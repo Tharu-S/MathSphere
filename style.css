@@ -188,14 +188,15 @@ footer p {
     font-size: 18px;
 }
 
-/*@media (max-width: 768px) {
+@media (max-width: 768px) {
 
-    .bg-video {
+   /* .bg-video {
         display: none;
-    }
+    }*/
 
     .home {
-        background: linear-gradient(to right, #1e3c72, #2a5298);
+        /*background: linear-gradient(to right, #1e3c72, #2a5298);*/
+        height: 100svh;
     }
 
     .home-content h2 {
@@ -206,10 +207,10 @@ footer p {
         font-size: 18px;
     }
 
-    .nav-anim {
+   /*.nav-anim {
         display: none;
-    }
-}*/
+    }*/
+}
 
 .about{
     background:black;
@@ -438,5 +439,6 @@ footer {
     margin: 6px 0;
     color: #cfd8ff;
 }
+
 
 
