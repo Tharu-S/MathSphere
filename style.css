@@ -188,7 +188,7 @@ footer p {
     font-size: 18px;
 }
 
-@media (max-width: 768px) {
+/*@media (max-width: 768px) {
 
     .bg-video {
         display: none;
@@ -209,7 +209,7 @@ footer p {
     .nav-anim {
         display: none;
     }
-}
+}*/
 
 .about{
     background:black;
@@ -438,4 +438,5 @@ footer {
     margin: 6px 0;
     color: #cfd8ff;
 }
+
 
