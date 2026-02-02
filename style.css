@@ -194,10 +194,10 @@ footer p {
         display: none;
     }*/
 
-    .home {
-        /*background: linear-gradient(to right, #1e3c72, #2a5298);*/
+    /*.home {
+        background: linear-gradient(to right, #1e3c72, #2a5298);
         height: 100svh;
-    }
+    }*/
 
     .home-content h2 {
         font-size: 32px;
@@ -439,6 +439,7 @@ footer {
     margin: 6px 0;
     color: #cfd8ff;
 }
+
 
 
 
