@@ -243,3 +243,25 @@ margin-top:10px;
 .desc.active{
     display:block;
 }
+
+#scrollBtn {
+    display: none;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    font-size: 18px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 14px 16px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #ff9800, #ff5722);
+    box-shadow: 0 0 10px #ff9800;
+    transition: 0.3s;
+}
+
+#scrollBtn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px #ff5722;
+}
+
