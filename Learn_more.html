@@ -31,7 +31,9 @@
             <span></span>
         </nav>
     </header>
-
+    
+    <button onclick="scrollToTop()" id="scrollBtn">⮝</button>
+    
     <section class="hero">
         <h2>Mathematics Topics</h2>
         <p>
@@ -950,13 +952,33 @@
     </footer>
 
     <script>
+        
         function openFunc(id){
             document.querySelectorAll(".desc")
             .forEach(d=>d.classList.remove("active"));
             document.getElementById(id).classList.add("active");
         }
+
+        let mybutton = document.getElementById("scrollBtn");
+
+        window.onscroll = function() {
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        };
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
     </script>
 
 </body>
 
 </html>  
+
