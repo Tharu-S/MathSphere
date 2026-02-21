@@ -14,7 +14,7 @@
         <a href="index.html">
             <img src="logo.png" alt="MathSphere Logo">
         </a>
-
+        <div class="hamburger" onclick="toggleMenu()"></div>
         <nav class="nav-anim">
             <a href="index.html">Home</a>
             <a href="topics.html" class="active">Topics</a>
@@ -151,9 +151,35 @@
     <footer>
         <p>&copy; 2026 All Rights Reserved | MathSphere</p>
     </footer>
+    <script>
+        function toggleMenu() {
+            const nav = document.querySelector('.nav-anim');
+            const hamburger = document.querySelector('.hamburger');
+            nav.classList.toggle('active');
+            hamburger.classList.toggle('open');
+        }
 
+        // Close nav when a link is clicked on mobile
+        const links = document.querySelectorAll('.nav-anim a');
+        const span = document.querySelector('.nav-anim span');
+
+        links.forEach((link, index) => {
+            link.addEventListener('click', () => {
+                // Desktop: move the highlight span
+                if (span) {
+                    span.style.top = `${index * 50}px`;
+                }
+                // Mobile: close the menu
+                if (window.innerWidth <= 768) {
+                    document.querySelector('.nav-anim').classList.remove('active');
+                    document.querySelector('.hamburger').classList.remove('open');
+                }
+            });
+        });
+    </script>
     <script src="topics.js"> </script>
 
 </body>
 </html>
+
 
