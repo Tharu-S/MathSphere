@@ -42,10 +42,45 @@
                 This website helps students understand mathematical concepts
                 easily using explanations, examples, and interactive tools.
             </p> <br> <br>
-            <a href="Learn_more.html" class="btn0">Start Learning</a> 
         </div>
 
     </section>
+
+        <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="feature-card">
+            <img src="https://cdn-icons-png.flaticon.com/512/2451/2451006.png" alt="Topics Icon">
+            <h3>Comprehensive Topics</h3>
+            <p>Explore a wide range of mathematical topics from basic arithmetic to advanced calculus, explained simply.</p>
+            <a href="topics.html" class="btn-small">Explore Topics</a>
+        </div>
+        <div class="feature-card">
+            <img src="https://cdn-icons-png.flaticon.com/512/3579/3579040.png" alt="Quiz Icon">
+            <h3>Interactive Practice</h3>
+            <p>Test your knowledge with our interactive quizzes and practice problems designed to reinforce your learning.</p>
+            <a href="practice.html" class="btn-small">Start Practicing</a>
+        </div>
+        <div class="feature-card">
+            <img src="https://cdn-icons-png.flaticon.com/512/265/265682.png" alt="Calculator Icon">
+            <h3>Smart Calculators</h3>
+            <p>Use our powerful online calculators to solve complex equations and visualize mathematical concepts instantly.</p>
+            <a href="calculators.html" class="btn-small">Use Calculators</a>
+        </div>
+    </section>
+
+    <section class="quote-section">
+        <blockquote>
+            "Mathematics is not about numbers, equations, computations, or algorithms: it is about understanding."
+            <cite>- William Paul Thurston</cite>
+        </blockquote>
+    </section>
+
+    <section class="cta-section">
+        <h2>Ready to Master Mathematics?</h2>
+        <p>Join thousands of learners and start improving your math skills today.</p>
+        <a href="topics.html" class="btn-large">Get Started Now</a>
+    </section>
+
 
     <footer>
         <p>&copy; 2026 All Rights Reserved | MathSphere</p>
@@ -54,15 +89,26 @@
     <script>
         function toggleMenu() {
             const nav = document.querySelector('.nav-anim');
+            const hamburger = document.querySelector('.hamburger');
             nav.classList.toggle('active');
+            hamburger.classList.toggle('open');
         }
 
+        // Close nav when a link is clicked on mobile
         const links = document.querySelectorAll('.nav-anim a');
         const span = document.querySelector('.nav-anim span');
 
         links.forEach((link, index) => {
             link.addEventListener('click', () => {
-                span.style.top = `${index * 50}px`; 
+                // Desktop: move the highlight span
+                if (span) {
+                    span.style.top = `${index * 50}px`;
+                }
+                // Mobile: close the menu
+                if (window.innerWidth <= 768) {
+                    document.querySelector('.nav-anim').classList.remove('active');
+                    document.querySelector('.hamburger').classList.remove('open');
+                }
             });
         });
     </script>
