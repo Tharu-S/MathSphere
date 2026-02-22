@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MathSphere - Practice</title>
+    <link rel="icon" href="logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .topic-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .tab-btn {
+            padding: 10px 24px;
+            border: 2px solid #ff9800;
+            background: transparent;
+            color: #ff9800;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .tab-btn:hover,
+        .tab-btn.active {
+            background: #ff9800;
+            color: #fff;
+        }
+
+        .quiz-panel {
+            display: none;
+        }
+
+        .quiz-panel.active {
+            display: block;
+        }
+
+        .topic-title {
+            font-size: 28px;
+            color: #00aaff;
+            margin-bottom: 8px;
+        }
+
+        .topic-desc {
+            color: #aaa;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .question-card {
+            background: #111;
+            border: 1px solid #333;
+            padding: 24px;
+            margin: 20px auto;
+            max-width: 680px;
+            border-radius: 12px;
+            text-align: left;
+            transition: border-color 0.3s;
+        }
+
+        .question-card.correct {
+            border-color: #4caf50;
+        }
+
+        .question-card.wrong {
+            border-color: #ff9800;
+        }
+
+        .question-card h3 {
+            color: #fff;
+            font-size: 18px;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .question-card label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ccc;
+            font-size: 17px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .question-card label:hover {
+            background: #1a2a3a;
+        }
+
+        .question-card input[type="radio"] {
+            accent-color: #ff9800;
+            width: 17px;
+            height: 17px;
+            flex-shrink: 0;
+        }
+
+        .status-badge {
+            display: none;
+            font-size: 13px;
+            font-weight: bold;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        .badge-correct {
+            background: #4caf50;
+            color: #fff;
+        }
+
+        .badge-wrong {
+            background: #ff9800;
+            color: #fff;
+        }
+
+        .explanation {
+            display: none;
+            margin-top: 18px;
+            background: #0d1b2a;
+            border-left: 4px solid #00aaff;
+            border-radius: 0 10px 10px 0;
+            padding: 16px 18px;
+            color: #cde;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .explanation.visible {
+            display: block;
+        }
+
+        .explanation strong {
+            color: #ff9800;
+        }
+
+        .explanation .step {
+            display: flex;
+            gap: 10px;
+            margin: 6px 0;
+        }
+
+        .step-num {
+            background: #00aaff;
+            color: #000;
+            font-weight: bold;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 13px;
+            margin-top: 2px;
+        }
+
+        .correct-label {
+            color: #4caf50 !important;
+            font-weight: bold;
+        }
+
+        .wrong-label {
+            color: #ff9800 !important;
+        }
+
+        .btn-submit {
+            padding: 13px 36px;
+            font-size: 18px;
+            background: linear-gradient(45deg, #ff9800, #ff5722);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 24px;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        .btn-submit:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .score-box {
+            display: none;
+            margin: 30px auto;
+            max-width: 480px;
+            background: #0d1b2a;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(0, 170, 255, 0.3);
+        }
+
+        .score-box .score-num {
+            font-size: 64px;
+            font-weight: bold;
+        }
+
+        .score-box .score-label {
+            font-size: 20px;
+            color: #aaa;
+            margin-bottom: 12px;
+        }
+
+        .score-box .score-msg {
+            font-size: 18px;
+            color: #ccc;
+        }
+
+        .score-perfect {
+            color: #4caf50;
+        }
+
+        .score-good {
+            color: #ff9800;
+        }
+
+        .score-retry {
+            color: #ff9800;
+        }
+
+        .btn-retry {
+            margin-top: 20px;
+            padding: 10px 28px;
+            border: 2px solid #ff9800;
+            background: transparent;
+            color: #ff9800;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-retry:hover {
+            background: #ff9800;
+            color: #fff;
+        }
+
+        .progress-wrap {
+            max-width: 680px;
+            margin: 0 auto 10px;
+            background: #222;
+            border-radius: 20px;
+            height: 8px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(45deg, #ff9800, #ff5722);
+            border-radius: 20px;
+            transition: width 0.5s;
+            width: 0%;
+        }
+
+        .progress-label {
+            max-width: 680px;
+            margin: 0 auto 20px;
+            color: #777;
+            font-size: 14px;
+            text-align: right;
+        }
+
+        .practice-section {
+            padding: 80px 20px 60px;
+            text-align: center;
+            background-color: #000814;
+            min-height: 80vh;
+        }
+
+        .practice-section>h2 {
+            font-size: 40px;
+            color: #ff9800;
+            margin-bottom: 10px;
+        }
+
+        .practice-section>.subtitle {
+            color: #aaa;
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Auth Guard: redirect to login if not logged in -->
+    <script>
+        if (localStorage.getItem('ms_logged_in') !== 'true') {
+            window.location.replace('login.html');
+        }
+    </script>
+
+    <header>
+        <a href="index.html">
+            <img src="logo.png" alt="MathSphere Logo">
+        </a>
+        <div class="hamburger" onclick="toggleMenu()"></div>
+        <nav class="nav-anim">
+            <a href="index.html">Home</a>
+            <a href="topics.html">Topics</a>
+            <a href="practice.html" class="activeP">Practice</a>
+            <a href="calculators.html">Calculators</a>
+            <a href="about.html">About Us</a>
+            <a href="login.html" id="nav-login">Login</a>
+            <a href="#" id="nav-logout" style="display:none;" onclick="handleLogout()">Logout</a>
+            <span></span>
+        </nav>
+    </header>
+
+    <section class="practice-section">
+        <h2>Practice Problems</h2>
+        <p class="subtitle">Choose a topic and test your knowledge — solutions are revealed after you submit!</p>
+
+        <div class="topic-tabs">
+            <button class="tab-btn active" onclick="switchTopic('algebra')">🔢 Algebra</button>
+            <button class="tab-btn" onclick="switchTopic('geometry')">📐 Geometry</button>
+            <button class="tab-btn" onclick="switchTopic('calculus')">∫ Calculus</button>
+            <button class="tab-btn" onclick="switchTopic('statistics')">📊 Statistics</button>
+            <button class="tab-btn" onclick="switchTopic('arithmetic')">➕ Arithmetic</button>
+        </div>
+
+        <!-- ══════════════ ALGEBRA ══════════════ -->
+        <div class="quiz-panel active" id="panel-algebra">
+            <h2 class="topic-title">Algebra</h2>
+            <p class="topic-desc">Equations, expressions, and unknowns.</p>
+            <div class="progress-wrap">
+                <div class="progress-bar" id="prog-algebra"></div>
+            </div>
+            <div class="progress-label" id="plabel-algebra">0 / 5 answered</div>
+
+            <!-- Q1 -->
+            <div class="question-card" id="algebra-q1">
+                <h3>1. Solve for x: &nbsp; 2x + 5 = 15 <span class="status-badge" id="badge-algebra-q1"></span></h3>
+                <label><input type="radio" name="algebra-q1" value="a"> x = 5</label>
+                <label><input type="radio" name="algebra-q1" value="b"> x = 10</label>
+                <label><input type="radio" name="algebra-q1" value="c"> x = 2.5</label>
+                <div class="explanation" id="exp-algebra-q1">
+                    <strong>✔ Correct Answer: x = 5</strong>
+                    <div class="step"><span class="step-num">1</span><span>Start with the equation: <em>2x + 5 =
+                                15</em></span></div>
+                    <div class="step"><span class="step-num">2</span><span>Subtract 5 from both sides: <em>2x =
+                                10</em></span></div>
+                    <div class="step"><span class="step-num">3</span><span>Divide both sides by 2: <em>x = 5</em></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="question-card" id="algebra-q2">
+                <h3>2. Expand: &nbsp; (x + 3)² <span class="status-badge" id="badge-algebra-q2"></span></h3>
+                <label><input type="radio" name="algebra-q2" value="a"> x² + 9</label>
+                <label><input type="radio" name="algebra-q2" value="b"> x² + 6x + 9</label>
+                <label><input type="radio" name="algebra-q2" value="c"> x² + 3x + 9</label>
+                <div class="explanation" id="exp-algebra-q2">
+                    <strong>✔ Correct Answer: x² + 6x + 9</strong>
+                    <div class="step"><span class="step-num">1</span><span>Use the identity (a + b)² = a² + 2ab +
+                            b²</span></div>
+                    <div class="step"><span class="step-num">2</span><span>a = x, b = 3 → x² + 2·x·3 + 3²</span></div>
+                    <div class="step"><span class="step-num">3</span><span>Simplify: x² + 6x + 9</span></div>
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="question-card" id="algebra-q3">
+                <h3>3. Solve: &nbsp; 3x − 7 = 2x + 4 <span class="status-badge" id="badge-algebra-q3"></span></h3>
+                <label><input type="radio" name="algebra-q3" value="a"> x = 3</label>
+                <label><input type="radio" name="algebra-q3" value="b"> x = 7</label>
+                <label><input type="radio" name="algebra-q3" value="c"> x = 11</label>
+                <div class="explanation" id="exp-algebra-q3">
+                    <strong>✔ Correct Answer: x = 11</strong>
+                    <div class="step"><span class="step-num">1</span><span>Move x terms to the left: 3x − 2x = 4 +
+                            7</span></div>
+                    <div class="step"><span class="step-num">2</span><span>Simplify: x = 11</span></div>
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="question-card" id="algebra-q4">
+                <h3>4. Factor: &nbsp; x² − 5x + 6 <span class="status-badge" id="badge-algebra-q4"></span></h3>
+                <label><input type="radio" name="algebra-q4" value="a"> (x − 2)(x − 3)</label>
+                <label><input type="radio" name="algebra-q4" value="b"> (x + 2)(x + 3)</label>
+                <label><input type="radio" name="algebra-q4" value="c"> (x − 1)(x − 6)</label>
+                <div class="explanation" id="exp-algebra-q4">
+                    <strong>✔ Correct Answer: (x − 2)(x − 3)</strong>
+                    <div class="step"><span class="step-num">1</span><span>Find two numbers that multiply to +6 and add
+                            to −5.</span></div>
+                    <div class="step"><span class="step-num">2</span><span>−2 × −3 = 6 and −2 + (−3) = −5 ✓</span></div>
+                    <div class="step"><span class="step-num">3</span><span>So the factored form is (x − 2)(x −
+                            3).</span></div>
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="question-card" id="algebra-q5">
+                <h3>5. What is the slope of the line &nbsp; y = 3x − 7? <span class="status-badge"
+                        id="badge-algebra-q5"></span></h3>
+                <label><input type="radio" name="algebra-q5" value="a"> −7</label>
+                <label><input type="radio" name="algebra-q5" value="b"> 7</label>
+                <label><input type="radio" name="algebra-q5" value="c"> 3</label>
+                <div class="explanation" id="exp-algebra-q5">
+                    <strong>✔ Correct Answer: 3</strong>
+                    <div class="step"><span class="step-num">1</span><span>The slope-intercept form is y =
+                            <strong>m</strong>x + b, where <strong>m</strong> is the slope.</span></div>
+                    <div class="step"><span class="step-num">2</span><span>Comparing y = 3x − 7, the coefficient of x is
+                            3, so slope = 3.</span></div>
+                </div>
+            </div>
+
+            <button class="btn-submit" onclick="submitQuiz('algebra')">Submit Answers</button>
+            <div class="score-box" id="score-algebra"></div>
+        </div>
+
+        <!-- ══════════════ GEOMETRY ══════════════ -->
+        <div class="quiz-panel" id="panel-geometry">
+            <h2 class="topic-title">Geometry</h2>
+            <p class="topic-desc">Shapes, areas, volumes, and angles.</p>
+            <div class="progress-wrap">
+                <div class="progress-bar" id="prog-geometry"></div>
+            </div>
+            <div class="progress-label" id="plabel-geometry">0 / 5 answered</div>
+
+            <div class="question-card" id="geometry-q1">
+                <h3>1. What is the area of a circle with radius 3? <span class="status-badge"
+                        id="badge-geometry-q1"></span></h3>
+                <label><input type="radio" name="geometry-q1" value="a"> 6π</label>
+                <label><input type="radio" name="geometry-q1" value="b"> 9π</label>
+                <label><input type="radio" name="geometry-q1" value="c"> 3π</label>
+                <div class="explanation" id="exp-geometry-q1">
+                    <strong>✔ Correct Answer: 9π</strong>
+                    <div class="step"><span class="step-num">1</span><span>Area of a circle = π r²</span></div>
+                    <div class="step"><span class="step-num">2</span><span>r = 3 → Area = π × 3² = 9π</span></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="geometry-q2">
+                <h3>2. What is the sum of interior angles of a triangle? <span class="status-badge"
+                        id="badge-geometry-q2"></span></h3>
+                <label><input type="radio" name="geometry-q2" value="a"> 90°</label>
+                <label><input type="radio" name="geometry-q2" value="b"> 270°</label>
+                <label><input type="radio" name="geometry-q2" value="c"> 180°</label>
+                <div class="explanation" id="exp-geometry-q2">
+                    <strong>✔ Correct Answer: 180°</strong>
+                    <div class="step"><span class="step-num">1</span><span>This is a fundamental theorem of Euclidean
+                            geometry.</span></div>
+                    <div class="step"><span class="step-num">2</span><span>For any triangle, the three interior angles
+                            always add up to exactly 180°.</span></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="geometry-q3">
+                <h3>3. What is the hypotenuse of a right triangle with legs 3 and 4? <span class="status-badge"
+                        id="badge-geometry-q3"></span></h3>
+                <label><input type="radio" name="geometry-q3" value="a"> 5</label>
+                <label><input type="radio" name="geometry-q3" value="b"> 7</label>
+                <label><input type="radio" name="geometry-q3" value="c"> 6</label>
+                <div class="explanation" id="exp-geometry-q3">
+                    <strong>✔ Correct Answer: 5</strong>
+                    <div class="step"><span class="step-num">1</span><span>Use the Pythagorean theorem: a² + b² =
+                            c²</span></div>
+                    <div class="step"><span class="step-num">2</span><span>3² + 4² = 9 + 16 = 25</span></div>
+                    <div class="step"><span class="step-num">3</span><span>c = √25 = 5</span></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="geometry-q4">
+                <h3>4. What is the volume of a cube with side length 4? <span class="status-badge"
+                        id="badge-geometry-q4"></span></h3>
+                <label><input type="radio" name="geometry-q4" value="a"> 16</label>
+                <label><input type="radio" name="geometry-q4" value="b"> 48</label>
+                <label><input type="radio" name="geometry-q4" value="c"> 64</label>
+                <div class="explanation" id="exp-geometry-q4">
+                    <strong>✔ Correct Answer: 64</strong>
+                    <div class="step"><span class="step-num">1</span><span>Volume of a cube = side³</span></div>
+                    <div class="step"><span class="step-num">2</span><span>V = 4³ = 4 × 4 × 4 = 64</span></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="geometry-q5">
+                <h3>5. The perimeter of a rectangle is 36. Its width is 6. What is its length? <span
+                        class="status-badge" id="badge-geometry-q5"></span></h3>
+                <label><input type="radio" name="geometry-q5" value="a"> 6</label>
+                <label><input type="radio" name="geometry-q5" value="b"> 12</label>
+                <label><input type="radio" name="geometry-q5" value="c"> 24</label>
+                <div class="explanation" id="exp-geometry-q5">
+                    <strong>✔ Correct Answer: 12</strong>
+                    <div class="step"><span class="step-num">1</span><span>Perimeter = 2(l + w) → 36 = 2(l + 6)</span>
+                    </div>
+                    <div class="step"><span class="step-num">2</span><span>Divide by 2: l + 6 = 18</span></div>
+                    <div class="step"><span class="step-num">3</span><span>l = 18 − 6 = 12</span></div>
+                </div>
+            </div>
+
+            <button class="btn-submit" onclick="submitQuiz('geometry')">Submit Answers</button>
+            <div class="score-box" id="score-geometry"></div>
+        </div>
+
+        <!-- ══════════════ CALCULUS ══════════════ -->
+        <div class="quiz-panel" id="panel-calculus">
+            <h2 class="topic-title">Calculus</h2>
+            <p class="topic-desc">Derivatives, integrals, and limits.</p>
+            <div class="progress-wrap">
+                <div class="progress-bar" id="prog-calculus"></div>
+            </div>
+            <div class="progress-label" id="plabel-calculus">0 / 5 answered</div>
+
+            <div class="question-card" id="calculus-q1">
+                <h3>1. What is the derivative of x²? <span class="status-badge" id="badge-calculus-q1"></span></h3>
+                <label><input type="radio" name="calculus-q1" value="a"> x</label>
+                <label><input type="radio" name="calculus-q1" value="b"> 2x</label>
+                <label><input type="radio" name="calculus-q1" value="c"> x³</label>
+                <div class="explanation" id="exp-calculus-q1">
+                    <strong>✔ Correct Answer: 2x</strong>
+                    <div class="step"><span class="step-num">1</span><span>Use the power rule: d/dx [xⁿ] = n·xⁿ⁻¹</span>
+                    </div>
+                    <div class="step"><span class="step-num">2</span><span>n = 2 → d/dx [x²] = 2·x²⁻¹ = 2x</span></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="calculus-q2">
+                <h3>2. What is ∫ 3x² dx? <span class="status-badge" id="badge-calculus-q2"></span></h3>
+                <label><input type="radio" name="calculus-q2" value="a"> 6x + C</label>
+                <label><input type="radio" name="calculus-q2" value="b"> x³ + C</label>
+                <label><input type="radio" name="calculus-q2" value="c"> 3x³ + C</label>
+                <div class="explanation" id="exp-calculus-q2">
+                    <strong>✔ Correct Answer: x³ + C</strong>
+                    <div class="step"><span class="step-num">1</span><span>Use the power rule for integration: ∫ xⁿ dx =
+                            xⁿ⁺¹/(n+1) + C</span></div>
+                    <div class="step"><span class="step-num">2</span><span>∫ 3x² dx = 3 · x³/3 + C = x³ + C</span></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="calculus-q3">
+                <h3>3. What is lim(x→0) sin(x)/x? <span class="status-badge" id="badge-calculus-q3"></span></h3>
+                <label><input type="radio" name="calculus-q3" value="a"> 0</label>
+                <label><input type="radio" name="calculus-q3" value="b"> ∞</label>
+                <label><input type="radio" name="calculus-q3" value="c"> 1</label>
+                <div class="explanation" id="exp-calculus-q3">
+                    <strong>✔ Correct Answer: 1</strong>
+                    <div class="step"><span class="step-num">1</span><span>This is one of the most famous limits in
+                            calculus.</span></div>
+                    <div class="step"><span class="step-num">2</span><span>As x → 0, sin(x) ≈ x (small angle
+                            approximation).</span></div>
+                    <div class="step"><span class="step-num">3</span><span>Therefore sin(x)/x → x/x = 1.</span></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="calculus-q4">
+                <h3>4. What is the derivative of sin(x)? <span class="status-badge" id="badge-calculus-q4"></span></h3>
+                <label><input type="radio" name="calculus-q4" value="a"> −cos(x)</label>
+                <label><input type="radio" name="calculus-q4" value="b"> cos(x)</label>
+                <label><input type="radio" name="calculus-q4" value="c"> tan(x)</label>
+                <div class="explanation" id="exp-calculus-q4">
+                    <strong>✔ Correct Answer: cos(x)</strong>
+                    <div class="step"><span class="step-num">1</span><span>This is a standard derivative to
+                            memorize.</span></div>
+                    <div class="step"><span class="step-num">2</span><span>d/dx [sin(x)] = cos(x)</span></div>
+                    <div class="step"><span class="step-num">3</span><span>Similarly, d/dx [cos(x)] = −sin(x)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card" id="calculus-q5">
+                <h3>5. What is the definite integral ∫₀² x dx? <span class="status-badge" id="badge-calculus-q5"></span>
+                </h3>
+                <label><input type="radio" name="calculus-q5" value="a"> 4</label>
+                <label><input type="radio" name="calculus-q5" value="b"> 2</label>
+                <label><input type="radio" name="calculus-q5" value="c"> 1</label>
+                <div class="explanation" id="exp-calculus-q5">
+                    <strong>✔ Correct Answer: 2</strong>
+                    <div class="step"><span class="step-num">1</span><span>∫ x dx = x²/2 + C</span></div>
+                    <div class="step"><span class="step-num">2</span><span>Evaluate from 0 to 2: [x²/2]₀² = (4/2) −
+                            (0/2) = 2 − 0 = 2</span></div>
+                </div>
+            </div>
+
+            <button class="btn-submit" onclick="submitQuiz('calculus')">Submit Answers</button>
+            <div class="score-box" id="score-calculus"></div>
+        </div>
+
+        <!-- ══════════════ STATISTICS ══════════════ -->
+        <div class="quiz-panel" id="panel-statistics">
+            <h2 class="topic-title">Statistics</h2>
+            <p class="topic-desc">Data, probability, and distributions.</p>
+            <div class="progress-wrap">
+                <div class="progress-bar" id="prog-statistics"></div>
+            </div>
+            <div class="progress-label" id="plabel-statistics">0 / 5 answered</div>
+
+            <div class="question-card" id="statistics-q1">
+                <h3>1. What is the mean of: 4, 8, 6, 5, 7? <span class="status-badge" id="badge-statistics-q1"></span>
+                </h3>
+                <label><input type="radio" name="statistics-q1" value="a"> 5</label>
+                <label><input type="radio" name="statistics-q1" value="b"> 6</label>
+                <label><input type="radio" name="statistics-q1" value="c"> 7</label>
+                <div class="explanation" id="exp-statistics-q1">
+                    <strong>✔ Correct Answer: 6</strong>
+                    <div class="step"><span class="step-num">1</span><span>Mean = Sum of all values ÷ Count of
+                            values</span></div>
+                    <div class="step"><span class="step-num">2</span><span>Sum = 4 + 8 + 6 + 5 + 7 = 30</span></div>
+                    <div class="step"><span class="step-num">3</span><span>Mean = 30 ÷ 5 = 6</span></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="statistics-q2">
+                <h3>2. What is the median of: 3, 7, 2, 9, 5? <span class="status-badge" id="badge-statistics-q2"></span>
+                </h3>
+                <label><input type="radio" name="statistics-q2" value="a"> 7</label>
+                <label><input type="radio" name="statistics-q2" value="b"> 5</label>
+                <label><input type="radio" name="statistics-q2" value="c"> 9</label>
+                <div class="explanation" id="exp-statistics-q2">
+                    <strong>✔ Correct Answer: 5</strong>
+                    <div class="step"><span class="step-num">1</span><span>Sort the values in ascending order: 2, 3, 5,
+                            7, 9</span></div>
+                    <div class="step"><span class="step-num">2</span><span>The middle value (3rd out of 5) is 5.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card" id="statistics-q3">
+                <h3>3. A fair die is rolled. What is the probability of getting a 4? <span class="status-badge"
+                        id="badge-statistics-q3"></span></h3>
+                <label><input type="radio" name="statistics-q3" value="a"> 1/3</label>
+                <label><input type="radio" name="statistics-q3" value="b"> 1/4</label>
+                <label><input type="radio" name="statistics-q3" value="c"> 1/6</label>
+                <div class="explanation" id="exp-statistics-q3">
+                    <strong>✔ Correct Answer: 1/6</strong>
+                    <div class="step"><span class="step-num">1</span><span>A fair die has 6 equally likely outcomes: {1,
+                            2, 3, 4, 5, 6}.</span></div>
+                    <div class="step"><span class="step-num">2</span><span>Only one outcome is a 4, so P(4) =
+                            1/6.</span></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="statistics-q4">
+                <h3>4. What does the standard deviation measure? <span class="status-badge"
+                        id="badge-statistics-q4"></span></h3>
+                <label><input type="radio" name="statistics-q4" value="a"> The average of the data</label>
+                <label><input type="radio" name="statistics-q4" value="b"> The spread/dispersion of the data</label>
+                <label><input type="radio" name="statistics-q4" value="c"> The middle value of the data</label>
+                <div class="explanation" id="exp-statistics-q4">
+                    <strong>✔ Correct Answer: The spread/dispersion of the data</strong>
+                    <div class="step"><span class="step-num">1</span><span>Standard deviation (σ) tells you how spread
+                            out the data values are from the mean.</span></div>
+                    <div class="step"><span class="step-num">2</span><span>A small σ means values are clustered close to
+                            the mean; a large σ means they are more spread out.</span></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="statistics-q5">
+                <h3>5. In a normal distribution, approximately what % of data falls within 1 standard deviation of the
+                    mean? <span class="status-badge" id="badge-statistics-q5"></span></h3>
+                <label><input type="radio" name="statistics-q5" value="a"> 95%</label>
+                <label><input type="radio" name="statistics-q5" value="b"> 99.7%</label>
+                <label><input type="radio" name="statistics-q5" value="c"> 68%</label>
+                <div class="explanation" id="exp-statistics-q5">
+                    <strong>✔ Correct Answer: 68%</strong>
+                    <div class="step"><span class="step-num">1</span><span>This is the 68-95-99.7 rule (Empirical Rule)
+                            for normal distributions.</span></div>
+                    <div class="step"><span class="step-num">2</span><span>Within 1σ of the mean → ~68% of data</span>
+                    </div>
+                    <div class="step"><span class="step-num">3</span><span>Within 2σ → ~95%, and within 3σ →
+                            ~99.7%</span></div>
+                </div>
+            </div>
+
+            <button class="btn-submit" onclick="submitQuiz('statistics')">Submit Answers</button>
+            <div class="score-box" id="score-statistics"></div>
+        </div>
+
+        <!-- ══════════════ ARITHMETIC ══════════════ -->
+        <div class="quiz-panel" id="panel-arithmetic">
+            <h2 class="topic-title">Arithmetic</h2>
+            <p class="topic-desc">Numbers, operations, fractions, and percentages.</p>
+            <div class="progress-wrap">
+                <div class="progress-bar" id="prog-arithmetic"></div>
+            </div>
+            <div class="progress-label" id="plabel-arithmetic">0 / 5 answered</div>
+
+            <div class="question-card" id="arithmetic-q1">
+                <h3>1. What is 15% of 200? <span class="status-badge" id="badge-arithmetic-q1"></span></h3>
+                <label><input type="radio" name="arithmetic-q1" value="a"> 25</label>
+                <label><input type="radio" name="arithmetic-q1" value="b"> 30</label>
+                <label><input type="radio" name="arithmetic-q1" value="c"> 20</label>
+                <div class="explanation" id="exp-arithmetic-q1">
+                    <strong>✔ Correct Answer: 30</strong>
+                    <div class="step"><span class="step-num">1</span><span>To find a percentage: (percent ÷ 100) ×
+                            number</span></div>
+                    <div class="step"><span class="step-num">2</span><span>(15 ÷ 100) × 200 = 0.15 × 200 = 30</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card" id="arithmetic-q2">
+                <h3>2. Simplify: &nbsp; 3/4 + 1/2 <span class="status-badge" id="badge-arithmetic-q2"></span></h3>
+                <label><input type="radio" name="arithmetic-q2" value="a"> 4/6</label>
+                <label><input type="radio" name="arithmetic-q2" value="b"> 5/4</label>
+                <label><input type="radio" name="arithmetic-q2" value="c"> 1</label>
+                <div class="explanation" id="exp-arithmetic-q2">
+                    <strong>✔ Correct Answer: 5/4</strong>
+                    <div class="step"><span class="step-num">1</span><span>Convert to a common denominator: 1/2 =
+                            2/4</span></div>
+                    <div class="step"><span class="step-num">2</span><span>3/4 + 2/4 = 5/4</span></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="arithmetic-q3">
+                <h3>3. What is the LCM of 4 and 6? <span class="status-badge" id="badge-arithmetic-q3"></span></h3>
+                <label><input type="radio" name="arithmetic-q3" value="a"> 12</label>
+                <label><input type="radio" name="arithmetic-q3" value="b"> 24</label>
+                <label><input type="radio" name="arithmetic-q3" value="c"> 6</label>
+                <div class="explanation" id="exp-arithmetic-q3">
+                    <strong>✔ Correct Answer: 12</strong>
+                    <div class="step"><span class="step-num">1</span><span>List multiples of 4: 4, 8,
+                            <strong>12</strong>, 16...</span></div>
+                    <div class="step"><span class="step-num">2</span><span>List multiples of 6: 6, <strong>12</strong>,
+                            18...</span></div>
+                    <div class="step"><span class="step-num">3</span><span>The smallest common multiple is 12.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card" id="arithmetic-q4">
+                <h3>4. What is 2⁵? <span class="status-badge" id="badge-arithmetic-q4"></span></h3>
+                <label><input type="radio" name="arithmetic-q4" value="a"> 10</label>
+                <label><input type="radio" name="arithmetic-q4" value="b"> 25</label>
+                <label><input type="radio" name="arithmetic-q4" value="c"> 32</label>
+                <div class="explanation" id="exp-arithmetic-q4">
+                    <strong>✔ Correct Answer: 32</strong>
+                    <div class="step"><span class="step-num">1</span><span>2⁵ means 2 multiplied by itself 5
+                            times.</span></div>
+                    <div class="step"><span class="step-num">2</span><span>2 × 2 × 2 × 2 × 2 = 4 × 4 × 2 = 32</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card" id="arithmetic-q5">
+                <h3>5. A shirt costs $80 and is on sale for 25% off. What is the sale price? <span class="status-badge"
+                        id="badge-arithmetic-q5"></span></h3>
+                <label><input type="radio" name="arithmetic-q5" value="a"> $55</label>
+                <label><input type="radio" name="arithmetic-q5" value="b"> $65</label>
+                <label><input type="radio" name="arithmetic-q5" value="c"> $60</label>
+                <div class="explanation" id="exp-arithmetic-q5">
+                    <strong>✔ Correct Answer: $60</strong>
+                    <div class="step"><span class="step-num">1</span><span>Find the discount: 25% of $80 = 0.25 × 80 =
+                            $20</span></div>
+                    <div class="step"><span class="step-num">2</span><span>Sale price = $80 − $20 = $60</span></div>
+                </div>
+            </div>
+
+            <button class="btn-submit" onclick="submitQuiz('arithmetic')">Submit Answers</button>
+            <div class="score-box" id="score-arithmetic"></div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 All Rights Reserved | MathSphere</p>
+    </footer>
+
+    <script>
+        /* ── Correct answers per topic ── */
+        const ANSWERS = {
+            algebra: { q1: 'a', q2: 'b', q3: 'c', q4: 'a', q5: 'c' },
+            geometry: { q1: 'b', q2: 'c', q3: 'a', q4: 'c', q5: 'b' },
+            calculus: { q1: 'b', q2: 'b', q3: 'c', q4: 'b', q5: 'b' },
+            statistics: { q1: 'b', q2: 'b', q3: 'c', q4: 'b', q5: 'c' },
+            arithmetic: { q1: 'b', q2: 'b', q3: 'a', q4: 'c', q5: 'c' }
+        };
+
+        const TOTAL = 5;
+
+        /* ── Tab switching ── */
+        function switchTopic(topic) {
+            document.querySelectorAll('.quiz-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('panel-' + topic).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        /* ── Track answered count for progress bar ── */
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                const nameParts = radio.name.split('-');   // e.g. ["algebra","q1"]
+                const topic = nameParts[0];
+                const answered = new Set();
+                for (let i = 1; i <= TOTAL; i++) {
+                    const sel = document.querySelector(`input[name="${topic}-q${i}"]:checked`);
+                    if (sel) answered.add(i);
+                }
+                const pct = (answered.size / TOTAL) * 100;
+                document.getElementById('prog-' + topic).style.width = pct + '%';
+                document.getElementById('plabel-' + topic).textContent = `${answered.size} / ${TOTAL} answered`;
+            });
+        });
+
+        /* ── Submit quiz ── */
+        function submitQuiz(topic) {
+            const correct = ANSWERS[topic];
+            let score = 0;
+
+            for (let i = 1; i <= TOTAL; i++) {
+                const qKey = `q${i}`;
+                const card = document.getElementById(`${topic}-${qKey}`);
+                const badge = document.getElementById(`badge-${topic}-${qKey}`);
+                const exp = document.getElementById(`exp-${topic}-${qKey}`);
+                const selected = document.querySelector(`input[name="${topic}-${qKey}"]:checked`);
+                const userAns = selected ? selected.value : null;
+                const rightAns = correct[qKey];
+
+                // Style labels
+                card.querySelectorAll('label').forEach(label => {
+                    const radio = label.querySelector('input');
+                    if (radio.value === rightAns) label.classList.add('correct-label');
+                    else if (radio.value === userAns) label.classList.add('wrong-label');
+                    radio.disabled = true;
+                });
+
+                // Card border
+                if (userAns === rightAns) {
+                    card.classList.add('correct');
+                    badge.textContent = '✔ Correct';
+                    badge.className = 'status-badge badge-correct';
+                    badge.style.display = 'inline-block';
+                    score++;
+                } else {
+                    card.classList.add('wrong');
+                    badge.textContent = '✘ Wrong';
+                    badge.className = 'status-badge badge-wrong';
+                    badge.style.display = 'inline-block';
+                }
+
+                // Show explanation
+                exp.classList.add('visible');
+            }
+
+            // Disable button
+            const btn = document.querySelector(`#panel-${topic} .btn-submit`);
+            btn.disabled = true;
+
+            // Show score box
+            const box = document.getElementById('score-' + topic);
+            box.style.display = 'block';
+
+            let cls, msg, emoji;
+            if (score === TOTAL) {
+                cls = 'score-perfect'; msg = 'Perfect score! Outstanding work! 🎉'; emoji = score;
+            } else if (score >= 3) {
+                cls = 'score-good'; msg = 'Good job! Review the explanations above to master the rest.'; emoji = score;
+            } else {
+                cls = 'score-retry'; msg = "Keep practicing! Read the step-by-step solutions above."; emoji = score;
+            }
+
+            box.innerHTML = `
+            <div class="score-label">Your Score</div>
+            <div class="score-num ${cls}">${score} / ${TOTAL}</div>
+            <div class="score-msg">${msg}</div>
+            <button class="btn-retry" onclick="retryQuiz('${topic}')">🔄 Try Again</button>
+        `;
+            box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        /* ── Retry ── */
+        function retryQuiz(topic) {
+            // Re-enable all radios and reset styling
+            document.querySelectorAll(`#panel-${topic} input[type="radio"]`).forEach(r => {
+                r.disabled = false;
+                r.checked = false;
+            });
+            document.querySelectorAll(`#panel-${topic} label`).forEach(l => {
+                l.classList.remove('correct-label', 'wrong-label');
+            });
+            document.querySelectorAll(`#panel-${topic} .question-card`).forEach(c => {
+                c.classList.remove('correct', 'wrong');
+            });
+            document.querySelectorAll(`#panel-${topic} .status-badge`).forEach(b => {
+                b.style.display = 'none';
+            });
+            document.querySelectorAll(`#panel-${topic} .explanation`).forEach(e => {
+                e.classList.remove('visible');
+            });
+
+
+            document.getElementById('prog-' + topic).style.width = '0%';
+            document.getElementById('plabel-' + topic).textContent = `0 / ${TOTAL} answered`;
+
+            // Re-enable submit button
+            document.querySelector(`#panel-${topic} .btn-submit`).disabled = false;
+
+            // Hide score box
+            document.getElementById('score-' + topic).style.display = 'none';
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* ── Hamburger ── */
+        function toggleMenu() {
+            document.querySelector('.nav-anim').classList.toggle('active');
+        }
+    </script>
+
+    <script>
+        function updateAuthNav() {
+            const loggedIn = localStorage.getItem('ms_logged_in') === 'true';
+            document.getElementById('nav-login').style.display = loggedIn ? 'none' : 'inline-block';
+            document.getElementById('nav-logout').style.display = loggedIn ? 'inline-block' : 'none';
+        }
+        function handleLogout() {
+            localStorage.removeItem('ms_logged_in');
+            localStorage.removeItem('ms_user_email');
+            updateAuthNav();
+        }
+        updateAuthNav();
+
+        document.querySelectorAll('.nav-anim a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    document.querySelector('.nav-anim').classList.remove('active');
+                    document.querySelector('.hamburger').classList.remove('open');
+                }
+            });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+
+</html>
