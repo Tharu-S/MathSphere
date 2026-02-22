@@ -390,7 +390,7 @@ footer {
 
 .topic-card {
     background: #0d1b2a;
-    padding: 10px;
+    padding: 20px;
     border-radius: 18px;
     box-shadow: 0 0 50px rgba(26, 62, 141, 0.45);
     transition: transform 0.3s, box-shadow 0.3s;
@@ -693,3 +693,4 @@ blockquote cite {
     }
 
 }
+
