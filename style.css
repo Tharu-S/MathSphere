@@ -201,7 +201,6 @@ footer p {
     border-radius: 15px;
     color: white;
     font-size: 25px;
-    ;
     text-align: center;
     margin: 10px;
     height: 600px;
@@ -391,7 +390,7 @@ footer {
 
 .topic-card {
     background: #0d1b2a;
-    padding: 20px;
+    padding: 10px;
     border-radius: 18px;
     box-shadow: 0 0 50px rgba(26, 62, 141, 0.45);
     transition: transform 0.3s, box-shadow 0.3s;
@@ -692,4 +691,5 @@ blockquote cite {
     .cta-section h2 {
         font-size: 32px;
     }
+
 }
