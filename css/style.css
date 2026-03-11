@@ -532,10 +532,29 @@ footer {
 
     /* Topic Card Mobile Overrides */
     .card {
-        width: 250px;
-        height: 300px;
-        margin: 0 10px;
+        width: 220px;
+        height: 260px;
+        margin: 0 -60px;
+        transform: scale(0.75) rotateY(25deg);
+        transition: all 0.6s cubic-bezier(0.4,0,0.2,1);
     }
+
+    .card.active {
+        transform: scale(1.15) rotateY(0deg) translateZ(40px);
+        opacity: 1;
+        filter: brightness(1) blur(0);
+    }
+
+    .card.right-side {
+        transform: scale(0.7) rotateY(-20deg);
+    }
+
+    .slider-track {
+        display: flex;
+        align-items: center;
+        transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+    }
+
 }
 
 .features {
