@@ -1,8 +1,8 @@
-🌐📐MathSphere 
+# 🌐📐MathSphere 
 
 MathSphere is an interactive educational web platform designed to help students explore mathematical concepts through visualization, practice, and smart tools. This project was developed as an individual assignment for the COM 2303 - Web Design course.
 
-🚀 Features
+## 🚀 Features
 
 - 📚 Topics – Covers Statistics, Probability, Geometry, Algebra, Trigonometry, Calculus, and Vectors
 - 📝 Practice – Interactive practice questions to test knowledge
@@ -10,17 +10,18 @@ MathSphere is an interactive educational web platform designed to help students 
 - 🔐 Login / Register – User authentication with password strength indicator
 - 📱 Responsive Design – Mobile-friendly layout with hamburger navigation
 
-🛠️ Technologies Used
+## 🛠️ Technologies Used
 
--HTML5: For semantic web structuring.
--CSS3: Custom styling with advanced animations and layouts.
--Bootstrap 5: For responsive grid systems and pre-built components.
--JavaScript (ES6): To handle interactive logic, calculations, and the quiz engine.
--Swiper.js: For implementing touch-friendly sliders and carousels.
--MathJax: To render high-quality mathematical equations and formulas.
+- **HTML5**: For semantic web structuring.
+- **CSS3**: Custom styling with advanced animations and layouts.
+- **Bootstrap 5**: For responsive grid systems and pre-built components.
+- **JavaScript (ES6)**: To handle interactive logic, calculations, and the quiz engine.
+- **Swiper.js**: For implementing touch-friendly sliders and carousels.
+- **MathJax**: To render high-quality mathematical equations and formulas.
 
-📁 Project Structure
+## 📁 Project Structure
 
+```
 MathSphere/
 │
 ├── 📂 css/                 # Stylesheets
@@ -51,21 +52,23 @@ MathSphere/
 │
 ├── 📄 README.md            # Project Documentation (for GitHub)
 └── 📄 .gitignore           # (Optional) Files to ignore in Git
+```
 
-✨Purpose of the Project
+## ✨ Purpose of the Project
 
 The purpose of MathSphere is to create an interactive and user-friendly website where students can:
--Learn mathematical concepts
--Practice math problems
--Perform calculations easily
+- Learn mathematical concepts
+- Practice math problems
+- Perform calculations easily
+
 This project demonstrates basic web design and development skills learned in the COM 2303 Web Design course.
 
-👩‍🎓Author
+## 👩‍🎓 Author
 
-Student Name: Tharushi Subhani
-Index No: 6243
-Registration No: ASP/2023/102
-Course: COM 2303 – Web Design
-Project Type: Individual Project
-
-
+| Field | Details |
+|-------|---------|
+| **Student Name** | Tharushi Subhani |
+| **Index No** | 6243 |
+| **Registration No** | ASP/2023/102 |
+| **Course** | COM 2303 – Web Design |
+| **Project Type** | Individual Project |
