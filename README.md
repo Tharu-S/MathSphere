@@ -1,7 +1,9 @@
 🌐📐MathSphere 
+
 MathSphere is an interactive educational web platform designed to help students explore mathematical concepts through visualization, practice, and smart tools. This project was developed as an individual assignment for the COM 2303 - Web Design course.
 
 🚀 Features
+
 - 📚 Topics – Covers Statistics, Probability, Geometry, Algebra, Trigonometry, Calculus, and Vectors
 - 📝 Practice – Interactive practice questions to test knowledge
 - 🧮 Calculators – Smart calculators for various math topics
@@ -9,6 +11,7 @@ MathSphere is an interactive educational web platform designed to help students 
 - 📱 Responsive Design – Mobile-friendly layout with hamburger navigation
 
 🛠️ Technologies Used
+
 HTML5: For semantic web structuring.
 CSS3: Custom styling with advanced animations and layouts.
 Bootstrap 5: For responsive grid systems and pre-built components.
@@ -17,6 +20,7 @@ Swiper.js: For implementing touch-friendly sliders and carousels.
 MathJax: To render high-quality mathematical equations and formulas.
 
 📁 Project Structure
+
 MathSphere/
 │
 ├── 📂 css/                 # Stylesheets
@@ -49,6 +53,7 @@ MathSphere/
 └── 📄 .gitignore           # (Optional) Files to ignore in Git
 
 ✨Purpose of the Project
+
 The purpose of MathSphere is to create an interactive and user-friendly website where students can:
 Learn mathematical concepts
 Practice math problems
@@ -56,6 +61,7 @@ Perform calculations easily
 This project demonstrates basic web design and development skills learned in the COM 2303 Web Design course.
 
 👩‍🎓Author
+
 Student Name: Tharushi Subhani
 Index No: 6243
 Registration No: ASP/2023/102
