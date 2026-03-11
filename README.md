@@ -13,10 +13,15 @@ MathSphere is an interactive educational web platform designed to help students 
 🛠️ Technologies Used
 
 HTML5: For semantic web structuring.
+
 CSS3: Custom styling with advanced animations and layouts.
+
 Bootstrap 5: For responsive grid systems and pre-built components.
+
 JavaScript (ES6): To handle interactive logic, calculations, and the quiz engine.
+
 Swiper.js: For implementing touch-friendly sliders and carousels.
+
 MathJax: To render high-quality mathematical equations and formulas.
 
 📁 Project Structure
@@ -55,6 +60,7 @@ MathSphere/
 ✨Purpose of the Project
 
 The purpose of MathSphere is to create an interactive and user-friendly website where students can:
+
 Learn mathematical concepts
 Practice math problems
 Perform calculations easily
@@ -63,9 +69,13 @@ This project demonstrates basic web design and development skills learned in the
 👩‍🎓Author
 
 Student Name: Tharushi Subhani
+
 Index No: 6243
+
 Registration No: ASP/2023/102
+
 Course: COM 2303 – Web Design
+
 Project Type: Individual Project
 
 
