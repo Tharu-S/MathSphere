@@ -23,10 +23,11 @@ function updateSlider() {
     });
 
     const isMobile = window.innerWidth <= 768;
-    const offsetMultiplier = isMobile ? -30 : -60;
+    const offsetMultiplier = isMobile ? -45 : -60;
     const offset = (currentIndex - Math.floor(cards.length / 2)) * offsetMultiplier;
     track.style.transform = `translateX(${offset}px)`;
 }
+
 
 cards.forEach((card, index) => {
     card.addEventListener('click', () => {
