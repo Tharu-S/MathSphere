@@ -318,14 +318,14 @@ footer {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    background-image: url('https://thumbs.dreamstime.com/b/math-formula-mathematics-calculus-school-blackboard-algebra-geometry-science-chalk-pattern-vector-education-concept-191320451.jpg') no-repeat center fixed;
 }
 
 .slider-track {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
 }
 
 .card {
@@ -552,7 +552,9 @@ footer {
     .slider-track {
         display: flex;
         align-items: center;
+        justify-content: flex-start;
         transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+        will-change: transform;
     }
 
 }
