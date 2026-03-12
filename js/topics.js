@@ -6,21 +6,21 @@ const prevBtn = document.getElementById('prev');
 let currentIndex = 3;
 
 function getOffset() {
-    const isMobile = window.innerWidth <= 768;
+    // Read the current translateX so we can measure true positions
+    const currentTranslate = parseFloat(track.style.transform.replace('translateX(', '').replace('px)', '')) || 0;
 
-    if (!isMobile) {
-        // Desktop: slider-track uses justify-content:center, so no translateX needed
-        return 0;
-    }
+    const activeCard = cards[currentIndex];
+    const containerRect = track.parentElement.getBoundingClientRect();
+    const cardRect = activeCard.getBoundingClientRect();
 
-    // Mobile: card width 220px, margin 0 -60px on each side → effective step = 100px
-    const trackWidth = track.parentElement.offsetWidth;
-    const center = trackWidth / 2;
-    const cardWidth = 220;
-    const cardMargin = -60; // each side
-    const effectiveStep = cardWidth + cardMargin * 2; // 100px
-    const activeCardCenter = currentIndex * effectiveStep + cardWidth / 2;
-    return center - activeCardCenter;
+    // Center of the container
+    const containerCenter = containerRect.left + containerRect.width / 2;
+
+    // Center of the active card as currently rendered
+    const cardCenter = cardRect.left + cardRect.width / 2;
+
+    // Shift needed = current offset + difference to close the gap
+    return currentTranslate + (containerCenter - cardCenter);
 }
 
 function updateSlider() {
@@ -40,7 +40,11 @@ function updateSlider() {
         }
     });
 
-    track.style.transform = `translateX(${getOffset()}px)`;
+    // Use requestAnimationFrame so the browser has laid out the new classes
+    // before we measure card positions for centering
+    requestAnimationFrame(() => {
+        track.style.transform = `translateX(${getOffset()}px)`;
+    });
 }
 
 cards.forEach((card, index) => {
