@@ -3,94 +3,256 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MathSphere</title>
+    <title> MathSphere</title>
     <link rel="icon" href="images/logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Exo+2:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="css/about.css">
 </head>
-
 <body>
 
-    <header>
-        <a href="index.html">
-            <img src="images/logo.png" alt="MathSphere Logo">
-        </a>
+<!-- Particle network canvas -->
+<canvas id="bgCanvas"></canvas>
 
-        <div class="hamburger" onclick="toggleMenu()"></div>
-        
-        <nav class="nav-anim">
-            <a href="index.html">Home</a>
-            <a href="topics.html">Topics</a>
-            <a href="practice.html">Practice</a>
-            <a href="calculators.html">Calculators</a>
-            <a href="about.html" class="activeAb">About Us</a>
-            <a href="login.html">Login</a>
-            <span></span>
-        </nav>
-    </header>
+<!-- ══ HEADER ══ -->
+<header>
+    <a href="index.html"><img src="images/logo.png" alt="MathSphere Logo"></a>
+    <div class="hamburger" onclick="toggleMenu()"></div>
+    <nav class="nav-anim">
+        <a href="index.html">Home</a>
+        <a href="topics.html">Topics</a>
+        <a href="practice.html">Practice</a>
+        <a href="calculators.html">Calculators</a>
+        <a href="about.html" class="activeAb">About Us</a>
+        <a href="login.html" id="nav-login">Login</a>
+        <a href="#" id="nav-logout" style="display:none;" onclick="handleLogout()">Logout</a>
+        <span></span>
+    </nav>
+</header>
 
-    <section class="about">
-        <p> <br>MathSphere is an interactive mathematics learning website developed as a
-        university project by <strong>Tharushi Subhani</strong>, a second-year
-        undergraduate student at <strong>Rajarata University of Sri Lanka</strong>.
-        This platform is designed to help students understand mathematical concepts
-        in a simple and engaging way through explanations, practice questions, and
-        interactive tools.
-        </p>
-        
-        <section class="swiper-section">
-            <h2>Why Choose MathSphere?</h2>
+<!-- ══ HERO ══ -->
+<section class="about-hero">
+    <div class="hero-ring"></div>
+    <div class="hero-ring"></div>
+    <div class="hero-ring"></div>
 
-            <div class="swiper mySwiper">
-                <div class="swiper-wrapper">
+    <span class="hero-badge">COM 2303 Web Design</span>
 
-                    <div class="swiper-slide">
-                        <h3>Easy Learning</h3>
-                        <p>Simple explanations to understand complex mathematical concepts.</p>
-                    </div>
+    <h1 class="hero-title">
+        <span class="line"><span>ABOUT</span></span>
+        <span class="line"><span class="gradient-word">MATHSPHERE</span></span>
+    </h1>
 
-                    <div class="swiper-slide">
-                        <h3>Practice Questions</h3>
-                        <p>Well-structured questions to improve problem-solving skills.</p>
-                    </div>
+    <p class="hero-sub">
+        A platform built to transform how students experience mathematics —
+        from intimidating formulas to interactive, intuitive understanding.
+    </p>
 
-                    <div class="swiper-slide">
-                        <h3>Smart Calculators</h3>
-                        <p>Fast and accurate calculators for various math topics.</p>
-                    </div>
+    <div class="scroll-cue">
+        <span>Scroll</span>
+        <div class="mouse"><div class="wheel"></div></div>
+    </div>
+</section>
 
-                    <div class="swiper-slide">
-                        <h3>Student Friendly</h3>
-                        <p>Designed especially for students with a clean and simple UI.</p>
-                    </div>
+<!-- ══ MISSION ══ -->
+<section class="page-section">
+    <div class="mission-split">
+        <div>
+            <span class="sec-label reveal">Our Mission</span>
+            <h2 class="sec-heading reveal" style="transition-delay:0.1s">Making Maths <em>feel possible</em> for everyone</h2>
+            <p class="sec-body reveal" style="transition-delay:0.2s">
+                MathSphere was born from a simple belief — that mathematics becomes beautiful when it's taught
+                with clarity. We built this platform to bridge the gap between abstract theory and genuine understanding.
+            </p>
+            <p class="sec-body reveal" style="margin-top:16px; transition-delay:0.3s">
+                Whether you're revising for an exam, exploring a topic for the first time, or just curious —
+                MathSphere gives you the tools to succeed at your own pace.
+            </p>
+        </div>
 
+        <div class="symbol-cluster reveal from-right">
+            <div class="cluster-core">&#8721;</div>
+            <div class="orbit-symbol" style="top:30px;  left:30px;  --dx:10px;  --dy:-12px; --od:4s;   --odel:0s;">&#960;</div>
+            <div class="orbit-symbol" style="top:20px;  right:40px; --dx:-8px;  --dy:10px;  --od:5s;   --odel:0.5s;">&#8747;</div>
+            <div class="orbit-symbol" style="bottom:50px; left:20px; --dx:12px; --dy:8px;   --od:6s;   --odel:1s;">&#8730;x</div>
+            <div class="orbit-symbol" style="bottom:40px; right:30px;--dx:-10px;--dy:-8px;  --od:4.5s; --odel:1.5s;">&#952;</div>
+            <div class="orbit-symbol" style="top:50%; left:10px;  transform:translateY(-50%); --dx:8px;  --dy:14px;  --od:5.5s; --odel:0.8s;">&#8734;</div>
+            <div class="orbit-symbol" style="top:50%; right:10px; transform:translateY(-50%);--dx:-12px;--dy:-10px; --od:3.5s; --odel:0.3s;">&#916;</div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ STATS STRIP ══ -->
+<div class="stats-strip">
+    <div class="stats-grid">
+        <div class="stat-item reveal">
+            <span class="stat-num"><span class="counter" data-target="7">0</span></span>
+            <span class="stat-label">Core Topics</span>
+        </div>
+        <div class="stat-item reveal" style="transition-delay:0.12s">
+            <span class="stat-num"><span class="counter" data-target="50">0</span><span class="stat-suffix">+</span></span>
+            <span class="stat-label">Practice Questions</span>
+        </div>
+        <div class="stat-item reveal" style="transition-delay:0.24s">
+            <span class="stat-num"><span class="counter" data-target="10">0</span><span class="stat-suffix">+</span></span>
+            <span class="stat-label">Calculators</span>
+        </div>
+        <div class="stat-item reveal" style="transition-delay:0.36s">
+            <span class="stat-num"><span class="counter" data-target="100">0</span><span class="stat-suffix">%</span></span>
+            <span class="stat-label">Free to Use</span>
+        </div>
+    </div>
+</div>
+
+<!-- ══ FEATURES BENTO GRID ══ -->
+<section class="page-section">
+    <span class="sec-label reveal" style="text-align:center; display:block;">What We Offer</span>
+    <h2 class="sec-heading reveal" style="text-align:center; max-width:100%; transition-delay:0.1s">
+        Everything you need, <em>in one place</em>
+    </h2>
+    <div style="margin-bottom:50px;"></div>
+    <div class="bento-grid">
+        <div class="bento-card wide reveal" style="transition-delay:0.05s">
+            <span class="bento-icon">&#128218;</span>
+            <h3>In-Depth Topic Library</h3>
+            <p>Seven fully covered subjects — Statistics, Probability, Geometry, Algebra, Trigonometry, Calculus,
+               and Vectors. Each topic includes worked examples, key formulas, and clear explanations rendered
+               beautifully with MathJax.</p>
+        </div>
+        <div class="bento-card reveal" style="transition-delay:0.10s">
+            <span class="bento-icon">&#128221;</span>
+            <h3>Interactive Practice</h3>
+            <p>Topic-specific quizzes with instant feedback, step-by-step explanations, and a live score tracker
+               to measure your growth.</p>
+        </div>
+        <div class="bento-card reveal" style="transition-delay:0.15s">
+            <span class="bento-icon">&#129518;</span>
+            <h3>Smart Calculators</h3>
+            <p>Purpose-built calculators for every branch of maths. Solve, visualise, and explore without leaving
+               the page.</p>
+        </div>
+        <div class="bento-card reveal" style="transition-delay:0.20s">
+            <span class="bento-icon">&#128241;</span>
+            <h3>Fully Responsive</h3>
+            <p>Designed mobile-first. MathSphere works flawlessly on every screen size with smooth hamburger
+               navigation.</p>
+        </div>
+        <div class="bento-card wide reveal" style="transition-delay:0.25s">
+            <span class="bento-icon">&#128272;</span>
+            <h3>User Accounts &amp; Security</h3>
+            <p>Register and log in to personalise your learning journey. Passwords are validated with a live
+               strength indicator, and your session persists safely across visits using localStorage.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ══ TOPICS TIMELINE ══ -->
+<section class="page-section" style="padding-top:0;">
+    <div class="two-col">
+        <div>
+            <span class="sec-label reveal">Curriculum</span>
+            <h2 class="sec-heading reveal" style="transition-delay:0.1s">Topics <em>Covered</em></h2>
+            <p class="sec-body reveal" style="transition-delay:0.2s; margin-bottom:48px;">
+                From foundational concepts to advanced theory — each subject is a self-contained learning module.
+            </p>
+            <div class="timeline">
+                <div class="tl-item reveal" style="transition-delay:0.10s">
+                    <div class="tl-dot">&#128202;</div><h4>Statistics</h4>
+                    <p>Mean, median, mode, variance, standard deviation, and data interpretation.</p>
                 </div>
+                <div class="tl-item reveal" style="transition-delay:0.18s">
+                    <div class="tl-dot">&#127922;</div><h4>Probability</h4>
+                    <p>Basic probability, conditional probability, Bayes' theorem, and random variables.</p>
+                </div>
+                <div class="tl-item reveal" style="transition-delay:0.26s">
+                    <div class="tl-dot">&#128208;</div><h4>Geometry</h4>
+                    <p>Angles, triangles, circles, area, perimeter, and 3D solid shapes.</p>
+                </div>
+                <div class="tl-item reveal" style="transition-delay:0.34s">
+                    <div class="tl-dot">&#128216;</div><h4>Algebra</h4>
+                    <p>Linear and quadratic equations, polynomials, logarithms, and sequences.</p>
+                </div>
+            </div>
+        </div>
 
-                <div class="swiper-pagination"></div>
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
+        <div style="padding-top:60px;">
+            <div class="timeline">
+                <div class="tl-item reveal" style="transition-delay:0.12s">
+                    <div class="tl-dot">&#128202;</div><h4>Trigonometry</h4>
+                    <p>SOH-CAH-TOA, identities, sine &amp; cosine rules, and angle applications.</p>
+                </div>
+                <div class="tl-item reveal" style="transition-delay:0.20s">
+                    <div class="tl-dot">&#128200;</div><h4>Calculus</h4>
+                    <p>Limits, differentiation rules, integration techniques, and the fundamental theorem.</p>
+                </div>
+                <div class="tl-item reveal" style="transition-delay:0.28s">
+                    <div class="tl-dot">&#129517;</div><h4>Vectors</h4>
+                    <p>Magnitude, dot product, unit vectors, and geometric applications in 2D &amp; 3D.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
+
+<!-- ══ AUTHOR CARD ══ -->
+<section class="page-section" style="padding-top:0;">
+    <span class="sec-label reveal" style="text-align:center; display:block;">The Developer</span>
+    <h2 class="sec-heading reveal" style="text-align:center; max-width:100%; transition-delay:0.1s; margin-bottom:50px;">
+        Meet the <em>Creator</em>
+    </h2>
+
+    <div class="holo-card-wrap reveal scale-in" style="transition-delay:0.15s">
+        <div class="holo-card" id="holoCard">
+            <div class="holo-orb o1"></div>
+            <div class="holo-orb o2"></div>
+
+            <div style="position:relative;">
+                <div class="holo-avatar">&#128105;&#8205;&#128187;</div>
+                <div class="avatar-ring"></div>
             </div>
 
-        </section>
-        
-    </section>
+            <h2 class="holo-name">Tharushi Subhani</h2>
+            <p class="holo-role">Web Designer &amp; Developer</p>
+            <p class="holo-desc">
+                MathSphere was designed and developed as an individual project for COM 2303 Web Design.
+                The vision was a platform where students genuinely enjoy learning maths — through clean design,
+                interactive tools, and clear explanations.
+            </p>
 
-    
+            <div class="details-grid">
+                <div class="detail-chip">
+                    <div class="lbl">Index No</div>
+                    <div class="val">6243</div>
+                </div>
+                <div class="detail-chip">
+                    <div class="lbl">Registration No</div>
+                    <div class="val">ASP/2023/102</div>
+                </div>
+                <div class="detail-chip">
+                    <div class="lbl">Course</div>
+                    <div class="val">COM 2303 – Web Design</div>
+                </div>
+                <div class="detail-chip">
+                    <div class="lbl">Project Type</div>
+                    <div class="val">Individual Project</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-    <footer>
-        <p>&copy; 2026 All Rights Reserved | MathSphere</p>
-    </footer>
+<!-- Scroll to top button -->
+<button id="scrollBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})">⮝</button>
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<footer>
+    <p>&copy; 2026 All Rights Reserved | MathSphere</p>
+</footer>
 
-    <script src="js/about.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    
+<script src="js/about.js"></script>
 
 </body>
 </html>
-
