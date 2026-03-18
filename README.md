@@ -126,4 +126,4 @@ MathSphere/
 | **Index No** | 6243 |
 | **Registration No** | ASP/2023/102 |
 | **Course** | COM 2303 – Web Design |
-| **Project Type** | Individual Project – Phase 3 |
+| **Project Type** | Individual Project |
