@@ -189,6 +189,53 @@
     </div>
 </section>
 
+<!-- ══ CONTACT FORM ══ -->
+<section class="page-section" style="padding-top:0;">
+    <span class="sec-label reveal" style="text-align:center; display:block;">Get In Touch</span>
+    <h2 class="sec-heading reveal" style="text-align:center; max-width:100%; transition-delay:0.1s; margin-bottom:40px;">
+        Send us a <em>Message</em>
+    </h2>
+ <div class="holo-card-wrap reveal scale-in" style="transition-delay:0.15s">
+  <div class="holo-card" id="holoCard">
+    <div class="holo-card-wrap reveal scale-in" style="max-width:600px; margin:0 auto;">
+        <div id="contactSuccess" style="display:none; color:#00cc66; text-align:center; margin-bottom:16px; font-size:16px;">
+            ✅ Message sent successfully!
+        </div>
+        <div id="contactError" style="display:none; color:#ff3333; text-align:center; margin-bottom:16px; font-size:16px;"></div>
+
+        <form id="contactForm" novalidate style="display:flex; flex-direction:column; gap:18px;">
+            <div class="form-group">
+                <label style="color:#aaa; font-size:14px; margin-bottom:6px; display:block;">Your Name</label>
+                <div class="input-wrap">
+                    <input type="text" id="contactName" placeholder="John Doe" required
+                        style="background:transparent; border:none; color:white; width:100%; outline:none; font-size:15px; padding:12px 0;">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label style="color:#aaa; font-size:14px; margin-bottom:6px; display:block;">Email Address</label>
+                <div class="input-wrap">
+                    <input type="email" id="contactEmail" placeholder="you@example.com" required
+                        style="background:transparent; border:none; color:white; width:100%; outline:none; font-size:15px; padding:12px 0;">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label style="color:#aaa; font-size:14px; margin-bottom:6px; display:block;">Message</label>
+                <div class="input-wrap" style="align-items:flex-start;">
+                    <textarea id="contactMessage" rows="5" placeholder="Write your message here..." required
+                        style="background:transparent; border:none; color:white; width:100%; outline:none; 
+                        resize:vertical; font-size:15px; padding:12px 0;"></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-auth" style="margin-top:8px;">SEND MESSAGE</button>
+        </form>
+    </div>
+  </div>
+ </div>
+</section>
+
 
 <!-- ══ AUTHOR CARD ══ -->
 <section class="page-section" style="padding-top:0;">
