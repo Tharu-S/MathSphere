@@ -13,7 +13,6 @@ developed as an individual assignment for the COM 2303 - Web Design course.
 - 🧮 **Calculators** – Smart calculators for various math topics
 - 🔐 **Login / Register** – User authentication with PHP sessions and password hashing
 - 💬 **Contact Form** – Users can submit messages stored in the database
-- 🖥️ **Dashboard** – Personalised welcome page after login
 - 📱 **Responsive Design** – Mobile-friendly layout with hamburger navigation
 
 ---
