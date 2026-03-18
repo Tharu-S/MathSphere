@@ -30,7 +30,17 @@
     </header>
 
     <section class="home">
-
+        <!-- ══ DASHBOARD WELCOME BANNER (shows only when logged in) ══ -->
+        <div id="welcomeBanner" style="display:none; background:linear-gradient(45deg,#ff9800,#ff5722); 
+            padding:14px 30px; text-align:center; font-size:16px; color:white; font-weight:500;">
+            👋 Welcome back, <span id="welcomeName"></span>! 
+            &nbsp;|&nbsp; 
+            <a href="topics.html" style="color:white; text-decoration:underline;">Start Learning</a>
+            &nbsp;|&nbsp;
+            <a href="practice.html" style="color:white; text-decoration:underline;">Practice</a>
+            &nbsp;|&nbsp;
+            <a href="calculators.html" style="color:white; text-decoration:underline;">Calculators</a>
+        </div>
         <video autoplay muted loop playsinline class="bg-video">
             <source src="images/background.webm" type="video/mp4">
             Your browser does not support the video tag.
@@ -96,8 +106,17 @@
         // ── Login / Logout state ──
         function updateAuthNav() {
             const loggedIn = localStorage.getItem('ms_logged_in') === 'true';
-            document.getElementById('nav-login').style.display = loggedIn ? 'none' : 'inline-block';
-            document.getElementById('nav-logout').style.display = loggedIn ? 'inline-block' : 'none';
+            const email    = localStorage.getItem('ms_user_email') || '';
+
+            document.getElementById('nav-login').style.display    = loggedIn ? 'none'         : 'inline-block';
+            document.getElementById('nav-logout').style.display   = loggedIn ? 'inline-block' : 'none';
+
+            // Show welcome banner
+            const banner = document.getElementById('welcomeBanner');
+            if (banner) {
+                banner.style.display = loggedIn ? 'block' : 'none';
+                document.getElementById('welcomeName').textContent = email;
+            }
         }
 
         function handleLogout() {
