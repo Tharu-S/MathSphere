@@ -176,3 +176,49 @@ document.querySelectorAll('.nav-anim a').forEach(link => {
         }
     });
 });
+
+
+
+
+/* ══════════════════════════════════════
+   CONTACT FORM
+══════════════════════════════════════ */
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name    = document.getElementById('contactName').value.trim();
+        const email   = document.getElementById('contactEmail').value.trim();
+        const message = document.getElementById('contactMessage').value.trim();
+        const btn     = this.querySelector('.btn-auth');
+
+        if (!name || !email || !message) {
+            document.getElementById('contactError').style.display = 'block';
+            document.getElementById('contactError').textContent = 'Please fill in all fields.';
+            return;
+        }
+
+        btn.textContent = 'SENDING...';
+        btn.style.opacity = '0.7';
+
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('email', email);
+        formData.append('message', message);
+
+        fetch('contact.php', { method: 'POST', body: formData })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('contactSuccess').style.display = 'block';
+                    document.getElementById('contactError').style.display  = 'none';
+                    contactForm.reset();
+                } else {
+                    document.getElementById('contactError').style.display  = 'block';
+                    document.getElementById('contactError').textContent = data.message;
+                }
+                btn.textContent = 'SEND MESSAGE';
+                btn.style.opacity = '1';
+            });
+    });
+}
