@@ -76,60 +76,81 @@
 
     <script>
         function toggleMenu() {
-        const nav = document.querySelector('.nav-anim');
-        const hamburger = document.querySelector('.hamburger');
-        nav.classList.toggle('active');
-        hamburger.classList.toggle('open');
-    }
-    // Close nav when a link is clicked on mobile
-    document.querySelectorAll('.nav-anim a').forEach(link => {
-        link.addEventListener('click', () => {
-            if (window.innerWidth <= 768) {
-                document.querySelector('.nav-anim').classList.remove('active');
-                document.querySelector('.hamburger').classList.remove('open');
-            }
+            const nav = document.querySelector('.nav-anim');
+            const hamburger = document.querySelector('.hamburger');
+            nav.classList.toggle('active');
+            hamburger.classList.toggle('open');
+        }
+        // Close nav when a link is clicked on mobile
+        document.querySelectorAll('.nav-anim a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    document.querySelector('.nav-anim').classList.remove('active');
+                    document.querySelector('.hamburger').classList.remove('open');
+                }
+            });
         });
-    });
-    function togglePw(id, btn) {
-        const input = document.getElementById(id);
-        if (input.type === 'password') {
-            input.type = 'text';
-            btn.textContent = '⌣';
-        } else {
-            input.type = 'password';
-            btn.textContent = '👁';
+        function togglePw(id, btn) {
+            const input = document.getElementById(id);
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = '⌣';
+            } else {
+                input.type = 'password';
+                btn.textContent = '👁';
+            }
         }
-    }
-    // ── Auth nav state ──
-    function updateAuthNav() {
-        const loggedIn = localStorage.getItem('ms_logged_in') === 'true';
-        document.getElementById('nav-login').style.display = loggedIn ? 'none' : 'inline-block';
-        document.getElementById('nav-logout').style.display = loggedIn ? 'inline-block' : 'none';
-    }
-    function handleLogout() {
-        localStorage.removeItem('ms_logged_in');
-        localStorage.removeItem('ms_user_email');
+        // ── Auth nav state ──
+        function updateAuthNav() {
+            const loggedIn = localStorage.getItem('ms_logged_in') === 'true';
+            document.getElementById('nav-login').style.display = loggedIn ? 'none' : 'inline-block';
+            document.getElementById('nav-logout').style.display = loggedIn ? 'inline-block' : 'none';
+        }
+        function handleLogout() {
+            localStorage.removeItem('ms_logged_in');
+            localStorage.removeItem('ms_user_email');
+            updateAuthNav();
+        }
         updateAuthNav();
-    }
-    updateAuthNav();
-    document.getElementById('loginForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
-        const btn = this.querySelector('.btn-auth');
-        if (!email || !password) {
-            alert('Please fill in all fields.');
-            return;
-        }
-        btn.textContent = 'SIGNING IN...';
-        btn.style.opacity = '0.7';
-        // Simulate sign-in (replace with real backend call)
-        setTimeout(() => {
-            localStorage.setItem('ms_logged_in', 'true');
-            localStorage.setItem('ms_user_email', email);
-            window.location.href = 'index.html';
-        }, 1000);
-    });
+        
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const email    = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const btn      = this.querySelector('.btn-auth');
+
+            if (!email || !password) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            btn.textContent = 'SIGNING IN...';
+            btn.style.opacity = '0.7';
+
+            const formData = new FormData();
+            formData.append('email', email);
+            formData.append('password', password);
+
+            fetch('auth/login.php', { method: 'POST', body: formData })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        localStorage.setItem('ms_logged_in', 'true');
+                        localStorage.setItem('ms_user_email', email);
+                        window.location.href = 'index.html';
+                    } else {
+                        alert(data.message);
+                        btn.textContent = 'SIGN IN';
+                        btn.style.opacity = '1';
+                    }
+                })
+                .catch(() => {
+                    alert('Something went wrong. Please try again.');
+                    btn.textContent = 'SIGN IN';
+                    btn.style.opacity = '1';
+                });
+        });
+
     </script>
     
     <script src="js/script.js"> </script>
