@@ -1,11 +1,12 @@
 <?php
 require_once 'includes/db.php';
+require_once 'includes/functions.php';
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name    = trim($_POST['name']    ?? '');
-    $email   = trim($_POST['email']   ?? '');
-    $message = trim($_POST['message'] ?? '');
+    $name    = sanitize($_POST['name']    ?? '');
+    $email   = sanitize($_POST['email']   ?? '');
+    $message = sanitize($_POST['message'] ?? '');
 
     if (!$name || !$email || !$message) {
         echo json_encode(['success' => false, 'message' => 'All fields are required.']);
