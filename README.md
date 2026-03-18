@@ -57,7 +57,6 @@ MathSphere/
 │   └── logout.php           # Session destroy and redirect
 │
 ├── 📄 contact.php           # Contact form handler
-├── 📄 dashboard.php         # User dashboard (session protected)
 ├── 📄 index.html            # Landing Page
 ├── 📄 topics.html           # Interactive Topics Gallery
 ├── 📄 Learn_more.html       # Detailed Math Content (MathJax)
