@@ -4,16 +4,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MathSphere </title>
+    <title>MathSphere – Practice</title>
     <link rel="icon" href="images/logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    
+    <style>
+        /* ── Level selector ── */
+        .level-selector {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 36px;
+            flex-wrap: wrap;
+        }
+        .level-btn {
+            padding: 9px 26px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: 0.3s;
+        }
+        .level-btn.easy   { border-color: #4caf50; color: #4caf50; background: transparent; }
+        .level-btn.medium { border-color: #ff9800; color: #ff9800; background: transparent; }
+        .level-btn.hard   { border-color: #e53935; color: #e53935; background: transparent; }
+        .level-btn.easy.active,   .level-btn.easy:hover   { background: #4caf50; color: #fff; }
+        .level-btn.medium.active, .level-btn.medium:hover { background: #ff9800; color: #fff; }
+        .level-btn.hard.active,   .level-btn.hard:hover   { background: #e53935; color: #fff; }
+
+        /* ── Level badge on title ── */
+        .level-badge {
+            display: inline-block;
+            font-size: 13px;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        .badge-easy   { background: #4caf50; color: #fff; }
+        .badge-medium { background: #ff9800; color: #fff; }
+        .badge-hard   { background: #e53935; color: #fff; }
+
+        .level-panel { display: none; }
+        .level-panel.active { display: block; }
+
+        /* ── Difficulty info strip ── */
+        .diff-info {
+            max-width: 680px;
+            margin: 0 auto 28px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #ccc;
+            text-align: left;
+        }
+        .diff-info.easy   { background: rgba(76,175,80,0.12);  border-left: 4px solid #4caf50; }
+        .diff-info.medium { background: rgba(255,152,0,0.12);  border-left: 4px solid #ff9800; }
+        .diff-info.hard   { background: rgba(229,57,53,0.12);  border-left: 4px solid #e53935; }
+    </style>
 </head>
 
 <body>
 
-    <!-- Auth Guard: redirect to login if not logged in -->
+    <!-- Auth Guard -->
     <script>
         if (localStorage.getItem('ms_logged_in') !== 'true') {
             window.location.replace('login.html');
@@ -21,9 +76,7 @@
     </script>
 
     <header>
-        <a href="index.html">
-            <img src="images/logo.png" alt="MathSphere Logo">
-        </a>
+        <a href="index.html"><img src="images/logo.png" alt="MathSphere Logo"></a>
         <div class="hamburger" onclick="toggleMenu()"></div>
         <nav class="nav-anim">
             <a href="index.html">Home</a>
@@ -39,506 +92,2083 @@
 
     <section class="practice-section">
         <h2>Practice Problems</h2>
-        <p class="subtitle">Choose a topic and test your knowledge — solutions are revealed after you submit!</p>
+        <p class="subtitle">Pick a topic, choose your difficulty level, and test your knowledge!</p>
 
+        <!-- ── Topic tabs ── -->
         <div class="topic-tabs">
-            <button class="tab-btn active" onclick="switchTopic('algebra')">🔢 Algebra</button>
-            <button class="tab-btn" onclick="switchTopic('geometry')">📐 Geometry</button>
-            <button class="tab-btn" onclick="switchTopic('calculus')">∫ Calculus</button>
-            <button class="tab-btn" onclick="switchTopic('statistics')">📊 Statistics</button>
-            <button class="tab-btn" onclick="switchTopic('arithmetic')">➕ Arithmetic</button>
+            <button class="tab-btn active" onclick="switchTopic('algebra',   event)">🔢 Algebra</button>
+            <button class="tab-btn"        onclick="switchTopic('geometry',  event)">📐 Geometry</button>
+            <button class="tab-btn"        onclick="switchTopic('calculus',  event)">∫ Calculus</button>
+            <button class="tab-btn"        onclick="switchTopic('statistics',event)">📊 Statistics</button>
+            <button class="tab-btn"        onclick="switchTopic('arithmetic',event)">➕ Arithmetic</button>
         </div>
 
-        <!-- ══════════════ ALGEBRA ══════════════ -->
+        <!-- ════════════════════════════════════════
+             ALGEBRA
+        ════════════════════════════════════════ -->
         <div class="quiz-panel active" id="panel-algebra">
             <h2 class="topic-title">Algebra</h2>
-            <p class="topic-desc">Equations, expressions, and unknowns.</p>
-            <div class="progress-wrap">
-                <div class="progress-bar" id="prog-algebra"></div>
-            </div>
-            <div class="progress-label" id="plabel-algebra">0 / 5 answered</div>
+            <p class="topic-desc">Equations, expressions, inequalities, and unknowns.</p>
 
-            <!-- Q1 -->
-            <div class="question-card" id="algebra-q1">
-                <h3>1. Solve for x: &nbsp; 2x + 5 = 15 <span class="status-badge" id="badge-algebra-q1"></span></h3>
-                <label><input type="radio" name="algebra-q1" value="a"> x = 5</label>
-                <label><input type="radio" name="algebra-q1" value="b"> x = 10</label>
-                <label><input type="radio" name="algebra-q1" value="c"> x = 2.5</label>
-                <div class="explanation" id="exp-algebra-q1">
-                    <strong>✔ Correct Answer: x = 5</strong>
-                    <div class="step"><span class="step-num">1</span><span>Start with the equation: <em>2x + 5 =
-                                15</em></span></div>
-                    <div class="step"><span class="step-num">2</span><span>Subtract 5 from both sides: <em>2x =
-                                10</em></span></div>
-                    <div class="step"><span class="step-num">3</span><span>Divide both sides by 2: <em>x = 5</em></span>
+            <!-- Level tabs -->
+            <div class="level-selector">
+                <button class="level-btn easy   active" onclick="switchLevel('algebra','easy',   event)">🟢 Easy</button>
+                <button class="level-btn medium"        onclick="switchLevel('algebra','medium', event)">🟡 Medium</button>
+                <button class="level-btn hard"          onclick="switchLevel('algebra','hard',   event)">🔴 Hard</button>
+            </div>
+
+            <!-- ── ALGEBRA EASY ── -->
+            <div class="level-panel active" id="level-algebra-easy">
+                <div class="diff-info easy">🟢 <strong>Easy</strong> — Straightforward one-step and two-step problems. Great for building confidence!</div>
+                <div class="progress-wrap"><div class="progress-bar" id="prog-algebra-easy"></div></div>
+                <div class="progress-label" id="plabel-algebra-easy">0 / 10 answered</div>
+
+                <div class="question-card" id="algebra-easy-q1">
+                    <h3>1. Solve for x: &nbsp; 2x + 5 = 15 <span class="status-badge" id="badge-algebra-easy-q1"></span></h3>
+                    <label><input type="radio" name="algebra-easy-q1" value="a"> x = 3</label>
+                    <label><input type="radio" name="algebra-easy-q1" value="b"> x = 5</label>
+                    <label><input type="radio" name="algebra-easy-q1" value="c"> x = 10</label>
+                    <div class="explanation" id="exp-algebra-easy-q1">
+                        <strong>✔ Correct Answer: x = 5</strong>
+                        <div class="step"><span class="step-num">1</span><span>Start: 2x + 5 = 15</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Subtract 5: 2x = 10</span></div>
+                        <div class="step"><span class="step-num">3</span><span>Divide by 2: x = 5</span></div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Q2 -->
-            <div class="question-card" id="algebra-q2">
-                <h3>2. Expand: &nbsp; (x + 3)² <span class="status-badge" id="badge-algebra-q2"></span></h3>
-                <label><input type="radio" name="algebra-q2" value="a"> x² + 9</label>
-                <label><input type="radio" name="algebra-q2" value="b"> x² + 6x + 9</label>
-                <label><input type="radio" name="algebra-q2" value="c"> x² + 3x + 9</label>
-                <div class="explanation" id="exp-algebra-q2">
-                    <strong>✔ Correct Answer: x² + 6x + 9</strong>
-                    <div class="step"><span class="step-num">1</span><span>Use the identity (a + b)² = a² + 2ab +
-                            b²</span></div>
-                    <div class="step"><span class="step-num">2</span><span>a = x, b = 3 → x² + 2·x·3 + 3²</span></div>
-                    <div class="step"><span class="step-num">3</span><span>Simplify: x² + 6x + 9</span></div>
+                <div class="question-card" id="algebra-easy-q2">
+                    <h3>2. What is the value of 3y when y = 4? <span class="status-badge" id="badge-algebra-easy-q2"></span></h3>
+                    <label><input type="radio" name="algebra-easy-q2" value="a"> 7</label>
+                    <label><input type="radio" name="algebra-easy-q2" value="b"> 12</label>
+                    <label><input type="radio" name="algebra-easy-q2" value="c"> 43</label>
+                    <div class="explanation" id="exp-algebra-easy-q2">
+                        <strong>✔ Correct Answer: 12</strong>
+                        <div class="step"><span class="step-num">1</span><span>Substitute y = 4 into 3y.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>3 × 4 = 12</span></div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Q3 -->
-            <div class="question-card" id="algebra-q3">
-                <h3>3. Solve: &nbsp; 3x − 7 = 2x + 4 <span class="status-badge" id="badge-algebra-q3"></span></h3>
-                <label><input type="radio" name="algebra-q3" value="a"> x = 3</label>
-                <label><input type="radio" name="algebra-q3" value="b"> x = 7</label>
-                <label><input type="radio" name="algebra-q3" value="c"> x = 11</label>
-                <div class="explanation" id="exp-algebra-q3">
-                    <strong>✔ Correct Answer: x = 11</strong>
-                    <div class="step"><span class="step-num">1</span><span>Move x terms to the left: 3x − 2x = 4 +
-                            7</span></div>
-                    <div class="step"><span class="step-num">2</span><span>Simplify: x = 11</span></div>
+                <div class="question-card" id="algebra-easy-q3">
+                    <h3>3. Simplify: &nbsp; 5x + 3x <span class="status-badge" id="badge-algebra-easy-q3"></span></h3>
+                    <label><input type="radio" name="algebra-easy-q3" value="a"> 15x</label>
+                    <label><input type="radio" name="algebra-easy-q3" value="b"> 53x</label>
+                    <label><input type="radio" name="algebra-easy-q3" value="c"> 8x</label>
+                    <div class="explanation" id="exp-algebra-easy-q3">
+                        <strong>✔ Correct Answer: 8x</strong>
+                        <div class="step"><span class="step-num">1</span><span>Like terms share the same variable.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>5x + 3x = (5 + 3)x = 8x</span></div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Q4 -->
-            <div class="question-card" id="algebra-q4">
-                <h3>4. Factor: &nbsp; x² − 5x + 6 <span class="status-badge" id="badge-algebra-q4"></span></h3>
-                <label><input type="radio" name="algebra-q4" value="a"> (x − 2)(x − 3)</label>
-                <label><input type="radio" name="algebra-q4" value="b"> (x + 2)(x + 3)</label>
-                <label><input type="radio" name="algebra-q4" value="c"> (x − 1)(x − 6)</label>
-                <div class="explanation" id="exp-algebra-q4">
-                    <strong>✔ Correct Answer: (x − 2)(x − 3)</strong>
-                    <div class="step"><span class="step-num">1</span><span>Find two numbers that multiply to +6 and add
-                            to −5.</span></div>
-                    <div class="step"><span class="step-num">2</span><span>−2 × −3 = 6 and −2 + (−3) = −5 ✓</span></div>
-                    <div class="step"><span class="step-num">3</span><span>So the factored form is (x − 2)(x −
-                            3).</span></div>
+                <div class="question-card" id="algebra-easy-q4">
+                    <h3>4. Solve: &nbsp; x − 7 = 10 <span class="status-badge" id="badge-algebra-easy-q4"></span></h3>
+                    <label><input type="radio" name="algebra-easy-q4" value="a"> x = 3</label>
+                    <label><input type="radio" name="algebra-easy-q4" value="b"> x = 17</label>
+                    <label><input type="radio" name="algebra-easy-q4" value="c"> x = 70</label>
+                    <div class="explanation" id="exp-algebra-easy-q4">
+                        <strong>✔ Correct Answer: x = 17</strong>
+                        <div class="step"><span class="step-num">1</span><span>Add 7 to both sides.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>x = 10 + 7 = 17</span></div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Q5 -->
-            <div class="question-card" id="algebra-q5">
-                <h3>5. What is the slope of the line &nbsp; y = 3x − 7? <span class="status-badge"
-                        id="badge-algebra-q5"></span></h3>
-                <label><input type="radio" name="algebra-q5" value="a"> −7</label>
-                <label><input type="radio" name="algebra-q5" value="b"> 7</label>
-                <label><input type="radio" name="algebra-q5" value="c"> 3</label>
-                <div class="explanation" id="exp-algebra-q5">
-                    <strong>✔ Correct Answer: 3</strong>
-                    <div class="step"><span class="step-num">1</span><span>The slope-intercept form is y =
-                            <strong>m</strong>x + b, where <strong>m</strong> is the slope.</span></div>
-                    <div class="step"><span class="step-num">2</span><span>Comparing y = 3x − 7, the coefficient of x is
-                            3, so slope = 3.</span></div>
+                <div class="question-card" id="algebra-easy-q5">
+                    <h3>5. If f(x) = 2x + 1, what is f(3)? <span class="status-badge" id="badge-algebra-easy-q5"></span></h3>
+                    <label><input type="radio" name="algebra-easy-q5" value="a"> 5</label>
+                    <label><input type="radio" name="algebra-easy-q5" value="b"> 7</label>
+                    <label><input type="radio" name="algebra-easy-q5" value="c"> 9</label>
+                    <div class="explanation" id="exp-algebra-easy-q5">
+                        <strong>✔ Correct Answer: 7</strong>
+                        <div class="step"><span class="step-num">1</span><span>Substitute x = 3: f(3) = 2(3) + 1</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= 6 + 1 = 7</span></div>
+                    </div>
                 </div>
+
+                <div class="question-card" id="algebra-easy-q6">
+                    <h3>6. What is the y-intercept of y = 4x + 7? <span class="status-badge" id="badge-algebra-easy-q6"></span></h3>
+                    <label><input type="radio" name="algebra-easy-q6" value="a"> 4</label>
+                    <label><input type="radio" name="algebra-easy-q6" value="b"> 7</label>
+                    <label><input type="radio" name="algebra-easy-q6" value="c"> −7</label>
+                    <div class="explanation" id="exp-algebra-easy-q6">
+                        <strong>✔ Correct Answer: 7</strong>
+                        <div class="step"><span class="step-num">1</span><span>In y = mx + b, b is the y-intercept.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Here b = 7.</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="algebra-easy-q7">
+                    <h3>7. Solve for n: &nbsp; n/4 = 9 <span class="status-badge" id="badge-algebra-easy-q7"></span></h3>
+                    <label><input type="radio" name="algebra-easy-q7" value="a"> n = 13</label>
+                    <label><input type="radio" name="algebra-easy-q7" value="b"> n = 2.25</label>
+                    <label><input type="radio" name="algebra-easy-q7" value="c"> n = 36</label>
+                    <div class="explanation" id="exp-algebra-easy-q7">
+                        <strong>✔ Correct Answer: n = 36</strong>
+                        <div class="step"><span class="step-num">1</span><span>Multiply both sides by 4.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>n = 9 × 4 = 36</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="algebra-easy-q8">
+                    <h3>8. Which expression is equivalent to 4(x + 2)? <span class="status-badge" id="badge-algebra-easy-q8"></span></h3>
+                    <label><input type="radio" name="algebra-easy-q8" value="a"> 4x + 2</label>
+                    <label><input type="radio" name="algebra-easy-q8" value="b"> 4x + 8</label>
+                    <label><input type="radio" name="algebra-easy-q8" value="c"> x + 8</label>
+                    <div class="explanation" id="exp-algebra-easy-q8">
+                        <strong>✔ Correct Answer: 4x + 8</strong>
+                        <div class="step"><span class="step-num">1</span><span>Distribute: 4 × x = 4x and 4 × 2 = 8.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Result: 4x + 8</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="algebra-easy-q9">
+                    <h3>9. If a = 3 and b = 5, what is 2a − b? <span class="status-badge" id="badge-algebra-easy-q9"></span></h3>
+                    <label><input type="radio" name="algebra-easy-q9" value="a"> 16</label>
+                    <label><input type="radio" name="algebra-easy-q9" value="b"> 11</label>
+                    <label><input type="radio" name="algebra-easy-q9" value="c"> 1</label>
+                    <div class="explanation" id="exp-algebra-easy-q9">
+                        <strong>✔ Correct Answer: 1</strong>
+                        <div class="step"><span class="step-num">1</span><span>2a = 2 × 3 = 6</span></div>
+                        <div class="step"><span class="step-num">2</span><span>2a − b = 6 − 5 = 1</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="algebra-easy-q10">
+                    <h3>10. Solve: &nbsp; 3x = 21 <span class="status-badge" id="badge-algebra-easy-q10"></span></h3>
+                    <label><input type="radio" name="algebra-easy-q10" value="a"> x = 7</label>
+                    <label><input type="radio" name="algebra-easy-q10" value="b"> x = 18</label>
+                    <label><input type="radio" name="algebra-easy-q10" value="c"> x = 63</label>
+                    <div class="explanation" id="exp-algebra-easy-q10">
+                        <strong>✔ Correct Answer: x = 7</strong>
+                        <div class="step"><span class="step-num">1</span><span>Divide both sides by 3.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>x = 21 ÷ 3 = 7</span></div>
+                    </div>
+                </div>
+
+                <button class="btn-submit" onclick="submitQuiz('algebra','easy')">Submit Answers</button>
+                <div class="score-box" id="score-algebra-easy"></div>
             </div>
 
-            <button class="btn-submit" onclick="submitQuiz('algebra')">Submit Answers</button>
-            <div class="score-box" id="score-algebra"></div>
+            <!-- ── ALGEBRA MEDIUM ── -->
+            <div class="level-panel" id="level-algebra-medium">
+                <div class="diff-info medium">🟡 <strong>Medium</strong> — Multi-step equations, factoring, and function analysis.</div>
+                <div class="progress-wrap"><div class="progress-bar" id="prog-algebra-medium"></div></div>
+                <div class="progress-label" id="plabel-algebra-medium">0 / 10 answered</div>
+
+                <div class="question-card" id="algebra-medium-q1">
+                    <h3>1. Solve: &nbsp; 3x − 7 = 2x + 4 <span class="status-badge" id="badge-algebra-medium-q1"></span></h3>
+                    <label><input type="radio" name="algebra-medium-q1" value="a"> x = 3</label>
+                    <label><input type="radio" name="algebra-medium-q1" value="b"> x = 7</label>
+                    <label><input type="radio" name="algebra-medium-q1" value="c"> x = 11</label>
+                    <div class="explanation" id="exp-algebra-medium-q1">
+                        <strong>✔ Correct Answer: x = 11</strong>
+                        <div class="step"><span class="step-num">1</span><span>Move x terms left: 3x − 2x = 4 + 7</span></div>
+                        <div class="step"><span class="step-num">2</span><span>x = 11</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="algebra-medium-q2">
+                    <h3>2. Expand: &nbsp; (x + 3)² <span class="status-badge" id="badge-algebra-medium-q2"></span></h3>
+                    <label><input type="radio" name="algebra-medium-q2" value="a"> x² + 9</label>
+                    <label><input type="radio" name="algebra-medium-q2" value="b"> x² + 6x + 9</label>
+                    <label><input type="radio" name="algebra-medium-q2" value="c"> x² + 3x + 9</label>
+                    <div class="explanation" id="exp-algebra-medium-q2">
+                        <strong>✔ Correct Answer: x² + 6x + 9</strong>
+                        <div class="step"><span class="step-num">1</span><span>Use (a+b)² = a² + 2ab + b²</span></div>
+                        <div class="step"><span class="step-num">2</span><span>x² + 2(x)(3) + 3² = x² + 6x + 9</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="algebra-medium-q3">
+                    <h3>3. Factor: &nbsp; x² − 5x + 6 <span class="status-badge" id="badge-algebra-medium-q3"></span></h3>
+                    <label><input type="radio" name="algebra-medium-q3" value="a"> (x − 2)(x − 3)</label>
+                    <label><input type="radio" name="algebra-medium-q3" value="b"> (x + 2)(x + 3)</label>
+                    <label><input type="radio" name="algebra-medium-q3" value="c"> (x − 1)(x − 6)</label>
+                    <div class="explanation" id="exp-algebra-medium-q3">
+                        <strong>✔ Correct Answer: (x − 2)(x − 3)</strong>
+                        <div class="step"><span class="step-num">1</span><span>Find two numbers: multiply to +6, add to −5.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>−2 × −3 = 6 and −2 + (−3) = −5 ✓</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="algebra-medium-q4">
+                    <h3>4. What is the slope of the line &nbsp; y = 3x − 7? <span class="status-badge" id="badge-algebra-medium-q4"></span></h3>
+                    <label><input type="radio" name="algebra-medium-q4" value="a"> −7</label>
+                    <label><input type="radio" name="algebra-medium-q4" value="b"> 7</label>
+                    <label><input type="radio" name="algebra-medium-q4" value="c"> 3</label>
+                    <div class="explanation" id="exp-algebra-medium-q4">
+                        <strong>✔ Correct Answer: 3</strong>
+                        <div class="step"><span class="step-num">1</span><span>In y = mx + b, m is the slope.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Coefficient of x is 3, so slope = 3.</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="algebra-medium-q5">
+                    <h3>5. Solve the system: x + y = 7 and x − y = 3 <span class="status-badge" id="badge-algebra-medium-q5"></span></h3>
+                    <label><input type="radio" name="algebra-medium-q5" value="a"> x = 4, y = 3</label>
+                    <label><input type="radio" name="algebra-medium-q5" value="b"> x = 5, y = 2</label>
+                    <label><input type="radio" name="algebra-medium-q5" value="c"> x = 6, y = 1</label>
+                    <div class="explanation" id="exp-algebra-medium-q5">
+                        <strong>✔ Correct Answer: x = 5, y = 2</strong>
+                        <div class="step"><span class="step-num">1</span><span>Add the equations: 2x = 10 → x = 5</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Substitute: 5 + y = 7 → y = 2</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="algebra-medium-q6">
+                    <h3>6. Solve the inequality: &nbsp; 2x − 3 &lt; 7 <span class="status-badge" id="badge-algebra-medium-q6"></span></h3>
+                    <label><input type="radio" name="algebra-medium-q6" value="a"> x &lt; 2</label>
+                    <label><input type="radio" name="algebra-medium-q6" value="b"> x &lt; 5</label>
+                    <label><input type="radio" name="algebra-medium-q6" value="c"> x &gt; 5</label>
+                    <div class="explanation" id="exp-algebra-medium-q6">
+                        <strong>✔ Correct Answer: x &lt; 5</strong>
+                        <div class="step"><span class="step-num">1</span><span>Add 3: 2x &lt; 10</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Divide by 2: x &lt; 5</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="algebra-medium-q7">
+                    <h3>7. What are the roots of x² − 4 = 0? <span class="status-badge" id="badge-algebra-medium-q7"></span></h3>
+                    <label><input type="radio" name="algebra-medium-q7" value="a"> x = ±4</label>
+                    <label><input type="radio" name="algebra-medium-q7" value="b"> x = ±2</label>
+                    <label><input type="radio" name="algebra-medium-q7" value="c"> x = 2 only</label>
+                    <div class="explanation" id="exp-algebra-medium-q7">
+                        <strong>✔ Correct Answer: x = ±2</strong>
+                        <div class="step"><span class="step-num">1</span><span>x² = 4 → x = ±√4</span></div>
+                        <div class="step"><span class="step-num">2</span><span>x = 2 or x = −2</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="algebra-medium-q8">
+                    <h3>8. Simplify: &nbsp; (3x²)(4x³) <span class="status-badge" id="badge-algebra-medium-q8"></span></h3>
+                    <label><input type="radio" name="algebra-medium-q8" value="a"> 7x⁵</label>
+                    <label><input type="radio" name="algebra-medium-q8" value="b"> 12x⁶</label>
+                    <label><input type="radio" name="algebra-medium-q8" value="c"> 12x⁵</label>
+                    <div class="explanation" id="exp-algebra-medium-q8">
+                        <strong>✔ Correct Answer: 12x⁵</strong>
+                        <div class="step"><span class="step-num">1</span><span>Multiply coefficients: 3 × 4 = 12</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Add exponents: x² × x³ = x⁵ → 12x⁵</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="algebra-medium-q9">
+                    <h3>9. What is the inverse function of f(x) = 2x + 6? <span class="status-badge" id="badge-algebra-medium-q9"></span></h3>
+                    <label><input type="radio" name="algebra-medium-q9" value="a"> f⁻¹(x) = (x − 6)/2</label>
+                    <label><input type="radio" name="algebra-medium-q9" value="b"> f⁻¹(x) = 2x − 6</label>
+                    <label><input type="radio" name="algebra-medium-q9" value="c"> f⁻¹(x) = x/2 + 6</label>
+                    <div class="explanation" id="exp-algebra-medium-q9">
+                        <strong>✔ Correct Answer: f⁻¹(x) = (x − 6)/2</strong>
+                        <div class="step"><span class="step-num">1</span><span>Replace f(x) with y: y = 2x + 6</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Swap x and y, solve for y: x = 2y + 6 → y = (x−6)/2</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="algebra-medium-q10">
+                    <h3>10. If 5x + 2y = 20 and y = 5, what is x? <span class="status-badge" id="badge-algebra-medium-q10"></span></h3>
+                    <label><input type="radio" name="algebra-medium-q10" value="a"> x = 6</label>
+                    <label><input type="radio" name="algebra-medium-q10" value="b"> x = 3</label>
+                    <label><input type="radio" name="algebra-medium-q10" value="c"> x = 2</label>
+                    <div class="explanation" id="exp-algebra-medium-q10">
+                        <strong>✔ Correct Answer: x = 2</strong>
+                        <div class="step"><span class="step-num">1</span><span>Substitute y = 5: 5x + 10 = 20</span></div>
+                        <div class="step"><span class="step-num">2</span><span>5x = 10 → x = 2</span></div>
+                    </div>
+                </div>
+
+                <button class="btn-submit" onclick="submitQuiz('algebra','medium')">Submit Answers</button>
+                <div class="score-box" id="score-algebra-medium"></div>
+            </div>
+
+            <!-- ── ALGEBRA HARD ── -->
+            <div class="level-panel" id="level-algebra-hard">
+                <div class="diff-info hard">🔴 <strong>Hard</strong> — Quadratic formula, complex inequalities, and advanced functions.</div>
+                <div class="progress-wrap"><div class="progress-bar" id="prog-algebra-hard"></div></div>
+                <div class="progress-label" id="plabel-algebra-hard">0 / 10 answered</div>
+
+                <div class="question-card" id="algebra-hard-q1">
+                    <h3>1. Solve using the quadratic formula: &nbsp; x² − 5x + 6 = 0 <span class="status-badge" id="badge-algebra-hard-q1"></span></h3>
+                    <label><input type="radio" name="algebra-hard-q1" value="a"> x = 1 or x = 6</label>
+                    <label><input type="radio" name="algebra-hard-q1" value="b"> x = 2 or x = 3</label>
+                    <label><input type="radio" name="algebra-hard-q1" value="c"> x = −2 or x = −3</label>
+                    <div class="explanation" id="exp-algebra-hard-q1">
+                        <strong>✔ Correct Answer: x = 2 or x = 3</strong>
+                        <div class="step"><span class="step-num">1</span><span>x = [5 ± √(25−24)] / 2 = [5 ± 1] / 2</span></div>
+                        <div class="step"><span class="step-num">2</span><span>x = (5+1)/2 = 3 or x = (5−1)/2 = 2</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="algebra-hard-q2">
+                    <h3>2. Which inequality represents the solution to &nbsp; −3x &gt; 12? <span class="status-badge" id="badge-algebra-hard-q2"></span></h3>
+                    <label><input type="radio" name="algebra-hard-q2" value="a"> x &gt; −4</label>
+                    <label><input type="radio" name="algebra-hard-q2" value="b"> x &lt; −4</label>
+                    <label><input type="radio" name="algebra-hard-q2" value="c"> x &gt; 4</label>
+                    <div class="explanation" id="exp-algebra-hard-q2">
+                        <strong>✔ Correct Answer: x &lt; −4</strong>
+                        <div class="step"><span class="step-num">1</span><span>Divide both sides by −3 (flip the inequality sign).</span></div>
+                        <div class="step"><span class="step-num">2</span><span>x &lt; −4</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="algebra-hard-q3">
+                    <h3>3. If g(x) = x² − 4 and h(x) = 2x, find g(h(3)). <span class="status-badge" id="badge-algebra-hard-q3"></span></h3>
+                    <label><input type="radio" name="algebra-hard-q3" value="a"> 32</label>
+                    <label><input type="radio" name="algebra-hard-q3" value="b"> 14</label>
+                    <label><input type="radio" name="algebra-hard-q3" value="c"> 5</label>
+                    <div class="explanation" id="exp-algebra-hard-q3">
+                        <strong>✔ Correct Answer: 32</strong>
+                        <div class="step"><span class="step-num">1</span><span>First find h(3) = 2(3) = 6</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Then g(6) = 6² − 4 = 36 − 4 = 32</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="algebra-hard-q4">
+                    <h3>4. What is the discriminant of &nbsp; 2x² + 3x − 5 = 0? <span class="status-badge" id="badge-algebra-hard-q4"></span></h3>
+                    <label><input type="radio" name="algebra-hard-q4" value="a"> 49</label>
+                    <label><input type="radio" name="algebra-hard-q4" value="b"> −31</label>
+                    <label><input type="radio" name="algebra-hard-q4" value="c"> 9</label>
+                    <div class="explanation" id="exp-algebra-hard-q4">
+                        <strong>✔ Correct Answer: 49</strong>
+                        <div class="step"><span class="step-num">1</span><span>Discriminant = b² − 4ac = 3² − 4(2)(−5)</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= 9 + 40 = 49</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="algebra-hard-q5">
+                    <h3>5. Simplify: &nbsp; (x² − 9) / (x − 3) <span class="status-badge" id="badge-algebra-hard-q5"></span></h3>
+                    <label><input type="radio" name="algebra-hard-q5" value="a"> x − 3</label>
+                    <label><input type="radio" name="algebra-hard-q5" value="b"> x + 3</label>
+                    <label><input type="radio" name="algebra-hard-q5" value="c"> x² − 3</label>
+                    <div class="explanation" id="exp-algebra-hard-q5">
+                        <strong>✔ Correct Answer: x + 3</strong>
+                        <div class="step"><span class="step-num">1</span><span>Factor the numerator: x² − 9 = (x+3)(x−3)</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Cancel (x−3): result is (x + 3), x ≠ 3</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="algebra-hard-q6">
+                    <h3>6. Solve: &nbsp; |2x − 4| = 10 <span class="status-badge" id="badge-algebra-hard-q6"></span></h3>
+                    <label><input type="radio" name="algebra-hard-q6" value="a"> x = 7 only</label>
+                    <label><input type="radio" name="algebra-hard-q6" value="b"> x = 7 or x = −3</label>
+                    <label><input type="radio" name="algebra-hard-q6" value="c"> x = 3 or x = −7</label>
+                    <div class="explanation" id="exp-algebra-hard-q6">
+                        <strong>✔ Correct Answer: x = 7 or x = −3</strong>
+                        <div class="step"><span class="step-num">1</span><span>Case 1: 2x − 4 = 10 → x = 7</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Case 2: 2x − 4 = −10 → x = −3</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="algebra-hard-q7">
+                    <h3>7. The roots of x² + bx + 12 = 0 are x = 3 and x = 4. What is b? <span class="status-badge" id="badge-algebra-hard-q7"></span></h3>
+                    <label><input type="radio" name="algebra-hard-q7" value="a"> b = 7</label>
+                    <label><input type="radio" name="algebra-hard-q7" value="b"> b = −7</label>
+                    <label><input type="radio" name="algebra-hard-q7" value="c"> b = 12</label>
+                    <div class="explanation" id="exp-algebra-hard-q7">
+                        <strong>✔ Correct Answer: b = −7</strong>
+                        <div class="step"><span class="step-num">1</span><span>By Vieta's formulas, sum of roots = −b → 3 + 4 = −b</span></div>
+                        <div class="step"><span class="step-num">2</span><span>7 = −b → b = −7</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="algebra-hard-q8">
+                    <h3>8. Solve for x: &nbsp; log₂(x) = 5 <span class="status-badge" id="badge-algebra-hard-q8"></span></h3>
+                    <label><input type="radio" name="algebra-hard-q8" value="a"> x = 10</label>
+                    <label><input type="radio" name="algebra-hard-q8" value="b"> x = 25</label>
+                    <label><input type="radio" name="algebra-hard-q8" value="c"> x = 32</label>
+                    <div class="explanation" id="exp-algebra-hard-q8">
+                        <strong>✔ Correct Answer: x = 32</strong>
+                        <div class="step"><span class="step-num">1</span><span>log₂(x) = 5 means 2⁵ = x</span></div>
+                        <div class="step"><span class="step-num">2</span><span>x = 32</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="algebra-hard-q9">
+                    <h3>9. What is the vertex of the parabola y = x² − 6x + 11? <span class="status-badge" id="badge-algebra-hard-q9"></span></h3>
+                    <label><input type="radio" name="algebra-hard-q9" value="a"> (3, 2)</label>
+                    <label><input type="radio" name="algebra-hard-q9" value="b"> (6, 11)</label>
+                    <label><input type="radio" name="algebra-hard-q9" value="c"> (−3, 2)</label>
+                    <div class="explanation" id="exp-algebra-hard-q9">
+                        <strong>✔ Correct Answer: (3, 2)</strong>
+                        <div class="step"><span class="step-num">1</span><span>Vertex x = −b/2a = 6/2 = 3</span></div>
+                        <div class="step"><span class="step-num">2</span><span>y = 9 − 18 + 11 = 2 → vertex (3, 2)</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="algebra-hard-q10">
+                    <h3>10. For what value of k does kx² − 4x + 1 = 0 have exactly one solution? <span class="status-badge" id="badge-algebra-hard-q10"></span></h3>
+                    <label><input type="radio" name="algebra-hard-q10" value="a"> k = 2</label>
+                    <label><input type="radio" name="algebra-hard-q10" value="b"> k = 4</label>
+                    <label><input type="radio" name="algebra-hard-q10" value="c"> k = 1</label>
+                    <div class="explanation" id="exp-algebra-hard-q10">
+                        <strong>✔ Correct Answer: k = 4</strong>
+                        <div class="step"><span class="step-num">1</span><span>One solution means discriminant = 0: b² − 4ac = 0</span></div>
+                        <div class="step"><span class="step-num">2</span><span>16 − 4k = 0 → k = 4</span></div>
+                    </div>
+                </div>
+
+                <button class="btn-submit" onclick="submitQuiz('algebra','hard')">Submit Answers</button>
+                <div class="score-box" id="score-algebra-hard"></div>
+            </div>
         </div>
 
-        <!-- ══════════════ GEOMETRY ══════════════ -->
+        <!-- ════════════════════════════════════════
+             GEOMETRY
+        ════════════════════════════════════════ -->
         <div class="quiz-panel" id="panel-geometry">
             <h2 class="topic-title">Geometry</h2>
             <p class="topic-desc">Shapes, areas, volumes, and angles.</p>
-            <div class="progress-wrap">
-                <div class="progress-bar" id="prog-geometry"></div>
-            </div>
-            <div class="progress-label" id="plabel-geometry">0 / 5 answered</div>
 
-            <div class="question-card" id="geometry-q1">
-                <h3>1. What is the area of a circle with radius 3? <span class="status-badge"
-                        id="badge-geometry-q1"></span></h3>
-                <label><input type="radio" name="geometry-q1" value="a"> 6π</label>
-                <label><input type="radio" name="geometry-q1" value="b"> 9π</label>
-                <label><input type="radio" name="geometry-q1" value="c"> 3π</label>
-                <div class="explanation" id="exp-geometry-q1">
-                    <strong>✔ Correct Answer: 9π</strong>
-                    <div class="step"><span class="step-num">1</span><span>Area of a circle = π r²</span></div>
-                    <div class="step"><span class="step-num">2</span><span>r = 3 → Area = π × 3² = 9π</span></div>
-                </div>
+            <div class="level-selector">
+                <button class="level-btn easy   active" onclick="switchLevel('geometry','easy',   event)">🟢 Easy</button>
+                <button class="level-btn medium"        onclick="switchLevel('geometry','medium', event)">🟡 Medium</button>
+                <button class="level-btn hard"          onclick="switchLevel('geometry','hard',   event)">🔴 Hard</button>
             </div>
 
-            <div class="question-card" id="geometry-q2">
-                <h3>2. What is the sum of interior angles of a triangle? <span class="status-badge"
-                        id="badge-geometry-q2"></span></h3>
-                <label><input type="radio" name="geometry-q2" value="a"> 90°</label>
-                <label><input type="radio" name="geometry-q2" value="b"> 270°</label>
-                <label><input type="radio" name="geometry-q2" value="c"> 180°</label>
-                <div class="explanation" id="exp-geometry-q2">
-                    <strong>✔ Correct Answer: 180°</strong>
-                    <div class="step"><span class="step-num">1</span><span>This is a fundamental theorem of Euclidean
-                            geometry.</span></div>
-                    <div class="step"><span class="step-num">2</span><span>For any triangle, the three interior angles
-                            always add up to exactly 180°.</span></div>
-                </div>
-            </div>
+            <!-- ── GEOMETRY EASY ── -->
+            <div class="level-panel active" id="level-geometry-easy">
+                <div class="diff-info easy">🟢 <strong>Easy</strong> — Basic shapes, angles, and simple formulas.</div>
+                <div class="progress-wrap"><div class="progress-bar" id="prog-geometry-easy"></div></div>
+                <div class="progress-label" id="plabel-geometry-easy">0 / 10 answered</div>
 
-            <div class="question-card" id="geometry-q3">
-                <h3>3. What is the hypotenuse of a right triangle with legs 3 and 4? <span class="status-badge"
-                        id="badge-geometry-q3"></span></h3>
-                <label><input type="radio" name="geometry-q3" value="a"> 5</label>
-                <label><input type="radio" name="geometry-q3" value="b"> 7</label>
-                <label><input type="radio" name="geometry-q3" value="c"> 6</label>
-                <div class="explanation" id="exp-geometry-q3">
-                    <strong>✔ Correct Answer: 5</strong>
-                    <div class="step"><span class="step-num">1</span><span>Use the Pythagorean theorem: a² + b² =
-                            c²</span></div>
-                    <div class="step"><span class="step-num">2</span><span>3² + 4² = 9 + 16 = 25</span></div>
-                    <div class="step"><span class="step-num">3</span><span>c = √25 = 5</span></div>
-                </div>
-            </div>
-
-            <div class="question-card" id="geometry-q4">
-                <h3>4. What is the volume of a cube with side length 4? <span class="status-badge"
-                        id="badge-geometry-q4"></span></h3>
-                <label><input type="radio" name="geometry-q4" value="a"> 16</label>
-                <label><input type="radio" name="geometry-q4" value="b"> 48</label>
-                <label><input type="radio" name="geometry-q4" value="c"> 64</label>
-                <div class="explanation" id="exp-geometry-q4">
-                    <strong>✔ Correct Answer: 64</strong>
-                    <div class="step"><span class="step-num">1</span><span>Volume of a cube = side³</span></div>
-                    <div class="step"><span class="step-num">2</span><span>V = 4³ = 4 × 4 × 4 = 64</span></div>
-                </div>
-            </div>
-
-            <div class="question-card" id="geometry-q5">
-                <h3>5. The perimeter of a rectangle is 36. Its width is 6. What is its length? <span
-                        class="status-badge" id="badge-geometry-q5"></span></h3>
-                <label><input type="radio" name="geometry-q5" value="a"> 6</label>
-                <label><input type="radio" name="geometry-q5" value="b"> 12</label>
-                <label><input type="radio" name="geometry-q5" value="c"> 24</label>
-                <div class="explanation" id="exp-geometry-q5">
-                    <strong>✔ Correct Answer: 12</strong>
-                    <div class="step"><span class="step-num">1</span><span>Perimeter = 2(l + w) → 36 = 2(l + 6)</span>
+                <div class="question-card" id="geometry-easy-q1">
+                    <h3>1. What is the sum of interior angles of a triangle? <span class="status-badge" id="badge-geometry-easy-q1"></span></h3>
+                    <label><input type="radio" name="geometry-easy-q1" value="a"> 90°</label>
+                    <label><input type="radio" name="geometry-easy-q1" value="b"> 270°</label>
+                    <label><input type="radio" name="geometry-easy-q1" value="c"> 180°</label>
+                    <div class="explanation" id="exp-geometry-easy-q1">
+                        <strong>✔ Correct Answer: 180°</strong>
+                        <div class="step"><span class="step-num">1</span><span>Fundamental theorem: all triangle angles sum to 180°.</span></div>
                     </div>
-                    <div class="step"><span class="step-num">2</span><span>Divide by 2: l + 6 = 18</span></div>
-                    <div class="step"><span class="step-num">3</span><span>l = 18 − 6 = 12</span></div>
                 </div>
+
+                <div class="question-card" id="geometry-easy-q2">
+                    <h3>2. What is the area of a rectangle with length 8 and width 5? <span class="status-badge" id="badge-geometry-easy-q2"></span></h3>
+                    <label><input type="radio" name="geometry-easy-q2" value="a"> 26</label>
+                    <label><input type="radio" name="geometry-easy-q2" value="b"> 40</label>
+                    <label><input type="radio" name="geometry-easy-q2" value="c"> 13</label>
+                    <div class="explanation" id="exp-geometry-easy-q2">
+                        <strong>✔ Correct Answer: 40</strong>
+                        <div class="step"><span class="step-num">1</span><span>Area = length × width = 8 × 5 = 40</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-easy-q3">
+                    <h3>3. How many sides does a hexagon have? <span class="status-badge" id="badge-geometry-easy-q3"></span></h3>
+                    <label><input type="radio" name="geometry-easy-q3" value="a"> 5</label>
+                    <label><input type="radio" name="geometry-easy-q3" value="b"> 8</label>
+                    <label><input type="radio" name="geometry-easy-q3" value="c"> 6</label>
+                    <div class="explanation" id="exp-geometry-easy-q3">
+                        <strong>✔ Correct Answer: 6</strong>
+                        <div class="step"><span class="step-num">1</span><span>"Hex" comes from Greek meaning six. A hexagon has 6 sides.</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-easy-q4">
+                    <h3>4. What is the perimeter of a square with side 7? <span class="status-badge" id="badge-geometry-easy-q4"></span></h3>
+                    <label><input type="radio" name="geometry-easy-q4" value="a"> 14</label>
+                    <label><input type="radio" name="geometry-easy-q4" value="b"> 28</label>
+                    <label><input type="radio" name="geometry-easy-q4" value="c"> 49</label>
+                    <div class="explanation" id="exp-geometry-easy-q4">
+                        <strong>✔ Correct Answer: 28</strong>
+                        <div class="step"><span class="step-num">1</span><span>Perimeter = 4 × side = 4 × 7 = 28</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-easy-q5">
+                    <h3>5. What type of angle is exactly 90°? <span class="status-badge" id="badge-geometry-easy-q5"></span></h3>
+                    <label><input type="radio" name="geometry-easy-q5" value="a"> Obtuse</label>
+                    <label><input type="radio" name="geometry-easy-q5" value="b"> Acute</label>
+                    <label><input type="radio" name="geometry-easy-q5" value="c"> Right</label>
+                    <div class="explanation" id="exp-geometry-easy-q5">
+                        <strong>✔ Correct Answer: Right</strong>
+                        <div class="step"><span class="step-num">1</span><span>Right angle = exactly 90°. Acute &lt; 90°. Obtuse &gt; 90°.</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-easy-q6">
+                    <h3>6. What is the circumference of a circle with radius 7? (Use π ≈ 3.14) <span class="status-badge" id="badge-geometry-easy-q6"></span></h3>
+                    <label><input type="radio" name="geometry-easy-q6" value="a"> 21.98</label>
+                    <label><input type="radio" name="geometry-easy-q6" value="b"> 43.96</label>
+                    <label><input type="radio" name="geometry-easy-q6" value="c"> 153.86</label>
+                    <div class="explanation" id="exp-geometry-easy-q6">
+                        <strong>✔ Correct Answer: 43.96</strong>
+                        <div class="step"><span class="step-num">1</span><span>C = 2πr = 2 × 3.14 × 7</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= 43.96</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-easy-q7">
+                    <h3>7. What is the area of a triangle with base 10 and height 6? <span class="status-badge" id="badge-geometry-easy-q7"></span></h3>
+                    <label><input type="radio" name="geometry-easy-q7" value="a"> 60</label>
+                    <label><input type="radio" name="geometry-easy-q7" value="b"> 16</label>
+                    <label><input type="radio" name="geometry-easy-q7" value="c"> 30</label>
+                    <div class="explanation" id="exp-geometry-easy-q7">
+                        <strong>✔ Correct Answer: 30</strong>
+                        <div class="step"><span class="step-num">1</span><span>Area = ½ × base × height</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= ½ × 10 × 6 = 30</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-easy-q8">
+                    <h3>8. Two angles are supplementary. One is 65°. What is the other? <span class="status-badge" id="badge-geometry-easy-q8"></span></h3>
+                    <label><input type="radio" name="geometry-easy-q8" value="a"> 25°</label>
+                    <label><input type="radio" name="geometry-easy-q8" value="b"> 115°</label>
+                    <label><input type="radio" name="geometry-easy-q8" value="c"> 125°</label>
+                    <div class="explanation" id="exp-geometry-easy-q8">
+                        <strong>✔ Correct Answer: 115°</strong>
+                        <div class="step"><span class="step-num">1</span><span>Supplementary angles add up to 180°.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>180° − 65° = 115°</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-easy-q9">
+                    <h3>9. How many degrees are in a full circle? <span class="status-badge" id="badge-geometry-easy-q9"></span></h3>
+                    <label><input type="radio" name="geometry-easy-q9" value="a"> 180°</label>
+                    <label><input type="radio" name="geometry-easy-q9" value="b"> 270°</label>
+                    <label><input type="radio" name="geometry-easy-q9" value="c"> 360°</label>
+                    <div class="explanation" id="exp-geometry-easy-q9">
+                        <strong>✔ Correct Answer: 360°</strong>
+                        <div class="step"><span class="step-num">1</span><span>A full rotation is always 360°.</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-easy-q10">
+                    <h3>10. What is the volume of a cube with side length 4? <span class="status-badge" id="badge-geometry-easy-q10"></span></h3>
+                    <label><input type="radio" name="geometry-easy-q10" value="a"> 16</label>
+                    <label><input type="radio" name="geometry-easy-q10" value="b"> 48</label>
+                    <label><input type="radio" name="geometry-easy-q10" value="c"> 64</label>
+                    <div class="explanation" id="exp-geometry-easy-q10">
+                        <strong>✔ Correct Answer: 64</strong>
+                        <div class="step"><span class="step-num">1</span><span>V = side³ = 4³ = 64</span></div>
+                    </div>
+                </div>
+
+                <button class="btn-submit" onclick="submitQuiz('geometry','easy')">Submit Answers</button>
+                <div class="score-box" id="score-geometry-easy"></div>
             </div>
 
-            <button class="btn-submit" onclick="submitQuiz('geometry')">Submit Answers</button>
-            <div class="score-box" id="score-geometry"></div>
+            <!-- ── GEOMETRY MEDIUM ── -->
+            <div class="level-panel" id="level-geometry-medium">
+                <div class="diff-info medium">🟡 <strong>Medium</strong> — Circles, Pythagorean theorem, and 3D shapes.</div>
+                <div class="progress-wrap"><div class="progress-bar" id="prog-geometry-medium"></div></div>
+                <div class="progress-label" id="plabel-geometry-medium">0 / 10 answered</div>
+
+                <div class="question-card" id="geometry-medium-q1">
+                    <h3>1. What is the area of a circle with radius 3? <span class="status-badge" id="badge-geometry-medium-q1"></span></h3>
+                    <label><input type="radio" name="geometry-medium-q1" value="a"> 6π</label>
+                    <label><input type="radio" name="geometry-medium-q1" value="b"> 9π</label>
+                    <label><input type="radio" name="geometry-medium-q1" value="c"> 3π</label>
+                    <div class="explanation" id="exp-geometry-medium-q1">
+                        <strong>✔ Correct Answer: 9π</strong>
+                        <div class="step"><span class="step-num">1</span><span>Area = πr² = π × 3² = 9π</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-medium-q2">
+                    <h3>2. What is the hypotenuse of a right triangle with legs 3 and 4? <span class="status-badge" id="badge-geometry-medium-q2"></span></h3>
+                    <label><input type="radio" name="geometry-medium-q2" value="a"> 5</label>
+                    <label><input type="radio" name="geometry-medium-q2" value="b"> 7</label>
+                    <label><input type="radio" name="geometry-medium-q2" value="c"> 6</label>
+                    <div class="explanation" id="exp-geometry-medium-q2">
+                        <strong>✔ Correct Answer: 5</strong>
+                        <div class="step"><span class="step-num">1</span><span>c² = 3² + 4² = 9 + 16 = 25</span></div>
+                        <div class="step"><span class="step-num">2</span><span>c = √25 = 5</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-medium-q3">
+                    <h3>3. What is the volume of a cube with side length 4? <span class="status-badge" id="badge-geometry-medium-q3"></span></h3>
+                    <label><input type="radio" name="geometry-medium-q3" value="a"> 16</label>
+                    <label><input type="radio" name="geometry-medium-q3" value="b"> 48</label>
+                    <label><input type="radio" name="geometry-medium-q3" value="c"> 64</label>
+                    <div class="explanation" id="exp-geometry-medium-q3">
+                        <strong>✔ Correct Answer: 64</strong>
+                        <div class="step"><span class="step-num">1</span><span>V = side³ = 4³ = 64</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-medium-q4">
+                    <h3>4. The perimeter of a rectangle is 36. Width is 6. What is the length? <span class="status-badge" id="badge-geometry-medium-q4"></span></h3>
+                    <label><input type="radio" name="geometry-medium-q4" value="a"> 6</label>
+                    <label><input type="radio" name="geometry-medium-q4" value="b"> 12</label>
+                    <label><input type="radio" name="geometry-medium-q4" value="c"> 24</label>
+                    <div class="explanation" id="exp-geometry-medium-q4">
+                        <strong>✔ Correct Answer: 12</strong>
+                        <div class="step"><span class="step-num">1</span><span>P = 2(l+w) → 36 = 2(l+6)</span></div>
+                        <div class="step"><span class="step-num">2</span><span>l + 6 = 18 → l = 12</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-medium-q5">
+                    <h3>5. What is the circumference of a circle with diameter 10? <span class="status-badge" id="badge-geometry-medium-q5"></span></h3>
+                    <label><input type="radio" name="geometry-medium-q5" value="a"> 5π</label>
+                    <label><input type="radio" name="geometry-medium-q5" value="b"> 20π</label>
+                    <label><input type="radio" name="geometry-medium-q5" value="c"> 10π</label>
+                    <div class="explanation" id="exp-geometry-medium-q5">
+                        <strong>✔ Correct Answer: 10π</strong>
+                        <div class="step"><span class="step-num">1</span><span>C = π × diameter = π × 10 = 10π</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-medium-q6">
+                    <h3>6. What is the area of a circle with radius 5? <span class="status-badge" id="badge-geometry-medium-q6"></span></h3>
+                    <label><input type="radio" name="geometry-medium-q6" value="a"> 10π</label>
+                    <label><input type="radio" name="geometry-medium-q6" value="b"> 25π</label>
+                    <label><input type="radio" name="geometry-medium-q6" value="c"> 5π</label>
+                    <div class="explanation" id="exp-geometry-medium-q6">
+                        <strong>✔ Correct Answer: 25π</strong>
+                        <div class="step"><span class="step-num">1</span><span>Area = πr² = π(5²) = 25π</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-medium-q7">
+                    <h3>7. In a right triangle, if one leg is 8 and hypotenuse is 10, what is the other leg? <span class="status-badge" id="badge-geometry-medium-q7"></span></h3>
+                    <label><input type="radio" name="geometry-medium-q7" value="a"> 4</label>
+                    <label><input type="radio" name="geometry-medium-q7" value="b"> 6</label>
+                    <label><input type="radio" name="geometry-medium-q7" value="c"> 7</label>
+                    <div class="explanation" id="exp-geometry-medium-q7">
+                        <strong>✔ Correct Answer: 6</strong>
+                        <div class="step"><span class="step-num">1</span><span>Pythagoras: a² + b² = c² → 64 + b² = 100</span></div>
+                        <div class="step"><span class="step-num">2</span><span>b² = 36 → b = 6</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-medium-q8">
+                    <h3>8. What is the sum of interior angles of a pentagon? <span class="status-badge" id="badge-geometry-medium-q8"></span></h3>
+                    <label><input type="radio" name="geometry-medium-q8" value="a"> 360°</label>
+                    <label><input type="radio" name="geometry-medium-q8" value="b"> 540°</label>
+                    <label><input type="radio" name="geometry-medium-q8" value="c"> 720°</label>
+                    <div class="explanation" id="exp-geometry-medium-q8">
+                        <strong>✔ Correct Answer: 540°</strong>
+                        <div class="step"><span class="step-num">1</span><span>Sum = (n − 2) × 180° = (5 − 2) × 180°</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= 3 × 180° = 540°</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-medium-q9">
+                    <h3>9. What is the volume of a cylinder with radius 3 and height 5? <span class="status-badge" id="badge-geometry-medium-q9"></span></h3>
+                    <label><input type="radio" name="geometry-medium-q9" value="a"> 30π</label>
+                    <label><input type="radio" name="geometry-medium-q9" value="b"> 15π</label>
+                    <label><input type="radio" name="geometry-medium-q9" value="c"> 45π</label>
+                    <div class="explanation" id="exp-geometry-medium-q9">
+                        <strong>✔ Correct Answer: 45π</strong>
+                        <div class="step"><span class="step-num">1</span><span>V = πr²h = π(9)(5) = 45π</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-medium-q10">
+                    <h3>10. Two parallel lines are cut by a transversal. Alternate interior angles are: <span class="status-badge" id="badge-geometry-medium-q10"></span></h3>
+                    <label><input type="radio" name="geometry-medium-q10" value="a"> Supplementary</label>
+                    <label><input type="radio" name="geometry-medium-q10" value="b"> Equal</label>
+                    <label><input type="radio" name="geometry-medium-q10" value="c"> Complementary</label>
+                    <div class="explanation" id="exp-geometry-medium-q10">
+                        <strong>✔ Correct Answer: Equal</strong>
+                        <div class="step"><span class="step-num">1</span><span>Alternate interior angles formed by parallel lines cut by a transversal are always equal (congruent).</span></div>
+                    </div>
+                </div>
+
+                <button class="btn-submit" onclick="submitQuiz('geometry','medium')">Submit Answers</button>
+                <div class="score-box" id="score-geometry-medium"></div>
+            </div>
+
+            <!-- ── GEOMETRY HARD ── -->
+            <div class="level-panel" id="level-geometry-hard">
+                <div class="diff-info hard">🔴 <strong>Hard</strong> — Coordinate geometry, arc length, sector area, and complex solids.</div>
+                <div class="progress-wrap"><div class="progress-bar" id="prog-geometry-hard"></div></div>
+                <div class="progress-label" id="plabel-geometry-hard">0 / 10 answered</div>
+
+                <div class="question-card" id="geometry-hard-q1">
+                    <h3>1. What is the area of a triangle with vertices A(0,0), B(4,0), C(0,3)? <span class="status-badge" id="badge-geometry-hard-q1"></span></h3>
+                    <label><input type="radio" name="geometry-hard-q1" value="a"> 12</label>
+                    <label><input type="radio" name="geometry-hard-q1" value="b"> 6</label>
+                    <label><input type="radio" name="geometry-hard-q1" value="c"> 7</label>
+                    <div class="explanation" id="exp-geometry-hard-q1">
+                        <strong>✔ Correct Answer: 6</strong>
+                        <div class="step"><span class="step-num">1</span><span>Base = 4, Height = 3 (right triangle at origin)</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Area = ½ × base × height = ½ × 4 × 3 = 6</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-hard-q2">
+                    <h3>2. What is the arc length of a 60° sector in a circle of radius 6? <span class="status-badge" id="badge-geometry-hard-q2"></span></h3>
+                    <label><input type="radio" name="geometry-hard-q2" value="a"> π</label>
+                    <label><input type="radio" name="geometry-hard-q2" value="b"> 2π</label>
+                    <label><input type="radio" name="geometry-hard-q2" value="c"> 3π</label>
+                    <div class="explanation" id="exp-geometry-hard-q2">
+                        <strong>✔ Correct Answer: 2π</strong>
+                        <div class="step"><span class="step-num">1</span><span>Arc length = (θ/360) × 2πr</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= (60/360) × 2π(6) = (1/6) × 12π = 2π</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-hard-q3">
+                    <h3>3. What is the volume of a sphere with radius 3? <span class="status-badge" id="badge-geometry-hard-q3"></span></h3>
+                    <label><input type="radio" name="geometry-hard-q3" value="a"> 36π</label>
+                    <label><input type="radio" name="geometry-hard-q3" value="b"> 27π</label>
+                    <label><input type="radio" name="geometry-hard-q3" value="c"> 12π</label>
+                    <div class="explanation" id="exp-geometry-hard-q3">
+                        <strong>✔ Correct Answer: 36π</strong>
+                        <div class="step"><span class="step-num">1</span><span>V = (4/3)πr³ = (4/3)π(27) = 36π</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-hard-q4">
+                    <h3>4. What is the distance between points (1, 2) and (5, 5)? <span class="status-badge" id="badge-geometry-hard-q4"></span></h3>
+                    <label><input type="radio" name="geometry-hard-q4" value="a"> 4</label>
+                    <label><input type="radio" name="geometry-hard-q4" value="b"> 5</label>
+                    <label><input type="radio" name="geometry-hard-q4" value="c"> 7</label>
+                    <div class="explanation" id="exp-geometry-hard-q4">
+                        <strong>✔ Correct Answer: 5</strong>
+                        <div class="step"><span class="step-num">1</span><span>d = √[(5−1)² + (5−2)²] = √[16 + 9]</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= √25 = 5</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-hard-q5">
+                    <h3>5. What is the sum of interior angles of a decagon (10 sides)? <span class="status-badge" id="badge-geometry-hard-q5"></span></h3>
+                    <label><input type="radio" name="geometry-hard-q5" value="a"> 1260°</label>
+                    <label><input type="radio" name="geometry-hard-q5" value="b"> 1440°</label>
+                    <label><input type="radio" name="geometry-hard-q5" value="c"> 1800°</label>
+                    <div class="explanation" id="exp-geometry-hard-q5">
+                        <strong>✔ Correct Answer: 1440°</strong>
+                        <div class="step"><span class="step-num">1</span><span>Sum = (n − 2) × 180° where n = number of sides</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= (10 − 2) × 180° = 8 × 180° = 1440°</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-hard-q6">
+                    <h3>6. What is the area of a sector with radius 6 and central angle 90°? <span class="status-badge" id="badge-geometry-hard-q6"></span></h3>
+                    <label><input type="radio" name="geometry-hard-q6" value="a"> 6π</label>
+                    <label><input type="radio" name="geometry-hard-q6" value="b"> 9π</label>
+                    <label><input type="radio" name="geometry-hard-q6" value="c"> 36π</label>
+                    <div class="explanation" id="exp-geometry-hard-q6">
+                        <strong>✔ Correct Answer: 9π</strong>
+                        <div class="step"><span class="step-num">1</span><span>Area = (θ/360) × πr² = (90/360) × π(36)</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= (1/4) × 36π = 9π</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-hard-q7">
+                    <h3>7. What is the midpoint of (2, 4) and (8, 10)? <span class="status-badge" id="badge-geometry-hard-q7"></span></h3>
+                    <label><input type="radio" name="geometry-hard-q7" value="a"> (4, 6)</label>
+                    <label><input type="radio" name="geometry-hard-q7" value="b"> (5, 7)</label>
+                    <label><input type="radio" name="geometry-hard-q7" value="c"> (6, 8)</label>
+                    <div class="explanation" id="exp-geometry-hard-q7">
+                        <strong>✔ Correct Answer: (5, 7)</strong>
+                        <div class="step"><span class="step-num">1</span><span>Midpoint = ((x₁+x₂)/2, (y₁+y₂)/2)</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= ((2+8)/2, (4+10)/2) = (5, 7)</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-hard-q8">
+                    <h3>8. What is the surface area of a cube with side 5? <span class="status-badge" id="badge-geometry-hard-q8"></span></h3>
+                    <label><input type="radio" name="geometry-hard-q8" value="a"> 100</label>
+                    <label><input type="radio" name="geometry-hard-q8" value="b"> 125</label>
+                    <label><input type="radio" name="geometry-hard-q8" value="c"> 150</label>
+                    <div class="explanation" id="exp-geometry-hard-q8">
+                        <strong>✔ Correct Answer: 150</strong>
+                        <div class="step"><span class="step-num">1</span><span>Surface area = 6 × side² = 6 × 25 = 150</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-hard-q9">
+                    <h3>9. A cone has radius 3 and height 4. What is its slant height? <span class="status-badge" id="badge-geometry-hard-q9"></span></h3>
+                    <label><input type="radio" name="geometry-hard-q9" value="a"> 4</label>
+                    <label><input type="radio" name="geometry-hard-q9" value="b"> 5</label>
+                    <label><input type="radio" name="geometry-hard-q9" value="c"> 7</label>
+                    <div class="explanation" id="exp-geometry-hard-q9">
+                        <strong>✔ Correct Answer: 5</strong>
+                        <div class="step"><span class="step-num">1</span><span>Slant height l = √(r² + h²) = √(9 + 16)</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= √25 = 5</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="geometry-hard-q10">
+                    <h3>10. What is the equation of a circle with center (2, −3) and radius 4? <span class="status-badge" id="badge-geometry-hard-q10"></span></h3>
+                    <label><input type="radio" name="geometry-hard-q10" value="a"> (x−2)² + (y+3)² = 16</label>
+                    <label><input type="radio" name="geometry-hard-q10" value="b"> (x+2)² + (y−3)² = 4</label>
+                    <label><input type="radio" name="geometry-hard-q10" value="c"> (x−2)² + (y−3)² = 16</label>
+                    <div class="explanation" id="exp-geometry-hard-q10">
+                        <strong>✔ Correct Answer: (x−2)² + (y+3)² = 16</strong>
+                        <div class="step"><span class="step-num">1</span><span>(x−h)² + (y−k)² = r² where center is (h, k)</span></div>
+                        <div class="step"><span class="step-num">2</span><span>(x−2)² + (y−(−3))² = 4² → (x−2)² + (y+3)² = 16</span></div>
+                    </div>
+                </div>
+
+                <button class="btn-submit" onclick="submitQuiz('geometry','hard')">Submit Answers</button>
+                <div class="score-box" id="score-geometry-hard"></div>
+            </div>
         </div>
 
-        <!-- ══════════════ CALCULUS ══════════════ -->
+        <!-- ════════════════════════════════════════
+             CALCULUS
+        ════════════════════════════════════════ -->
         <div class="quiz-panel" id="panel-calculus">
             <h2 class="topic-title">Calculus</h2>
             <p class="topic-desc">Derivatives, integrals, and limits.</p>
-            <div class="progress-wrap">
-                <div class="progress-bar" id="prog-calculus"></div>
-            </div>
-            <div class="progress-label" id="plabel-calculus">0 / 5 answered</div>
 
-            <div class="question-card" id="calculus-q1">
-                <h3>1. What is the derivative of x²? <span class="status-badge" id="badge-calculus-q1"></span></h3>
-                <label><input type="radio" name="calculus-q1" value="a"> x</label>
-                <label><input type="radio" name="calculus-q1" value="b"> 2x</label>
-                <label><input type="radio" name="calculus-q1" value="c"> x³</label>
-                <div class="explanation" id="exp-calculus-q1">
-                    <strong>✔ Correct Answer: 2x</strong>
-                    <div class="step"><span class="step-num">1</span><span>Use the power rule: d/dx [xⁿ] = n·xⁿ⁻¹</span>
-                    </div>
-                    <div class="step"><span class="step-num">2</span><span>n = 2 → d/dx [x²] = 2·x²⁻¹ = 2x</span></div>
-                </div>
+            <div class="level-selector">
+                <button class="level-btn easy   active" onclick="switchLevel('calculus','easy',   event)">🟢 Easy</button>
+                <button class="level-btn medium"        onclick="switchLevel('calculus','medium', event)">🟡 Medium</button>
+                <button class="level-btn hard"          onclick="switchLevel('calculus','hard',   event)">🔴 Hard</button>
             </div>
 
-            <div class="question-card" id="calculus-q2">
-                <h3>2. What is ∫ 3x² dx? <span class="status-badge" id="badge-calculus-q2"></span></h3>
-                <label><input type="radio" name="calculus-q2" value="a"> 6x + C</label>
-                <label><input type="radio" name="calculus-q2" value="b"> x³ + C</label>
-                <label><input type="radio" name="calculus-q2" value="c"> 3x³ + C</label>
-                <div class="explanation" id="exp-calculus-q2">
-                    <strong>✔ Correct Answer: x³ + C</strong>
-                    <div class="step"><span class="step-num">1</span><span>Use the power rule for integration: ∫ xⁿ dx =
-                            xⁿ⁺¹/(n+1) + C</span></div>
-                    <div class="step"><span class="step-num">2</span><span>∫ 3x² dx = 3 · x³/3 + C = x³ + C</span></div>
-                </div>
-            </div>
+            <!-- ── CALCULUS EASY ── -->
+            <div class="level-panel active" id="level-calculus-easy">
+                <div class="diff-info easy">🟢 <strong>Easy</strong> — Basic derivatives and simple integrals using the power rule.</div>
+                <div class="progress-wrap"><div class="progress-bar" id="prog-calculus-easy"></div></div>
+                <div class="progress-label" id="plabel-calculus-easy">0 / 10 answered</div>
 
-            <div class="question-card" id="calculus-q3">
-                <h3>3. What is lim(x→0) sin(x)/x? <span class="status-badge" id="badge-calculus-q3"></span></h3>
-                <label><input type="radio" name="calculus-q3" value="a"> 0</label>
-                <label><input type="radio" name="calculus-q3" value="b"> ∞</label>
-                <label><input type="radio" name="calculus-q3" value="c"> 1</label>
-                <div class="explanation" id="exp-calculus-q3">
-                    <strong>✔ Correct Answer: 1</strong>
-                    <div class="step"><span class="step-num">1</span><span>This is one of the most famous limits in
-                            calculus.</span></div>
-                    <div class="step"><span class="step-num">2</span><span>As x → 0, sin(x) ≈ x (small angle
-                            approximation).</span></div>
-                    <div class="step"><span class="step-num">3</span><span>Therefore sin(x)/x → x/x = 1.</span></div>
-                </div>
-            </div>
-
-            <div class="question-card" id="calculus-q4">
-                <h3>4. What is the derivative of sin(x)? <span class="status-badge" id="badge-calculus-q4"></span></h3>
-                <label><input type="radio" name="calculus-q4" value="a"> −cos(x)</label>
-                <label><input type="radio" name="calculus-q4" value="b"> cos(x)</label>
-                <label><input type="radio" name="calculus-q4" value="c"> tan(x)</label>
-                <div class="explanation" id="exp-calculus-q4">
-                    <strong>✔ Correct Answer: cos(x)</strong>
-                    <div class="step"><span class="step-num">1</span><span>This is a standard derivative to
-                            memorize.</span></div>
-                    <div class="step"><span class="step-num">2</span><span>d/dx [sin(x)] = cos(x)</span></div>
-                    <div class="step"><span class="step-num">3</span><span>Similarly, d/dx [cos(x)] = −sin(x)</span>
+                <div class="question-card" id="calculus-easy-q1">
+                    <h3>1. What is the derivative of x²? <span class="status-badge" id="badge-calculus-easy-q1"></span></h3>
+                    <label><input type="radio" name="calculus-easy-q1" value="a"> x</label>
+                    <label><input type="radio" name="calculus-easy-q1" value="b"> 2x</label>
+                    <label><input type="radio" name="calculus-easy-q1" value="c"> x³</label>
+                    <div class="explanation" id="exp-calculus-easy-q1">
+                        <strong>✔ Correct Answer: 2x</strong>
+                        <div class="step"><span class="step-num">1</span><span>Power rule: d/dx[xⁿ] = n·xⁿ⁻¹</span></div>
+                        <div class="step"><span class="step-num">2</span><span>d/dx[x²] = 2x</span></div>
                     </div>
                 </div>
-            </div>
 
-            <div class="question-card" id="calculus-q5">
-                <h3>5. What is the definite integral ∫₀² x dx? <span class="status-badge" id="badge-calculus-q5"></span>
-                </h3>
-                <label><input type="radio" name="calculus-q5" value="a"> 4</label>
-                <label><input type="radio" name="calculus-q5" value="b"> 2</label>
-                <label><input type="radio" name="calculus-q5" value="c"> 1</label>
-                <div class="explanation" id="exp-calculus-q5">
-                    <strong>✔ Correct Answer: 2</strong>
-                    <div class="step"><span class="step-num">1</span><span>∫ x dx = x²/2 + C</span></div>
-                    <div class="step"><span class="step-num">2</span><span>Evaluate from 0 to 2: [x²/2]₀² = (4/2) −
-                            (0/2) = 2 − 0 = 2</span></div>
+                <div class="question-card" id="calculus-easy-q2">
+                    <h3>2. What is the derivative of a constant, e.g. d/dx[7]? <span class="status-badge" id="badge-calculus-easy-q2"></span></h3>
+                    <label><input type="radio" name="calculus-easy-q2" value="a"> 7</label>
+                    <label><input type="radio" name="calculus-easy-q2" value="b"> 0</label>
+                    <label><input type="radio" name="calculus-easy-q2" value="c"> 1</label>
+                    <div class="explanation" id="exp-calculus-easy-q2">
+                        <strong>✔ Correct Answer: 0</strong>
+                        <div class="step"><span class="step-num">1</span><span>Constants don't change, so their rate of change is 0.</span></div>
+                    </div>
                 </div>
+
+                <div class="question-card" id="calculus-easy-q3">
+                    <h3>3. What is ∫ 2x dx? <span class="status-badge" id="badge-calculus-easy-q3"></span></h3>
+                    <label><input type="radio" name="calculus-easy-q3" value="a"> x + C</label>
+                    <label><input type="radio" name="calculus-easy-q3" value="b"> 2 + C</label>
+                    <label><input type="radio" name="calculus-easy-q3" value="c"> x² + C</label>
+                    <div class="explanation" id="exp-calculus-easy-q3">
+                        <strong>✔ Correct Answer: x² + C</strong>
+                        <div class="step"><span class="step-num">1</span><span>∫ xⁿ dx = xⁿ⁺¹/(n+1) + C</span></div>
+                        <div class="step"><span class="step-num">2</span><span>∫ 2x dx = 2 · x²/2 + C = x² + C</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-easy-q4">
+                    <h3>4. What is the derivative of sin(x)? <span class="status-badge" id="badge-calculus-easy-q4"></span></h3>
+                    <label><input type="radio" name="calculus-easy-q4" value="a"> −cos(x)</label>
+                    <label><input type="radio" name="calculus-easy-q4" value="b"> cos(x)</label>
+                    <label><input type="radio" name="calculus-easy-q4" value="c"> tan(x)</label>
+                    <div class="explanation" id="exp-calculus-easy-q4">
+                        <strong>✔ Correct Answer: cos(x)</strong>
+                        <div class="step"><span class="step-num">1</span><span>d/dx[sin(x)] = cos(x) — a standard result to memorize.</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-easy-q5">
+                    <h3>5. What is lim(x→0) sin(x)/x? <span class="status-badge" id="badge-calculus-easy-q5"></span></h3>
+                    <label><input type="radio" name="calculus-easy-q5" value="a"> 0</label>
+                    <label><input type="radio" name="calculus-easy-q5" value="b"> ∞</label>
+                    <label><input type="radio" name="calculus-easy-q5" value="c"> 1</label>
+                    <div class="explanation" id="exp-calculus-easy-q5">
+                        <strong>✔ Correct Answer: 1</strong>
+                        <div class="step"><span class="step-num">1</span><span>As x → 0, sin(x) ≈ x (small angle approximation).</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Therefore sin(x)/x → 1.</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-easy-q6">
+                    <h3>6. What is the derivative of 5x³? <span class="status-badge" id="badge-calculus-easy-q6"></span></h3>
+                    <label><input type="radio" name="calculus-easy-q6" value="a"> 5x²</label>
+                    <label><input type="radio" name="calculus-easy-q6" value="b"> 15x²</label>
+                    <label><input type="radio" name="calculus-easy-q6" value="c"> 15x³</label>
+                    <div class="explanation" id="exp-calculus-easy-q6">
+                        <strong>✔ Correct Answer: 15x²</strong>
+                        <div class="step"><span class="step-num">1</span><span>Power rule: d/dx[axⁿ] = n·axⁿ⁻¹</span></div>
+                        <div class="step"><span class="step-num">2</span><span>d/dx[5x³] = 3 × 5x² = 15x²</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-easy-q7">
+                    <h3>7. What is the derivative of cos(x)? <span class="status-badge" id="badge-calculus-easy-q7"></span></h3>
+                    <label><input type="radio" name="calculus-easy-q7" value="a"> sin(x)</label>
+                    <label><input type="radio" name="calculus-easy-q7" value="b"> −sin(x)</label>
+                    <label><input type="radio" name="calculus-easy-q7" value="c"> −cos(x)</label>
+                    <div class="explanation" id="exp-calculus-easy-q7">
+                        <strong>✔ Correct Answer: −sin(x)</strong>
+                        <div class="step"><span class="step-num">1</span><span>d/dx[cos(x)] = −sin(x) — a standard result to memorize.</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-easy-q8">
+                    <h3>8. What is ∫ 5 dx? <span class="status-badge" id="badge-calculus-easy-q8"></span></h3>
+                    <label><input type="radio" name="calculus-easy-q8" value="a"> 0 + C</label>
+                    <label><input type="radio" name="calculus-easy-q8" value="b"> 5x + C</label>
+                    <label><input type="radio" name="calculus-easy-q8" value="c"> 5x²/2 + C</label>
+                    <div class="explanation" id="exp-calculus-easy-q8">
+                        <strong>✔ Correct Answer: 5x + C</strong>
+                        <div class="step"><span class="step-num">1</span><span>The integral of a constant k is kx + C.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>∫ 5 dx = 5x + C</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-easy-q9">
+                    <h3>9. What does f'(x) &gt; 0 on an interval tell us about f(x)? <span class="status-badge" id="badge-calculus-easy-q9"></span></h3>
+                    <label><input type="radio" name="calculus-easy-q9" value="a"> f is decreasing</label>
+                    <label><input type="radio" name="calculus-easy-q9" value="b"> f is constant</label>
+                    <label><input type="radio" name="calculus-easy-q9" value="c"> f is increasing</label>
+                    <div class="explanation" id="exp-calculus-easy-q9">
+                        <strong>✔ Correct Answer: f is increasing</strong>
+                        <div class="step"><span class="step-num">1</span><span>A positive derivative means the function is going up (increasing).</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-easy-q10">
+                    <h3>10. What is the derivative of eˣ? <span class="status-badge" id="badge-calculus-easy-q10"></span></h3>
+                    <label><input type="radio" name="calculus-easy-q10" value="a"> xeˣ⁻¹</label>
+                    <label><input type="radio" name="calculus-easy-q10" value="b"> eˣ</label>
+                    <label><input type="radio" name="calculus-easy-q10" value="c"> eˣ⁺¹</label>
+                    <div class="explanation" id="exp-calculus-easy-q10">
+                        <strong>✔ Correct Answer: eˣ</strong>
+                        <div class="step"><span class="step-num">1</span><span>eˣ is its own derivative — a unique and important property.</span></div>
+                    </div>
+                </div>
+
+                <button class="btn-submit" onclick="submitQuiz('calculus','easy')">Submit Answers</button>
+                <div class="score-box" id="score-calculus-easy"></div>
             </div>
 
-            <button class="btn-submit" onclick="submitQuiz('calculus')">Submit Answers</button>
-            <div class="score-box" id="score-calculus"></div>
+            <!-- ── CALCULUS MEDIUM ── -->
+            <div class="level-panel" id="level-calculus-medium">
+                <div class="diff-info medium">🟡 <strong>Medium</strong> — Chain rule, definite integrals, and product/quotient rules.</div>
+                <div class="progress-wrap"><div class="progress-bar" id="prog-calculus-medium"></div></div>
+                <div class="progress-label" id="plabel-calculus-medium">0 / 10 answered</div>
+
+                <div class="question-card" id="calculus-medium-q1">
+                    <h3>1. What is ∫₀² x dx? <span class="status-badge" id="badge-calculus-medium-q1"></span></h3>
+                    <label><input type="radio" name="calculus-medium-q1" value="a"> 4</label>
+                    <label><input type="radio" name="calculus-medium-q1" value="b"> 2</label>
+                    <label><input type="radio" name="calculus-medium-q1" value="c"> 1</label>
+                    <div class="explanation" id="exp-calculus-medium-q1">
+                        <strong>✔ Correct Answer: 2</strong>
+                        <div class="step"><span class="step-num">1</span><span>∫ x dx = x²/2 + C</span></div>
+                        <div class="step"><span class="step-num">2</span><span>[x²/2]₀² = (4/2) − (0/2) = 2</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-medium-q2">
+                    <h3>2. What is d/dx [x³ + 5x]? <span class="status-badge" id="badge-calculus-medium-q2"></span></h3>
+                    <label><input type="radio" name="calculus-medium-q2" value="a"> 3x² + 5</label>
+                    <label><input type="radio" name="calculus-medium-q2" value="b"> x² + 5</label>
+                    <label><input type="radio" name="calculus-medium-q2" value="c"> 3x + 5</label>
+                    <div class="explanation" id="exp-calculus-medium-q2">
+                        <strong>✔ Correct Answer: 3x² + 5</strong>
+                        <div class="step"><span class="step-num">1</span><span>Differentiate term by term using the power rule.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>d/dx[x³] = 3x²; d/dx[5x] = 5 → 3x² + 5</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-medium-q3">
+                    <h3>3. What is ∫ 3x² dx? <span class="status-badge" id="badge-calculus-medium-q3"></span></h3>
+                    <label><input type="radio" name="calculus-medium-q3" value="a"> 6x + C</label>
+                    <label><input type="radio" name="calculus-medium-q3" value="b"> x³ + C</label>
+                    <label><input type="radio" name="calculus-medium-q3" value="c"> 3x³ + C</label>
+                    <div class="explanation" id="exp-calculus-medium-q3">
+                        <strong>✔ Correct Answer: x³ + C</strong>
+                        <div class="step"><span class="step-num">1</span><span>∫ 3x² dx = 3 · x³/3 + C = x³ + C</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-medium-q4">
+                    <h3>4. Using the chain rule, find d/dx [sin(3x)]. <span class="status-badge" id="badge-calculus-medium-q4"></span></h3>
+                    <label><input type="radio" name="calculus-medium-q4" value="a"> cos(3x)</label>
+                    <label><input type="radio" name="calculus-medium-q4" value="b"> 3cos(x)</label>
+                    <label><input type="radio" name="calculus-medium-q4" value="c"> 3cos(3x)</label>
+                    <div class="explanation" id="exp-calculus-medium-q4">
+                        <strong>✔ Correct Answer: 3cos(3x)</strong>
+                        <div class="step"><span class="step-num">1</span><span>Chain rule: d/dx[f(g(x))] = f'(g(x)) · g'(x)</span></div>
+                        <div class="step"><span class="step-num">2</span><span>f = sin, g = 3x → cos(3x) · 3 = 3cos(3x)</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-medium-q5">
+                    <h3>5. Find the local minimum of f(x) = x² − 4x + 5. <span class="status-badge" id="badge-calculus-medium-q5"></span></h3>
+                    <label><input type="radio" name="calculus-medium-q5" value="a"> x = 0</label>
+                    <label><input type="radio" name="calculus-medium-q5" value="b"> x = 2</label>
+                    <label><input type="radio" name="calculus-medium-q5" value="c"> x = 4</label>
+                    <div class="explanation" id="exp-calculus-medium-q5">
+                        <strong>✔ Correct Answer: x = 2</strong>
+                        <div class="step"><span class="step-num">1</span><span>f'(x) = 2x − 4; set to zero: 2x − 4 = 0</span></div>
+                        <div class="step"><span class="step-num">2</span><span>x = 2; f''(x) = 2 &gt; 0 → confirmed minimum.</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-medium-q6">
+                    <h3>6. Find d/dx [ln(x)]. <span class="status-badge" id="badge-calculus-medium-q6"></span></h3>
+                    <label><input type="radio" name="calculus-medium-q6" value="a"> eˣ</label>
+                    <label><input type="radio" name="calculus-medium-q6" value="b"> 1/x</label>
+                    <label><input type="radio" name="calculus-medium-q6" value="c"> ln(x)/x</label>
+                    <div class="explanation" id="exp-calculus-medium-q6">
+                        <strong>✔ Correct Answer: 1/x</strong>
+                        <div class="step"><span class="step-num">1</span><span>Standard result: d/dx[ln(x)] = 1/x (for x &gt; 0).</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-medium-q7">
+                    <h3>7. What is ∫ (1/x) dx? <span class="status-badge" id="badge-calculus-medium-q7"></span></h3>
+                    <label><input type="radio" name="calculus-medium-q7" value="a"> x⁻² + C</label>
+                    <label><input type="radio" name="calculus-medium-q7" value="b"> ln|x| + C</label>
+                    <label><input type="radio" name="calculus-medium-q7" value="c"> 1/x² + C</label>
+                    <div class="explanation" id="exp-calculus-medium-q7">
+                        <strong>✔ Correct Answer: ln|x| + C</strong>
+                        <div class="step"><span class="step-num">1</span><span>∫ (1/x) dx = ln|x| + C — a standard integral result.</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-medium-q8">
+                    <h3>8. Using the quotient rule, find d/dx [x / eˣ]. <span class="status-badge" id="badge-calculus-medium-q8"></span></h3>
+                    <label><input type="radio" name="calculus-medium-q8" value="a"> (1 − x) / eˣ</label>
+                    <label><input type="radio" name="calculus-medium-q8" value="b"> (x − 1) / eˣ</label>
+                    <label><input type="radio" name="calculus-medium-q8" value="c"> 1 / eˣ</label>
+                    <div class="explanation" id="exp-calculus-medium-q8">
+                        <strong>✔ Correct Answer: (1 − x) / eˣ</strong>
+                        <div class="step"><span class="step-num">1</span><span>Quotient rule: (u'v − uv') / v² where u=x, v=eˣ</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= (1·eˣ − x·eˣ) / e²ˣ = eˣ(1−x) / e²ˣ = (1−x)/eˣ</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-medium-q9">
+                    <h3>9. What is ∫₁³ 2 dx? <span class="status-badge" id="badge-calculus-medium-q9"></span></h3>
+                    <label><input type="radio" name="calculus-medium-q9" value="a"> 2</label>
+                    <label><input type="radio" name="calculus-medium-q9" value="b"> 6</label>
+                    <label><input type="radio" name="calculus-medium-q9" value="c"> 4</label>
+                    <div class="explanation" id="exp-calculus-medium-q9">
+                        <strong>✔ Correct Answer: 4</strong>
+                        <div class="step"><span class="step-num">1</span><span>∫₁³ 2 dx = [2x]₁³ = 2(3) − 2(1)</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= 6 − 2 = 4</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-medium-q10">
+                    <h3>10. What is the second derivative of f(x) = x⁴? <span class="status-badge" id="badge-calculus-medium-q10"></span></h3>
+                    <label><input type="radio" name="calculus-medium-q10" value="a"> 4x³</label>
+                    <label><input type="radio" name="calculus-medium-q10" value="b"> 12x²</label>
+                    <label><input type="radio" name="calculus-medium-q10" value="c"> 24x</label>
+                    <div class="explanation" id="exp-calculus-medium-q10">
+                        <strong>✔ Correct Answer: 12x²</strong>
+                        <div class="step"><span class="step-num">1</span><span>First derivative: f'(x) = 4x³</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Second derivative: f''(x) = 12x²</span></div>
+                    </div>
+                </div>
+
+                <button class="btn-submit" onclick="submitQuiz('calculus','medium')">Submit Answers</button>
+                <div class="score-box" id="score-calculus-medium"></div>
+            </div>
+
+            <!-- ── CALCULUS HARD ── -->
+            <div class="level-panel" id="level-calculus-hard">
+                <div class="diff-info hard">🔴 <strong>Hard</strong> — Integration by substitution, related rates, and advanced limits.</div>
+                <div class="progress-wrap"><div class="progress-bar" id="prog-calculus-hard"></div></div>
+                <div class="progress-label" id="plabel-calculus-hard">0 / 10 answered</div>
+
+                <div class="question-card" id="calculus-hard-q1">
+                    <h3>1. What is ∫ e^(2x) dx? <span class="status-badge" id="badge-calculus-hard-q1"></span></h3>
+                    <label><input type="radio" name="calculus-hard-q1" value="a"> 2e^(2x) + C</label>
+                    <label><input type="radio" name="calculus-hard-q1" value="b"> e^(2x)/2 + C</label>
+                    <label><input type="radio" name="calculus-hard-q1" value="c"> e^x + C</label>
+                    <div class="explanation" id="exp-calculus-hard-q1">
+                        <strong>✔ Correct Answer: e^(2x)/2 + C</strong>
+                        <div class="step"><span class="step-num">1</span><span>Let u = 2x, du = 2 dx → dx = du/2</span></div>
+                        <div class="step"><span class="step-num">2</span><span>∫ eᵘ (du/2) = eᵘ/2 + C = e^(2x)/2 + C</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-hard-q2">
+                    <h3>2. Find d/dx [x · eˣ] using the product rule. <span class="status-badge" id="badge-calculus-hard-q2"></span></h3>
+                    <label><input type="radio" name="calculus-hard-q2" value="a"> eˣ</label>
+                    <label><input type="radio" name="calculus-hard-q2" value="b"> x · eˣ</label>
+                    <label><input type="radio" name="calculus-hard-q2" value="c"> eˣ(x + 1)</label>
+                    <div class="explanation" id="exp-calculus-hard-q2">
+                        <strong>✔ Correct Answer: eˣ(x + 1)</strong>
+                        <div class="step"><span class="step-num">1</span><span>Product rule: (uv)' = u'v + uv'</span></div>
+                        <div class="step"><span class="step-num">2</span><span>u=x, v=eˣ → 1·eˣ + x·eˣ = eˣ(1+x)</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-hard-q3">
+                    <h3>3. What is lim(x→∞) (3x² + 1)/(x² − 2)? <span class="status-badge" id="badge-calculus-hard-q3"></span></h3>
+                    <label><input type="radio" name="calculus-hard-q3" value="a"> 0</label>
+                    <label><input type="radio" name="calculus-hard-q3" value="b"> ∞</label>
+                    <label><input type="radio" name="calculus-hard-q3" value="c"> 3</label>
+                    <div class="explanation" id="exp-calculus-hard-q3">
+                        <strong>✔ Correct Answer: 3</strong>
+                        <div class="step"><span class="step-num">1</span><span>Divide numerator and denominator by x².</span></div>
+                        <div class="step"><span class="step-num">2</span><span>(3 + 1/x²) / (1 − 2/x²) → 3/1 = 3 as x→∞</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-hard-q4">
+                    <h3>4. What is ∫₀^π sin(x) dx? <span class="status-badge" id="badge-calculus-hard-q4"></span></h3>
+                    <label><input type="radio" name="calculus-hard-q4" value="a"> 0</label>
+                    <label><input type="radio" name="calculus-hard-q4" value="b"> 2</label>
+                    <label><input type="radio" name="calculus-hard-q4" value="c"> π</label>
+                    <div class="explanation" id="exp-calculus-hard-q4">
+                        <strong>✔ Correct Answer: 2</strong>
+                        <div class="step"><span class="step-num">1</span><span>∫ sin(x) dx = −cos(x) + C</span></div>
+                        <div class="step"><span class="step-num">2</span><span>[−cos(x)]₀^π = (−cos π) − (−cos 0) = 1 + 1 = 2</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-hard-q5">
+                    <h3>5. A ball's position is s(t) = t³ − 3t. At what time t &gt; 0 is the velocity zero? <span class="status-badge" id="badge-calculus-hard-q5"></span></h3>
+                    <label><input type="radio" name="calculus-hard-q5" value="a"> t = 1</label>
+                    <label><input type="radio" name="calculus-hard-q5" value="b"> t = 3</label>
+                    <label><input type="radio" name="calculus-hard-q5" value="c"> t = 2</label>
+                    <div class="explanation" id="exp-calculus-hard-q5">
+                        <strong>✔ Correct Answer: t = 1</strong>
+                        <div class="step"><span class="step-num">1</span><span>Velocity = s'(t) = 3t² − 3</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Set to zero: 3t² − 3 = 0 → t² = 1 → t = 1</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-hard-q6">
+                    <h3>6. What is d/dx [tan(x)]? <span class="status-badge" id="badge-calculus-hard-q6"></span></h3>
+                    <label><input type="radio" name="calculus-hard-q6" value="a"> sec(x)</label>
+                    <label><input type="radio" name="calculus-hard-q6" value="b"> sec²(x)</label>
+                    <label><input type="radio" name="calculus-hard-q6" value="c"> cot(x)</label>
+                    <div class="explanation" id="exp-calculus-hard-q6">
+                        <strong>✔ Correct Answer: sec²(x)</strong>
+                        <div class="step"><span class="step-num">1</span><span>Standard result: d/dx[tan(x)] = sec²(x).</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-hard-q7">
+                    <h3>7. Evaluate ∫ x·ln(x) dx using integration by parts. <span class="status-badge" id="badge-calculus-hard-q7"></span></h3>
+                    <label><input type="radio" name="calculus-hard-q7" value="a"> x²ln(x)/2 + C</label>
+                    <label><input type="radio" name="calculus-hard-q7" value="b"> x²ln(x)/2 − x²/4 + C</label>
+                    <label><input type="radio" name="calculus-hard-q7" value="c"> x²/2 − ln(x) + C</label>
+                    <div class="explanation" id="exp-calculus-hard-q7">
+                        <strong>✔ Correct Answer: x²ln(x)/2 − x²/4 + C</strong>
+                        <div class="step"><span class="step-num">1</span><span>Let u = ln(x), dv = x dx → du = 1/x dx, v = x²/2</span></div>
+                        <div class="step"><span class="step-num">2</span><span>∫ x·ln(x) dx = x²ln(x)/2 − ∫ x²/(2x) dx = x²ln(x)/2 − x²/4 + C</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-hard-q8">
+                    <h3>8. What is lim(x→0) (1 − cos x) / x²? <span class="status-badge" id="badge-calculus-hard-q8"></span></h3>
+                    <label><input type="radio" name="calculus-hard-q8" value="a"> 0</label>
+                    <label><input type="radio" name="calculus-hard-q8" value="b"> 1</label>
+                    <label><input type="radio" name="calculus-hard-q8" value="c"> 1/2</label>
+                    <div class="explanation" id="exp-calculus-hard-q8">
+                        <strong>✔ Correct Answer: 1/2</strong>
+                        <div class="step"><span class="step-num">1</span><span>Apply L'Hôpital twice (0/0 form): differentiate top and bottom.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>lim sin(x)/2x → lim cos(x)/2 = 1/2 as x→0</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-hard-q9">
+                    <h3>9. Find the area between y = x² and y = x on [0, 1]. <span class="status-badge" id="badge-calculus-hard-q9"></span></h3>
+                    <label><input type="radio" name="calculus-hard-q9" value="a"> 1/3</label>
+                    <label><input type="radio" name="calculus-hard-q9" value="b"> 1/6</label>
+                    <label><input type="radio" name="calculus-hard-q9" value="c"> 1/2</label>
+                    <div class="explanation" id="exp-calculus-hard-q9">
+                        <strong>✔ Correct Answer: 1/6</strong>
+                        <div class="step"><span class="step-num">1</span><span>Area = ∫₀¹ (x − x²) dx = [x²/2 − x³/3]₀¹</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= 1/2 − 1/3 = 1/6</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="calculus-hard-q10">
+                    <h3>10. What is ∫ cos²(x) dx? <span class="status-badge" id="badge-calculus-hard-q10"></span></h3>
+                    <label><input type="radio" name="calculus-hard-q10" value="a"> sin²(x) + C</label>
+                    <label><input type="radio" name="calculus-hard-q10" value="b"> x/2 + sin(2x)/4 + C</label>
+                    <label><input type="radio" name="calculus-hard-q10" value="c"> −sin(x)cos(x) + C</label>
+                    <div class="explanation" id="exp-calculus-hard-q10">
+                        <strong>✔ Correct Answer: x/2 + sin(2x)/4 + C</strong>
+                        <div class="step"><span class="step-num">1</span><span>Use identity: cos²(x) = (1 + cos(2x)) / 2</span></div>
+                        <div class="step"><span class="step-num">2</span><span>∫ (1 + cos2x)/2 dx = x/2 + sin(2x)/4 + C</span></div>
+                    </div>
+                </div>
+
+                <button class="btn-submit" onclick="submitQuiz('calculus','hard')">Submit Answers</button>
+                <div class="score-box" id="score-calculus-hard"></div>
+            </div>
         </div>
 
-        <!-- ══════════════ STATISTICS ══════════════ -->
+        <!-- ════════════════════════════════════════
+             STATISTICS
+        ════════════════════════════════════════ -->
         <div class="quiz-panel" id="panel-statistics">
             <h2 class="topic-title">Statistics</h2>
             <p class="topic-desc">Data, probability, and distributions.</p>
-            <div class="progress-wrap">
-                <div class="progress-bar" id="prog-statistics"></div>
-            </div>
-            <div class="progress-label" id="plabel-statistics">0 / 5 answered</div>
 
-            <div class="question-card" id="statistics-q1">
-                <h3>1. What is the mean of: 4, 8, 6, 5, 7? <span class="status-badge" id="badge-statistics-q1"></span>
-                </h3>
-                <label><input type="radio" name="statistics-q1" value="a"> 5</label>
-                <label><input type="radio" name="statistics-q1" value="b"> 6</label>
-                <label><input type="radio" name="statistics-q1" value="c"> 7</label>
-                <div class="explanation" id="exp-statistics-q1">
-                    <strong>✔ Correct Answer: 6</strong>
-                    <div class="step"><span class="step-num">1</span><span>Mean = Sum of all values ÷ Count of
-                            values</span></div>
-                    <div class="step"><span class="step-num">2</span><span>Sum = 4 + 8 + 6 + 5 + 7 = 30</span></div>
-                    <div class="step"><span class="step-num">3</span><span>Mean = 30 ÷ 5 = 6</span></div>
-                </div>
+            <div class="level-selector">
+                <button class="level-btn easy   active" onclick="switchLevel('statistics','easy',   event)">🟢 Easy</button>
+                <button class="level-btn medium"        onclick="switchLevel('statistics','medium', event)">🟡 Medium</button>
+                <button class="level-btn hard"          onclick="switchLevel('statistics','hard',   event)">🔴 Hard</button>
             </div>
 
-            <div class="question-card" id="statistics-q2">
-                <h3>2. What is the median of: 3, 7, 2, 9, 5? <span class="status-badge" id="badge-statistics-q2"></span>
-                </h3>
-                <label><input type="radio" name="statistics-q2" value="a"> 7</label>
-                <label><input type="radio" name="statistics-q2" value="b"> 5</label>
-                <label><input type="radio" name="statistics-q2" value="c"> 9</label>
-                <div class="explanation" id="exp-statistics-q2">
-                    <strong>✔ Correct Answer: 5</strong>
-                    <div class="step"><span class="step-num">1</span><span>Sort the values in ascending order: 2, 3, 5,
-                            7, 9</span></div>
-                    <div class="step"><span class="step-num">2</span><span>The middle value (3rd out of 5) is 5.</span>
+            <!-- ── STATISTICS EASY ── -->
+            <div class="level-panel active" id="level-statistics-easy">
+                <div class="diff-info easy">🟢 <strong>Easy</strong> — Mean, median, mode, and basic probability.</div>
+                <div class="progress-wrap"><div class="progress-bar" id="prog-statistics-easy"></div></div>
+                <div class="progress-label" id="plabel-statistics-easy">0 / 10 answered</div>
+
+                <div class="question-card" id="statistics-easy-q1">
+                    <h3>1. What is the mean of: 4, 8, 6, 5, 7? <span class="status-badge" id="badge-statistics-easy-q1"></span></h3>
+                    <label><input type="radio" name="statistics-easy-q1" value="a"> 5</label>
+                    <label><input type="radio" name="statistics-easy-q1" value="b"> 6</label>
+                    <label><input type="radio" name="statistics-easy-q1" value="c"> 7</label>
+                    <div class="explanation" id="exp-statistics-easy-q1">
+                        <strong>✔ Correct Answer: 6</strong>
+                        <div class="step"><span class="step-num">1</span><span>Sum = 4+8+6+5+7 = 30</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Mean = 30 ÷ 5 = 6</span></div>
                     </div>
                 </div>
-            </div>
 
-            <div class="question-card" id="statistics-q3">
-                <h3>3. A fair die is rolled. What is the probability of getting a 4? <span class="status-badge"
-                        id="badge-statistics-q3"></span></h3>
-                <label><input type="radio" name="statistics-q3" value="a"> 1/3</label>
-                <label><input type="radio" name="statistics-q3" value="b"> 1/4</label>
-                <label><input type="radio" name="statistics-q3" value="c"> 1/6</label>
-                <div class="explanation" id="exp-statistics-q3">
-                    <strong>✔ Correct Answer: 1/6</strong>
-                    <div class="step"><span class="step-num">1</span><span>A fair die has 6 equally likely outcomes: {1,
-                            2, 3, 4, 5, 6}.</span></div>
-                    <div class="step"><span class="step-num">2</span><span>Only one outcome is a 4, so P(4) =
-                            1/6.</span></div>
-                </div>
-            </div>
-
-            <div class="question-card" id="statistics-q4">
-                <h3>4. What does the standard deviation measure? <span class="status-badge"
-                        id="badge-statistics-q4"></span></h3>
-                <label><input type="radio" name="statistics-q4" value="a"> The average of the data</label>
-                <label><input type="radio" name="statistics-q4" value="b"> The spread/dispersion of the data</label>
-                <label><input type="radio" name="statistics-q4" value="c"> The middle value of the data</label>
-                <div class="explanation" id="exp-statistics-q4">
-                    <strong>✔ Correct Answer: The spread/dispersion of the data</strong>
-                    <div class="step"><span class="step-num">1</span><span>Standard deviation (σ) tells you how spread
-                            out the data values are from the mean.</span></div>
-                    <div class="step"><span class="step-num">2</span><span>A small σ means values are clustered close to
-                            the mean; a large σ means they are more spread out.</span></div>
-                </div>
-            </div>
-
-            <div class="question-card" id="statistics-q5">
-                <h3>5. In a normal distribution, approximately what % of data falls within 1 standard deviation of the
-                    mean? <span class="status-badge" id="badge-statistics-q5"></span></h3>
-                <label><input type="radio" name="statistics-q5" value="a"> 95%</label>
-                <label><input type="radio" name="statistics-q5" value="b"> 99.7%</label>
-                <label><input type="radio" name="statistics-q5" value="c"> 68%</label>
-                <div class="explanation" id="exp-statistics-q5">
-                    <strong>✔ Correct Answer: 68%</strong>
-                    <div class="step"><span class="step-num">1</span><span>This is the 68-95-99.7 rule (Empirical Rule)
-                            for normal distributions.</span></div>
-                    <div class="step"><span class="step-num">2</span><span>Within 1σ of the mean → ~68% of data</span>
+                <div class="question-card" id="statistics-easy-q2">
+                    <h3>2. What is the median of: 3, 7, 2, 9, 5? <span class="status-badge" id="badge-statistics-easy-q2"></span></h3>
+                    <label><input type="radio" name="statistics-easy-q2" value="a"> 7</label>
+                    <label><input type="radio" name="statistics-easy-q2" value="b"> 5</label>
+                    <label><input type="radio" name="statistics-easy-q2" value="c"> 9</label>
+                    <div class="explanation" id="exp-statistics-easy-q2">
+                        <strong>✔ Correct Answer: 5</strong>
+                        <div class="step"><span class="step-num">1</span><span>Sort: 2, 3, 5, 7, 9 — middle value is 5.</span></div>
                     </div>
-                    <div class="step"><span class="step-num">3</span><span>Within 2σ → ~95%, and within 3σ →
-                            ~99.7%</span></div>
                 </div>
+
+                <div class="question-card" id="statistics-easy-q3">
+                    <h3>3. A fair die is rolled. What is the probability of getting a 4? <span class="status-badge" id="badge-statistics-easy-q3"></span></h3>
+                    <label><input type="radio" name="statistics-easy-q3" value="a"> 1/3</label>
+                    <label><input type="radio" name="statistics-easy-q3" value="b"> 1/4</label>
+                    <label><input type="radio" name="statistics-easy-q3" value="c"> 1/6</label>
+                    <div class="explanation" id="exp-statistics-easy-q3">
+                        <strong>✔ Correct Answer: 1/6</strong>
+                        <div class="step"><span class="step-num">1</span><span>6 equally likely outcomes; one is 4 → P = 1/6.</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-easy-q4">
+                    <h3>4. What is the mode of: 2, 4, 4, 5, 7? <span class="status-badge" id="badge-statistics-easy-q4"></span></h3>
+                    <label><input type="radio" name="statistics-easy-q4" value="a"> 2</label>
+                    <label><input type="radio" name="statistics-easy-q4" value="b"> 5</label>
+                    <label><input type="radio" name="statistics-easy-q4" value="c"> 4</label>
+                    <div class="explanation" id="exp-statistics-easy-q4">
+                        <strong>✔ Correct Answer: 4</strong>
+                        <div class="step"><span class="step-num">1</span><span>The mode is the value that appears most often.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>4 appears twice — all others appear once.</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-easy-q5">
+                    <h3>5. A bag has 3 red and 7 blue balls. What is the probability of drawing a red ball? <span class="status-badge" id="badge-statistics-easy-q5"></span></h3>
+                    <label><input type="radio" name="statistics-easy-q5" value="a"> 3/10</label>
+                    <label><input type="radio" name="statistics-easy-q5" value="b"> 7/10</label>
+                    <label><input type="radio" name="statistics-easy-q5" value="c"> 1/3</label>
+                    <div class="explanation" id="exp-statistics-easy-q5">
+                        <strong>✔ Correct Answer: 3/10</strong>
+                        <div class="step"><span class="step-num">1</span><span>Total = 10. Favourable = 3.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>P(red) = 3/10</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-easy-q6">
+                    <h3>6. What is the mode of: 3, 7, 3, 9, 3, 7? <span class="status-badge" id="badge-statistics-easy-q6"></span></h3>
+                    <label><input type="radio" name="statistics-easy-q6" value="a"> 7</label>
+                    <label><input type="radio" name="statistics-easy-q6" value="b"> 3</label>
+                    <label><input type="radio" name="statistics-easy-q6" value="c"> 9</label>
+                    <div class="explanation" id="exp-statistics-easy-q6">
+                        <strong>✔ Correct Answer: 3</strong>
+                        <div class="step"><span class="step-num">1</span><span>The mode is the most frequently occurring value.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>3 appears 3 times — more than any other value.</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-easy-q7">
+                    <h3>7. A bag has 3 red and 7 blue marbles. What is the probability of picking red? <span class="status-badge" id="badge-statistics-easy-q7"></span></h3>
+                    <label><input type="radio" name="statistics-easy-q7" value="a"> 7/10</label>
+                    <label><input type="radio" name="statistics-easy-q7" value="b"> 3/7</label>
+                    <label><input type="radio" name="statistics-easy-q7" value="c"> 3/10</label>
+                    <div class="explanation" id="exp-statistics-easy-q7">
+                        <strong>✔ Correct Answer: 3/10</strong>
+                        <div class="step"><span class="step-num">1</span><span>P(red) = favourable outcomes / total outcomes</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= 3 / (3 + 7) = 3/10</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-easy-q8">
+                    <h3>8. What is the range of: 12, 4, 9, 17, 6? <span class="status-badge" id="badge-statistics-easy-q8"></span></h3>
+                    <label><input type="radio" name="statistics-easy-q8" value="a"> 9</label>
+                    <label><input type="radio" name="statistics-easy-q8" value="b"> 12</label>
+                    <label><input type="radio" name="statistics-easy-q8" value="c"> 13</label>
+                    <div class="explanation" id="exp-statistics-easy-q8">
+                        <strong>✔ Correct Answer: 13</strong>
+                        <div class="step"><span class="step-num">1</span><span>Range = Max − Min = 17 − 4 = 13</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-easy-q9">
+                    <h3>9. If you flip a fair coin, what is the probability of getting tails? <span class="status-badge" id="badge-statistics-easy-q9"></span></h3>
+                    <label><input type="radio" name="statistics-easy-q9" value="a"> 1/4</label>
+                    <label><input type="radio" name="statistics-easy-q9" value="b"> 1/3</label>
+                    <label><input type="radio" name="statistics-easy-q9" value="c"> 1/2</label>
+                    <div class="explanation" id="exp-statistics-easy-q9">
+                        <strong>✔ Correct Answer: 1/2</strong>
+                        <div class="step"><span class="step-num">1</span><span>A fair coin has 2 equally likely outcomes: heads or tails.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>P(tails) = 1/2</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-easy-q10">
+                    <h3>10. What is the mean of: 10, 20, 30? <span class="status-badge" id="badge-statistics-easy-q10"></span></h3>
+                    <label><input type="radio" name="statistics-easy-q10" value="a"> 15</label>
+                    <label><input type="radio" name="statistics-easy-q10" value="b"> 20</label>
+                    <label><input type="radio" name="statistics-easy-q10" value="c"> 25</label>
+                    <div class="explanation" id="exp-statistics-easy-q10">
+                        <strong>✔ Correct Answer: 20</strong>
+                        <div class="step"><span class="step-num">1</span><span>Sum = 10 + 20 + 30 = 60</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Mean = 60 / 3 = 20</span></div>
+                    </div>
+                </div>
+
+                <button class="btn-submit" onclick="submitQuiz('statistics','easy')">Submit Answers</button>
+                <div class="score-box" id="score-statistics-easy"></div>
             </div>
 
-            <button class="btn-submit" onclick="submitQuiz('statistics')">Submit Answers</button>
-            <div class="score-box" id="score-statistics"></div>
+            <!-- ── STATISTICS MEDIUM ── -->
+            <div class="level-panel" id="level-statistics-medium">
+                <div class="diff-info medium">🟡 <strong>Medium</strong> — Standard deviation, variance, and the empirical rule.</div>
+                <div class="progress-wrap"><div class="progress-bar" id="prog-statistics-medium"></div></div>
+                <div class="progress-label" id="plabel-statistics-medium">0 / 10 answered</div>
+
+                <div class="question-card" id="statistics-medium-q1">
+                    <h3>1. What does the standard deviation measure? <span class="status-badge" id="badge-statistics-medium-q1"></span></h3>
+                    <label><input type="radio" name="statistics-medium-q1" value="a"> The average of the data</label>
+                    <label><input type="radio" name="statistics-medium-q1" value="b"> The spread/dispersion of the data</label>
+                    <label><input type="radio" name="statistics-medium-q1" value="c"> The middle value of the data</label>
+                    <div class="explanation" id="exp-statistics-medium-q1">
+                        <strong>✔ Correct Answer: Spread/dispersion of the data</strong>
+                        <div class="step"><span class="step-num">1</span><span>Standard deviation (σ) tells how spread out values are from the mean.</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-medium-q2">
+                    <h3>2. In a normal distribution, ~what % of data falls within 1 standard deviation? <span class="status-badge" id="badge-statistics-medium-q2"></span></h3>
+                    <label><input type="radio" name="statistics-medium-q2" value="a"> 95%</label>
+                    <label><input type="radio" name="statistics-medium-q2" value="b"> 99.7%</label>
+                    <label><input type="radio" name="statistics-medium-q2" value="c"> 68%</label>
+                    <div class="explanation" id="exp-statistics-medium-q2">
+                        <strong>✔ Correct Answer: 68%</strong>
+                        <div class="step"><span class="step-num">1</span><span>The 68–95–99.7 (empirical) rule: within 1σ → 68%.</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-medium-q3">
+                    <h3>3. What is the variance of the data set: 2, 4, 4, 4, 5, 5, 7, 9? <span class="status-badge" id="badge-statistics-medium-q3"></span></h3>
+                    <label><input type="radio" name="statistics-medium-q3" value="a"> 2</label>
+                    <label><input type="radio" name="statistics-medium-q3" value="b"> 4</label>
+                    <label><input type="radio" name="statistics-medium-q3" value="c"> 16</label>
+                    <div class="explanation" id="exp-statistics-medium-q3">
+                        <strong>✔ Correct Answer: 4</strong>
+                        <div class="step"><span class="step-num">1</span><span>Mean = (2+4+4+4+5+5+7+9)/8 = 40/8 = 5</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Variance = [(9+1+1+1+0+0+4+16)/8] = 32/8 = 4</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-medium-q4">
+                    <h3>4. Two events A and B are mutually exclusive. P(A)=0.3, P(B)=0.4. What is P(A or B)? <span class="status-badge" id="badge-statistics-medium-q4"></span></h3>
+                    <label><input type="radio" name="statistics-medium-q4" value="a"> 0.12</label>
+                    <label><input type="radio" name="statistics-medium-q4" value="b"> 0.7</label>
+                    <label><input type="radio" name="statistics-medium-q4" value="c"> 0.58</label>
+                    <div class="explanation" id="exp-statistics-medium-q4">
+                        <strong>✔ Correct Answer: 0.7</strong>
+                        <div class="step"><span class="step-num">1</span><span>Mutually exclusive → P(A or B) = P(A) + P(B)</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= 0.3 + 0.4 = 0.7</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-medium-q5">
+                    <h3>5. What is the range of the data set: 5, 12, 3, 8, 20, 1? <span class="status-badge" id="badge-statistics-medium-q5"></span></h3>
+                    <label><input type="radio" name="statistics-medium-q5" value="a"> 15</label>
+                    <label><input type="radio" name="statistics-medium-q5" value="b"> 19</label>
+                    <label><input type="radio" name="statistics-medium-q5" value="c"> 17</label>
+                    <div class="explanation" id="exp-statistics-medium-q5">
+                        <strong>✔ Correct Answer: 19</strong>
+                        <div class="step"><span class="step-num">1</span><span>Range = Maximum − Minimum = 20 − 1 = 19</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-medium-q6">
+                    <h3>6. Two dice are rolled. What is P(sum = 7)? <span class="status-badge" id="badge-statistics-medium-q6"></span></h3>
+                    <label><input type="radio" name="statistics-medium-q6" value="a"> 1/6</label>
+                    <label><input type="radio" name="statistics-medium-q6" value="b"> 5/36</label>
+                    <label><input type="radio" name="statistics-medium-q6" value="c"> 7/36</label>
+                    <div class="explanation" id="exp-statistics-medium-q6">
+                        <strong>✔ Correct Answer: 1/6</strong>
+                        <div class="step"><span class="step-num">1</span><span>Pairs summing to 7: (1,6),(2,5),(3,4),(4,3),(5,2),(6,1) = 6 ways.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>P = 6/36 = 1/6</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-medium-q7">
+                    <h3>7. What is the variance of: 2, 4, 4, 4, 5, 5, 7, 9? <span class="status-badge" id="badge-statistics-medium-q7"></span></h3>
+                    <label><input type="radio" name="statistics-medium-q7" value="a"> 2</label>
+                    <label><input type="radio" name="statistics-medium-q7" value="b"> 4</condition></label>
+                    <label><input type="radio" name="statistics-medium-q7" value="c"> 6</label>
+                    <div class="explanation" id="exp-statistics-medium-q7">
+                        <strong>✔ Correct Answer: 4</strong>
+                        <div class="step"><span class="step-num">1</span><span>Mean = 40/8 = 5. Deviations²: 9,1,1,1,0,0,4,16 → sum = 32</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Variance = 32/8 = 4</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-medium-q8">
+                    <h3>8. In a normal distribution, what percentage of data falls within 1 standard deviation of the mean? <span class="status-badge" id="badge-statistics-medium-q8"></span></h3>
+                    <label><input type="radio" name="statistics-medium-q8" value="a"> 99.7%</label>
+                    <label><input type="radio" name="statistics-medium-q8" value="b"> 95%</label>
+                    <label><input type="radio" name="statistics-medium-q8" value="c"> 68%</label>
+                    <div class="explanation" id="exp-statistics-medium-q8">
+                        <strong>✔ Correct Answer: 68%</strong>
+                        <div class="step"><span class="step-num">1</span><span>The 68-95-99.7 rule: 1σ → 68%, 2σ → 95%, 3σ → 99.7%.</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-medium-q9">
+                    <h3>9. What is the interquartile range (IQR) of: 1, 3, 5, 7, 9, 11, 13? <span class="status-badge" id="badge-statistics-medium-q9"></span></h3>
+                    <label><input type="radio" name="statistics-medium-q9" value="a"> 6</label>
+                    <label><input type="radio" name="statistics-medium-q9" value="b"> 8</label>
+                    <label><input type="radio" name="statistics-medium-q9" value="c"> 10</label>
+                    <div class="explanation" id="exp-statistics-medium-q9">
+                        <strong>✔ Correct Answer: 8</strong>
+                        <div class="step"><span class="step-num">1</span><span>Q1 = 3, Q3 = 11 (lower and upper quartiles)</span></div>
+                        <div class="step"><span class="step-num">2</span><span>IQR = Q3 − Q1 = 11 − 3 = 8</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-medium-q10">
+                    <h3>10. P(A) = 0.4, P(B) = 0.5, and A and B are independent. What is P(A and B)? <span class="status-badge" id="badge-statistics-medium-q10"></span></h3>
+                    <label><input type="radio" name="statistics-medium-q10" value="a"> 0.9</label>
+                    <label><input type="radio" name="statistics-medium-q10" value="b"> 0.1</label>
+                    <label><input type="radio" name="statistics-medium-q10" value="c"> 0.2</label>
+                    <div class="explanation" id="exp-statistics-medium-q10">
+                        <strong>✔ Correct Answer: 0.2</strong>
+                        <div class="step"><span class="step-num">1</span><span>For independent events: P(A and B) = P(A) × P(B)</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= 0.4 × 0.5 = 0.2</span></div>
+                    </div>
+                </div>
+
+                <button class="btn-submit" onclick="submitQuiz('statistics','medium')">Submit Answers</button>
+                <div class="score-box" id="score-statistics-medium"></div>
+            </div>
+
+            <!-- ── STATISTICS HARD ── -->
+            <div class="level-panel" id="level-statistics-hard">
+                <div class="diff-info hard">🔴 <strong>Hard</strong> — Conditional probability, Bayes' theorem, and regression.</div>
+                <div class="progress-wrap"><div class="progress-bar" id="prog-statistics-hard"></div></div>
+                <div class="progress-label" id="plabel-statistics-hard">0 / 10 answered</div>
+
+                <div class="question-card" id="statistics-hard-q1">
+                    <h3>1. P(A)=0.5, P(B|A)=0.4. What is P(A and B)? <span class="status-badge" id="badge-statistics-hard-q1"></span></h3>
+                    <label><input type="radio" name="statistics-hard-q1" value="a"> 0.9</label>
+                    <label><input type="radio" name="statistics-hard-q1" value="b"> 0.2</label>
+                    <label><input type="radio" name="statistics-hard-q1" value="c"> 0.1</label>
+                    <div class="explanation" id="exp-statistics-hard-q1">
+                        <strong>✔ Correct Answer: 0.2</strong>
+                        <div class="step"><span class="step-num">1</span><span>P(A and B) = P(A) × P(B|A)</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= 0.5 × 0.4 = 0.2</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-hard-q2">
+                    <h3>2. In a binomial distribution with n=5 and p=0.5, what is P(X=3)? <span class="status-badge" id="badge-statistics-hard-q2"></span></h3>
+                    <label><input type="radio" name="statistics-hard-q2" value="a"> 5/16</label>
+                    <label><input type="radio" name="statistics-hard-q2" value="b"> 3/16</label>
+                    <label><input type="radio" name="statistics-hard-q2" value="c"> 5/32</label>
+                    <div class="explanation" id="exp-statistics-hard-q2">
+                        <strong>✔ Correct Answer: 5/16</strong>
+                        <div class="step"><span class="step-num">1</span><span>P(X=k) = C(n,k) · pᵏ · (1−p)ⁿ⁻ᵏ</span></div>
+                        <div class="step"><span class="step-num">2</span><span>C(5,3) · (0.5)³ · (0.5)² = 10 · (1/8) · (1/4) = 10/32 = 5/16</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-hard-q3">
+                    <h3>3. A z-score of 2 means the value is how many standard deviations above the mean? <span class="status-badge" id="badge-statistics-hard-q3"></span></h3>
+                    <label><input type="radio" name="statistics-hard-q3" value="a"> 1</label>
+                    <label><input type="radio" name="statistics-hard-q3" value="b"> 2</label>
+                    <label><input type="radio" name="statistics-hard-q3" value="c"> 4</label>
+                    <div class="explanation" id="exp-statistics-hard-q3">
+                        <strong>✔ Correct Answer: 2</strong>
+                        <div class="step"><span class="step-num">1</span><span>z = (x − μ) / σ → z = 2 means the value is 2σ above the mean.</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-hard-q4">
+                    <h3>4. Which correlation coefficient indicates the strongest linear relationship? <span class="status-badge" id="badge-statistics-hard-q4"></span></h3>
+                    <label><input type="radio" name="statistics-hard-q4" value="a"> r = 0.4</label>
+                    <label><input type="radio" name="statistics-hard-q4" value="b"> r = −0.95</label>
+                    <label><input type="radio" name="statistics-hard-q4" value="c"> r = 0.7</label>
+                    <div class="explanation" id="exp-statistics-hard-q4">
+                        <strong>✔ Correct Answer: r = −0.95</strong>
+                        <div class="step"><span class="step-num">1</span><span>Strength = |r|. The closer to ±1, the stronger the relationship.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>|−0.95| = 0.95 is closest to 1 → strongest.</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-hard-q5">
+                    <h3>5. Using Bayes' theorem: P(D)=0.01, P(+|D)=0.99, P(+|¬D)=0.05. What is P(D|+)? <span class="status-badge" id="badge-statistics-hard-q5"></span></h3>
+                    <label><input type="radio" name="statistics-hard-q5" value="a"> ~0.99</label>
+                    <label><input type="radio" name="statistics-hard-q5" value="b"> ~0.17</label>
+                    <label><input type="radio" name="statistics-hard-q5" value="c"> ~0.50</label>
+                    <div class="explanation" id="exp-statistics-hard-q5">
+                        <strong>✔ Correct Answer: ~0.17</strong>
+                        <div class="step"><span class="step-num">1</span><span>P(D|+) = P(+|D)·P(D) / [P(+|D)·P(D) + P(+|¬D)·P(¬D)]</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= (0.99×0.01) / (0.99×0.01 + 0.05×0.99) = 0.0099 / 0.0594 ≈ 0.167</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-hard-q6">
+                    <h3>6. A z-score of 2.0 corresponds to what percentile (approx)? <span class="status-badge" id="badge-statistics-hard-q6"></span></h3>
+                    <label><input type="radio" name="statistics-hard-q6" value="a"> 84th</label>
+                    <label><input type="radio" name="statistics-hard-q6" value="b"> 95th</label>
+                    <label><input type="radio" name="statistics-hard-q6" value="c"> 97.7th</label>
+                    <div class="explanation" id="exp-statistics-hard-q6">
+                        <strong>✔ Correct Answer: 97.7th</strong>
+                        <div class="step"><span class="step-num">1</span><span>z = 2.0 means 2 standard deviations above the mean.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>From the 68-95-99.7 rule: ~95% within ±2σ → ~97.7% below z = +2.</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-hard-q7">
+                    <h3>7. A sample has mean 50 and standard deviation 10, n = 25. What is the standard error? <span class="status-badge" id="badge-statistics-hard-q7"></span></h3>
+                    <label><input type="radio" name="statistics-hard-q7" value="a"> 10</label>
+                    <label><input type="radio" name="statistics-hard-q7" value="b"> 2</label>
+                    <label><input type="radio" name="statistics-hard-q7" value="c"> 0.4</label>
+                    <div class="explanation" id="exp-statistics-hard-q7">
+                        <strong>✔ Correct Answer: 2</strong>
+                        <div class="step"><span class="step-num">1</span><span>Standard error = σ / √n = 10 / √25</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= 10 / 5 = 2</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-hard-q8">
+                    <h3>8. Which value of r indicates the strongest linear correlation? <span class="status-badge" id="badge-statistics-hard-q8"></span></h3>
+                    <label><input type="radio" name="statistics-hard-q8" value="a"> r = 0.85</label>
+                    <label><input type="radio" name="statistics-hard-q8" value="b"> r = −0.95</label>
+                    <label><input type="radio" name="statistics-hard-q8" value="c"> r = 0.50</label>
+                    <div class="explanation" id="exp-statistics-hard-q8">
+                        <strong>✔ Correct Answer: r = −0.95</strong>
+                        <div class="step"><span class="step-num">1</span><span>Strength of correlation is measured by |r|, not sign.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>|−0.95| = 0.95 is larger than |0.85| = 0.85 or |0.50|.</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-hard-q9">
+                    <h3>9. In hypothesis testing, what does a p-value of 0.03 mean at α = 0.05? <span class="status-badge" id="badge-statistics-hard-q9"></span></h3>
+                    <label><input type="radio" name="statistics-hard-q9" value="a"> Fail to reject H₀</label>
+                    <label><input type="radio" name="statistics-hard-q9" value="b"> Reject H₀</label>
+                    <label><input type="radio" name="statistics-hard-q9" value="c"> Accept H₀</label>
+                    <div class="explanation" id="exp-statistics-hard-q9">
+                        <strong>✔ Correct Answer: Reject H₀</strong>
+                        <div class="step"><span class="step-num">1</span><span>If p-value &lt; α, we reject the null hypothesis.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>0.03 &lt; 0.05 → reject H₀; result is statistically significant.</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="statistics-hard-q10">
+                    <h3>10. How many ways can 5 students be arranged in a line? <span class="status-badge" id="badge-statistics-hard-q10"></span></h3>
+                    <label><input type="radio" name="statistics-hard-q10" value="a"> 25</label>
+                    <label><input type="radio" name="statistics-hard-q10" value="b"> 60</label>
+                    <label><input type="radio" name="statistics-hard-q10" value="c"> 120</label>
+                    <div class="explanation" id="exp-statistics-hard-q10">
+                        <strong>✔ Correct Answer: 120</strong>
+                        <div class="step"><span class="step-num">1</span><span>Number of permutations = 5! = 5 × 4 × 3 × 2 × 1</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= 120</span></div>
+                    </div>
+                </div>
+
+                <button class="btn-submit" onclick="submitQuiz('statistics','hard')">Submit Answers</button>
+                <div class="score-box" id="score-statistics-hard"></div>
+            </div>
         </div>
 
-        <!-- ══════════════ ARITHMETIC ══════════════ -->
+        <!-- ════════════════════════════════════════
+             ARITHMETIC
+        ════════════════════════════════════════ -->
         <div class="quiz-panel" id="panel-arithmetic">
             <h2 class="topic-title">Arithmetic</h2>
             <p class="topic-desc">Numbers, operations, fractions, and percentages.</p>
-            <div class="progress-wrap">
-                <div class="progress-bar" id="prog-arithmetic"></div>
-            </div>
-            <div class="progress-label" id="plabel-arithmetic">0 / 5 answered</div>
 
-            <div class="question-card" id="arithmetic-q1">
-                <h3>1. What is 15% of 200? <span class="status-badge" id="badge-arithmetic-q1"></span></h3>
-                <label><input type="radio" name="arithmetic-q1" value="a"> 25</label>
-                <label><input type="radio" name="arithmetic-q1" value="b"> 30</label>
-                <label><input type="radio" name="arithmetic-q1" value="c"> 20</label>
-                <div class="explanation" id="exp-arithmetic-q1">
-                    <strong>✔ Correct Answer: 30</strong>
-                    <div class="step"><span class="step-num">1</span><span>To find a percentage: (percent ÷ 100) ×
-                            number</span></div>
-                    <div class="step"><span class="step-num">2</span><span>(15 ÷ 100) × 200 = 0.15 × 200 = 30</span>
+            <div class="level-selector">
+                <button class="level-btn easy   active" onclick="switchLevel('arithmetic','easy',   event)">🟢 Easy</button>
+                <button class="level-btn medium"        onclick="switchLevel('arithmetic','medium', event)">🟡 Medium</button>
+                <button class="level-btn hard"          onclick="switchLevel('arithmetic','hard',   event)">🔴 Hard</button>
+            </div>
+
+            <!-- ── ARITHMETIC EASY ── -->
+            <div class="level-panel active" id="level-arithmetic-easy">
+                <div class="diff-info easy">🟢 <strong>Easy</strong> — Basic operations, fractions, and simple percentages.</div>
+                <div class="progress-wrap"><div class="progress-bar" id="prog-arithmetic-easy"></div></div>
+                <div class="progress-label" id="plabel-arithmetic-easy">0 / 10 answered</div>
+
+                <div class="question-card" id="arithmetic-easy-q1">
+                    <h3>1. What is 15% of 200? <span class="status-badge" id="badge-arithmetic-easy-q1"></span></h3>
+                    <label><input type="radio" name="arithmetic-easy-q1" value="a"> 25</label>
+                    <label><input type="radio" name="arithmetic-easy-q1" value="b"> 30</label>
+                    <label><input type="radio" name="arithmetic-easy-q1" value="c"> 20</label>
+                    <div class="explanation" id="exp-arithmetic-easy-q1">
+                        <strong>✔ Correct Answer: 30</strong>
+                        <div class="step"><span class="step-num">1</span><span>0.15 × 200 = 30</span></div>
                     </div>
                 </div>
-            </div>
 
-            <div class="question-card" id="arithmetic-q2">
-                <h3>2. Simplify: &nbsp; 3/4 + 1/2 <span class="status-badge" id="badge-arithmetic-q2"></span></h3>
-                <label><input type="radio" name="arithmetic-q2" value="a"> 4/6</label>
-                <label><input type="radio" name="arithmetic-q2" value="b"> 5/4</label>
-                <label><input type="radio" name="arithmetic-q2" value="c"> 1</label>
-                <div class="explanation" id="exp-arithmetic-q2">
-                    <strong>✔ Correct Answer: 5/4</strong>
-                    <div class="step"><span class="step-num">1</span><span>Convert to a common denominator: 1/2 =
-                            2/4</span></div>
-                    <div class="step"><span class="step-num">2</span><span>3/4 + 2/4 = 5/4</span></div>
-                </div>
-            </div>
-
-            <div class="question-card" id="arithmetic-q3">
-                <h3>3. What is the LCM of 4 and 6? <span class="status-badge" id="badge-arithmetic-q3"></span></h3>
-                <label><input type="radio" name="arithmetic-q3" value="a"> 12</label>
-                <label><input type="radio" name="arithmetic-q3" value="b"> 24</label>
-                <label><input type="radio" name="arithmetic-q3" value="c"> 6</label>
-                <div class="explanation" id="exp-arithmetic-q3">
-                    <strong>✔ Correct Answer: 12</strong>
-                    <div class="step"><span class="step-num">1</span><span>List multiples of 4: 4, 8,
-                            <strong>12</strong>, 16...</span></div>
-                    <div class="step"><span class="step-num">2</span><span>List multiples of 6: 6, <strong>12</strong>,
-                            18...</span></div>
-                    <div class="step"><span class="step-num">3</span><span>The smallest common multiple is 12.</span>
+                <div class="question-card" id="arithmetic-easy-q2">
+                    <h3>2. What is 2⁵? <span class="status-badge" id="badge-arithmetic-easy-q2"></span></h3>
+                    <label><input type="radio" name="arithmetic-easy-q2" value="a"> 10</label>
+                    <label><input type="radio" name="arithmetic-easy-q2" value="b"> 25</label>
+                    <label><input type="radio" name="arithmetic-easy-q2" value="c"> 32</label>
+                    <div class="explanation" id="exp-arithmetic-easy-q2">
+                        <strong>✔ Correct Answer: 32</strong>
+                        <div class="step"><span class="step-num">1</span><span>2×2×2×2×2 = 32</span></div>
                     </div>
                 </div>
-            </div>
 
-            <div class="question-card" id="arithmetic-q4">
-                <h3>4. What is 2⁵? <span class="status-badge" id="badge-arithmetic-q4"></span></h3>
-                <label><input type="radio" name="arithmetic-q4" value="a"> 10</label>
-                <label><input type="radio" name="arithmetic-q4" value="b"> 25</label>
-                <label><input type="radio" name="arithmetic-q4" value="c"> 32</label>
-                <div class="explanation" id="exp-arithmetic-q4">
-                    <strong>✔ Correct Answer: 32</strong>
-                    <div class="step"><span class="step-num">1</span><span>2⁵ means 2 multiplied by itself 5
-                            times.</span></div>
-                    <div class="step"><span class="step-num">2</span><span>2 × 2 × 2 × 2 × 2 = 4 × 4 × 2 = 32</span>
+                <div class="question-card" id="arithmetic-easy-q3">
+                    <h3>3. Simplify: &nbsp; 3/4 + 1/2 <span class="status-badge" id="badge-arithmetic-easy-q3"></span></h3>
+                    <label><input type="radio" name="arithmetic-easy-q3" value="a"> 4/6</label>
+                    <label><input type="radio" name="arithmetic-easy-q3" value="b"> 5/4</label>
+                    <label><input type="radio" name="arithmetic-easy-q3" value="c"> 1</label>
+                    <div class="explanation" id="exp-arithmetic-easy-q3">
+                        <strong>✔ Correct Answer: 5/4</strong>
+                        <div class="step"><span class="step-num">1</span><span>Convert: 1/2 = 2/4 → 3/4 + 2/4 = 5/4</span></div>
                     </div>
                 </div>
-            </div>
 
-            <div class="question-card" id="arithmetic-q5">
-                <h3>5. A shirt costs $80 and is on sale for 25% off. What is the sale price? <span class="status-badge"
-                        id="badge-arithmetic-q5"></span></h3>
-                <label><input type="radio" name="arithmetic-q5" value="a"> $55</label>
-                <label><input type="radio" name="arithmetic-q5" value="b"> $65</label>
-                <label><input type="radio" name="arithmetic-q5" value="c"> $60</label>
-                <div class="explanation" id="exp-arithmetic-q5">
-                    <strong>✔ Correct Answer: $60</strong>
-                    <div class="step"><span class="step-num">1</span><span>Find the discount: 25% of $80 = 0.25 × 80 =
-                            $20</span></div>
-                    <div class="step"><span class="step-num">2</span><span>Sale price = $80 − $20 = $60</span></div>
+                <div class="question-card" id="arithmetic-easy-q4">
+                    <h3>4. What is the LCM of 4 and 6? <span class="status-badge" id="badge-arithmetic-easy-q4"></span></h3>
+                    <label><input type="radio" name="arithmetic-easy-q4" value="a"> 12</label>
+                    <label><input type="radio" name="arithmetic-easy-q4" value="b"> 24</label>
+                    <label><input type="radio" name="arithmetic-easy-q4" value="c"> 6</label>
+                    <div class="explanation" id="exp-arithmetic-easy-q4">
+                        <strong>✔ Correct Answer: 12</strong>
+                        <div class="step"><span class="step-num">1</span><span>Multiples of 4: 4, 8, 12... Multiples of 6: 6, 12... → LCM = 12</span></div>
+                    </div>
                 </div>
+
+                <div class="question-card" id="arithmetic-easy-q5">
+                    <h3>5. A shirt costs $80 and is on sale for 25% off. What is the sale price? <span class="status-badge" id="badge-arithmetic-easy-q5"></span></h3>
+                    <label><input type="radio" name="arithmetic-easy-q5" value="a"> $55</label>
+                    <label><input type="radio" name="arithmetic-easy-q5" value="b"> $65</label>
+                    <label><input type="radio" name="arithmetic-easy-q5" value="c"> $60</label>
+                    <div class="explanation" id="exp-arithmetic-easy-q5">
+                        <strong>✔ Correct Answer: $60</strong>
+                        <div class="step"><span class="step-num">1</span><span>Discount = 25% × 80 = $20</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Sale price = 80 − 20 = $60</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-easy-q6">
+                    <h3>6. What is 15% of 200? <span class="status-badge" id="badge-arithmetic-easy-q6"></span></h3>
+                    <label><input type="radio" name="arithmetic-easy-q6" value="a"> 20</label>
+                    <label><input type="radio" name="arithmetic-easy-q6" value="b"> 25</label>
+                    <label><input type="radio" name="arithmetic-easy-q6" value="c"> 30</label>
+                    <div class="explanation" id="exp-arithmetic-easy-q6">
+                        <strong>✔ Correct Answer: 30</strong>
+                        <div class="step"><span class="step-num">1</span><span>15% = 15/100 = 0.15</span></div>
+                        <div class="step"><span class="step-num">2</span><span>0.15 × 200 = 30</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-easy-q7">
+                    <h3>7. What is the LCM of 4 and 6? <span class="status-badge" id="badge-arithmetic-easy-q7"></span></h3>
+                    <label><input type="radio" name="arithmetic-easy-q7" value="a"> 24</label>
+                    <label><input type="radio" name="arithmetic-easy-q7" value="b"> 12</label>
+                    <label><input type="radio" name="arithmetic-easy-q7" value="c"> 2</label>
+                    <div class="explanation" id="exp-arithmetic-easy-q7">
+                        <strong>✔ Correct Answer: 12</strong>
+                        <div class="step"><span class="step-num">1</span><span>Multiples of 4: 4, 8, 12… Multiples of 6: 6, 12…</span></div>
+                        <div class="step"><span class="step-num">2</span><span>LCM = 12 (smallest common multiple)</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-easy-q8">
+                    <h3>8. What is 3/4 + 1/4? <span class="status-badge" id="badge-arithmetic-easy-q8"></span></h3>
+                    <label><input type="radio" name="arithmetic-easy-q8" value="a"> 4/8</label>
+                    <label><input type="radio" name="arithmetic-easy-q8" value="b"> 1</label>
+                    <label><input type="radio" name="arithmetic-easy-q8" value="c"> 4/4</label>
+                    <div class="explanation" id="exp-arithmetic-easy-q8">
+                        <strong>✔ Correct Answer: 1</strong>
+                        <div class="step"><span class="step-num">1</span><span>Same denominator: 3/4 + 1/4 = 4/4 = 1</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-easy-q9">
+                    <h3>9. What is √49? <span class="status-badge" id="badge-arithmetic-easy-q9"></span></h3>
+                    <label><input type="radio" name="arithmetic-easy-q9" value="a"> 6</label>
+                    <label><input type="radio" name="arithmetic-easy-q9" value="b"> 8</label>
+                    <label><input type="radio" name="arithmetic-easy-q9" value="c"> 7</label>
+                    <div class="explanation" id="exp-arithmetic-easy-q9">
+                        <strong>✔ Correct Answer: 7</strong>
+                        <div class="step"><span class="step-num">1</span><span>7 × 7 = 49, so √49 = 7</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-easy-q10">
+                    <h3>10. What is 2³? <span class="status-badge" id="badge-arithmetic-easy-q10"></span></h3>
+                    <label><input type="radio" name="arithmetic-easy-q10" value="a"> 6</label>
+                    <label><input type="radio" name="arithmetic-easy-q10" value="b"> 9</label>
+                    <label><input type="radio" name="arithmetic-easy-q10" value="c"> 8</label>
+                    <div class="explanation" id="exp-arithmetic-easy-q10">
+                        <strong>✔ Correct Answer: 8</strong>
+                        <div class="step"><span class="step-num">1</span><span>2³ = 2 × 2 × 2 = 8</span></div>
+                    </div>
+                </div>
+
+                <button class="btn-submit" onclick="submitQuiz('arithmetic','easy')">Submit Answers</button>
+                <div class="score-box" id="score-arithmetic-easy"></div>
             </div>
 
-            <button class="btn-submit" onclick="submitQuiz('arithmetic')">Submit Answers</button>
-            <div class="score-box" id="score-arithmetic"></div>
+            <!-- ── ARITHMETIC MEDIUM ── -->
+            <div class="level-panel" id="level-arithmetic-medium">
+                <div class="diff-info medium">🟡 <strong>Medium</strong> — Ratios, proportions, GCD, and multi-step percentage problems.</div>
+                <div class="progress-wrap"><div class="progress-bar" id="prog-arithmetic-medium"></div></div>
+                <div class="progress-label" id="plabel-arithmetic-medium">0 / 10 answered</div>
+
+                <div class="question-card" id="arithmetic-medium-q1">
+                    <h3>1. What is the GCD (HCF) of 36 and 48? <span class="status-badge" id="badge-arithmetic-medium-q1"></span></h3>
+                    <label><input type="radio" name="arithmetic-medium-q1" value="a"> 6</label>
+                    <label><input type="radio" name="arithmetic-medium-q1" value="b"> 12</label>
+                    <label><input type="radio" name="arithmetic-medium-q1" value="c"> 18</label>
+                    <div class="explanation" id="exp-arithmetic-medium-q1">
+                        <strong>✔ Correct Answer: 12</strong>
+                        <div class="step"><span class="step-num">1</span><span>Factors of 36: 1,2,3,4,6,9,12,18,36</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Factors of 48: 1,2,3,4,6,8,12,16,24,48 → GCD = 12</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-medium-q2">
+                    <h3>2. A car travels 150 km in 3 hours. What is its average speed? <span class="status-badge" id="badge-arithmetic-medium-q2"></span></h3>
+                    <label><input type="radio" name="arithmetic-medium-q2" value="a"> 30 km/h</label>
+                    <label><input type="radio" name="arithmetic-medium-q2" value="b"> 50 km/h</label>
+                    <label><input type="radio" name="arithmetic-medium-q2" value="c"> 75 km/h</label>
+                    <div class="explanation" id="exp-arithmetic-medium-q2">
+                        <strong>✔ Correct Answer: 50 km/h</strong>
+                        <div class="step"><span class="step-num">1</span><span>Speed = Distance / Time = 150 / 3 = 50 km/h</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-medium-q3">
+                    <h3>3. If 3 : 5 = x : 20, what is x? <span class="status-badge" id="badge-arithmetic-medium-q3"></span></h3>
+                    <label><input type="radio" name="arithmetic-medium-q3" value="a"> 10</label>
+                    <label><input type="radio" name="arithmetic-medium-q3" value="b"> 12</label>
+                    <label><input type="radio" name="arithmetic-medium-q3" value="c"> 15</label>
+                    <div class="explanation" id="exp-arithmetic-medium-q3">
+                        <strong>✔ Correct Answer: 12</strong>
+                        <div class="step"><span class="step-num">1</span><span>Cross multiply: 5x = 3 × 20 = 60</span></div>
+                        <div class="step"><span class="step-num">2</span><span>x = 60 / 5 = 12</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-medium-q4">
+                    <h3>4. A price increased from $50 to $65. What is the percentage increase? <span class="status-badge" id="badge-arithmetic-medium-q4"></span></h3>
+                    <label><input type="radio" name="arithmetic-medium-q4" value="a"> 15%</label>
+                    <label><input type="radio" name="arithmetic-medium-q4" value="b"> 25%</label>
+                    <label><input type="radio" name="arithmetic-medium-q4" value="c"> 30%</label>
+                    <div class="explanation" id="exp-arithmetic-medium-q4">
+                        <strong>✔ Correct Answer: 30%</strong>
+                        <div class="step"><span class="step-num">1</span><span>Increase = 65 − 50 = 15</span></div>
+                        <div class="step"><span class="step-num">2</span><span>% increase = (15/50) × 100 = 30%</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-medium-q5">
+                    <h3>5. Simplify: &nbsp; (2/3) ÷ (4/9) <span class="status-badge" id="badge-arithmetic-medium-q5"></span></h3>
+                    <label><input type="radio" name="arithmetic-medium-q5" value="a"> 8/27</label>
+                    <label><input type="radio" name="arithmetic-medium-q5" value="b"> 3/2</label>
+                    <label><input type="radio" name="arithmetic-medium-q5" value="c"> 2/3</label>
+                    <div class="explanation" id="exp-arithmetic-medium-q5">
+                        <strong>✔ Correct Answer: 3/2</strong>
+                        <div class="step"><span class="step-num">1</span><span>Dividing by a fraction = multiplying by its reciprocal.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>(2/3) × (9/4) = 18/12 = 3/2</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-medium-q6">
+                    <h3>6. A jacket costs $80 after a 20% discount. What was the original price? <span class="status-badge" id="badge-arithmetic-medium-q6"></span></h3>
+                    <label><input type="radio" name="arithmetic-medium-q6" value="a"> $96</label>
+                    <label><input type="radio" name="arithmetic-medium-q6" value="b"> $100</label>
+                    <label><input type="radio" name="arithmetic-medium-q6" value="c"> $64</label>
+                    <div class="explanation" id="exp-arithmetic-medium-q6">
+                        <strong>✔ Correct Answer: $100</strong>
+                        <div class="step"><span class="step-num">1</span><span>$80 = 80% of original price → original = 80 / 0.80</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= $100</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-medium-q7">
+                    <h3>7. Evaluate: &nbsp; 3 + 4 × 2 − 1 <span class="status-badge" id="badge-arithmetic-medium-q7"></span></h3>
+                    <label><input type="radio" name="arithmetic-medium-q7" value="a"> 13</label>
+                    <label><input type="radio" name="arithmetic-medium-q7" value="b"> 10</label>
+                    <label><input type="radio" name="arithmetic-medium-q7" value="c"> 14</label>
+                    <div class="explanation" id="exp-arithmetic-medium-q7">
+                        <strong>✔ Correct Answer: 10</strong>
+                        <div class="step"><span class="step-num">1</span><span>Order of operations (BODMAS): multiplication first → 4 × 2 = 8</span></div>
+                        <div class="step"><span class="step-num">2</span><span>3 + 8 − 1 = 10</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-medium-q8">
+                    <h3>8. What is the GCD of 48 and 36? <span class="status-badge" id="badge-arithmetic-medium-q8"></span></h3>
+                    <label><input type="radio" name="arithmetic-medium-q8" value="a"> 6</label>
+                    <label><input type="radio" name="arithmetic-medium-q8" value="b"> 12</label>
+                    <label><input type="radio" name="arithmetic-medium-q8" value="c"> 18</label>
+                    <div class="explanation" id="exp-arithmetic-medium-q8">
+                        <strong>✔ Correct Answer: 12</strong>
+                        <div class="step"><span class="step-num">1</span><span>Factors of 48: 1,2,3,4,6,8,12,16,24,48</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Factors of 36: 1,2,3,4,6,9,12,18,36 → GCD = 12</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-medium-q9">
+                    <h3>9. Express 0.375 as a fraction in simplest form. <span class="status-badge" id="badge-arithmetic-medium-q9"></span></h3>
+                    <label><input type="radio" name="arithmetic-medium-q9" value="a"> 3/8</label>
+                    <label><input type="radio" name="arithmetic-medium-q9" value="b"> 375/100</label>
+                    <label><input type="radio" name="arithmetic-medium-q9" value="c"> 3/4</label>
+                    <div class="explanation" id="exp-arithmetic-medium-q9">
+                        <strong>✔ Correct Answer: 3/8</strong>
+                        <div class="step"><span class="step-num">1</span><span>0.375 = 375/1000. Simplify by dividing by 125.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>375/1000 = 3/8</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-medium-q10">
+                    <h3>10. If 5 workers can finish a job in 8 days, how many days for 10 workers? <span class="status-badge" id="badge-arithmetic-medium-q10"></span></h3>
+                    <label><input type="radio" name="arithmetic-medium-q10" value="a"> 4</label>
+                    <label><input type="radio" name="arithmetic-medium-q10" value="b"> 16</label>
+                    <label><input type="radio" name="arithmetic-medium-q10" value="c"> 3</label>
+                    <div class="explanation" id="exp-arithmetic-medium-q10">
+                        <strong>✔ Correct Answer: 4</strong>
+                        <div class="step"><span class="step-num">1</span><span>Inverse proportion: more workers → fewer days.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Days = (5 × 8) / 10 = 40 / 10 = 4 days</span></div>
+                    </div>
+                </div>
+
+                <button class="btn-submit" onclick="submitQuiz('arithmetic','medium')">Submit Answers</button>
+                <div class="score-box" id="score-arithmetic-medium"></div>
+            </div>
+
+            <!-- ── ARITHMETIC HARD ── -->
+            <div class="level-panel" id="level-arithmetic-hard">
+                <div class="diff-info hard">🔴 <strong>Hard</strong> — Number theory, compound interest, and complex fraction operations.</div>
+                <div class="progress-wrap"><div class="progress-bar" id="prog-arithmetic-hard"></div></div>
+                <div class="progress-label" id="plabel-arithmetic-hard">0 / 10 answered</div>
+
+                <div class="question-card" id="arithmetic-hard-q1">
+                    <h3>1. What is compound interest on $1000 at 10% p.a. for 2 years (compounded annually)? <span class="status-badge" id="badge-arithmetic-hard-q1"></span></h3>
+                    <label><input type="radio" name="arithmetic-hard-q1" value="a"> $200</label>
+                    <label><input type="radio" name="arithmetic-hard-q1" value="b"> $210</label>
+                    <label><input type="radio" name="arithmetic-hard-q1" value="c"> $220</label>
+                    <div class="explanation" id="exp-arithmetic-hard-q1">
+                        <strong>✔ Correct Answer: $210</strong>
+                        <div class="step"><span class="step-num">1</span><span>A = P(1 + r)ⁿ = 1000(1.1)² = 1000 × 1.21 = $1210</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Interest = 1210 − 1000 = $210</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-hard-q2">
+                    <h3>2. What is the smallest prime number greater than 50? <span class="status-badge" id="badge-arithmetic-hard-q2"></span></h3>
+                    <label><input type="radio" name="arithmetic-hard-q2" value="a"> 51</label>
+                    <label><input type="radio" name="arithmetic-hard-q2" value="b"> 53</label>
+                    <label><input type="radio" name="arithmetic-hard-q2" value="c"> 57</label>
+                    <div class="explanation" id="exp-arithmetic-hard-q2">
+                        <strong>✔ Correct Answer: 53</strong>
+                        <div class="step"><span class="step-num">1</span><span>51 = 3×17 (not prime). 52 = 4×13 (not prime). 53 is prime!</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-hard-q3">
+                    <h3>3. A number is divisible by both 4 and 6. It must be divisible by: <span class="status-badge" id="badge-arithmetic-hard-q3"></span></h3>
+                    <label><input type="radio" name="arithmetic-hard-q3" value="a"> 24</label>
+                    <label><input type="radio" name="arithmetic-hard-q3" value="b"> 12</label>
+                    <label><input type="radio" name="arithmetic-hard-q3" value="c"> 8</label>
+                    <div class="explanation" id="exp-arithmetic-hard-q3">
+                        <strong>✔ Correct Answer: 12</strong>
+                        <div class="step"><span class="step-num">1</span><span>Must be divisible by LCM(4, 6) = 12.</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Not necessarily 24 (e.g. 12 works but not 24).</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-hard-q4">
+                    <h3>4. Evaluate: &nbsp; √(144/25) <span class="status-badge" id="badge-arithmetic-hard-q4"></span></h3>
+                    <label><input type="radio" name="arithmetic-hard-q4" value="a"> 12/5</label>
+                    <label><input type="radio" name="arithmetic-hard-q4" value="b"> 72/25</label>
+                    <label><input type="radio" name="arithmetic-hard-q4" value="c"> 5/12</label>
+                    <div class="explanation" id="exp-arithmetic-hard-q4">
+                        <strong>✔ Correct Answer: 12/5</strong>
+                        <div class="step"><span class="step-num">1</span><span>√(a/b) = √a / √b</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= √144 / √25 = 12 / 5</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-hard-q5">
+                    <h3>5. If a train travels at 60 km/h for 2.5 hours, then at 80 km/h for 1.5 hours, what is its average speed? <span class="status-badge" id="badge-arithmetic-hard-q5"></span></h3>
+                    <label><input type="radio" name="arithmetic-hard-q5" value="a"> 70 km/h</label>
+                    <label><input type="radio" name="arithmetic-hard-q5" value="b"> 67.5 km/h</label>
+                    <label><input type="radio" name="arithmetic-hard-q5" value="c"> 72 km/h</label>
+                    <div class="explanation" id="exp-arithmetic-hard-q5">
+                        <strong>✔ Correct Answer: 67.5 km/h</strong>
+                        <div class="step"><span class="step-num">1</span><span>Total distance = 60×2.5 + 80×1.5 = 150 + 120 = 270 km</span></div>
+                        <div class="step"><span class="step-num">2</span><span>Total time = 2.5 + 1.5 = 4 hours → Avg speed = 270/4 = 67.5 km/h</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-hard-q6">
+                    <h3>6. What is 2⁻³ expressed as a fraction? <span class="status-badge" id="badge-arithmetic-hard-q6"></span></h3>
+                    <label><input type="radio" name="arithmetic-hard-q6" value="a"> −8</label>
+                    <label><input type="radio" name="arithmetic-hard-q6" value="b"> 1/6</label>
+                    <label><input type="radio" name="arithmetic-hard-q6" value="c"> 1/8</label>
+                    <div class="explanation" id="exp-arithmetic-hard-q6">
+                        <strong>✔ Correct Answer: 1/8</strong>
+                        <div class="step"><span class="step-num">1</span><span>Negative exponent: a⁻ⁿ = 1/aⁿ</span></div>
+                        <div class="step"><span class="step-num">2</span><span>2⁻³ = 1/2³ = 1/8</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-hard-q7">
+                    <h3>7. A $5000 investment grows at 6% p.a. compounded monthly for 1 year. What is the amount? <span class="status-badge" id="badge-arithmetic-hard-q7"></span></h3>
+                    <label><input type="radio" name="arithmetic-hard-q7" value="a"> $5300.00</label>
+                    <label><input type="radio" name="arithmetic-hard-q7" value="b"> $5308.39</label>
+                    <label><input type="radio" name="arithmetic-hard-q7" value="c"> $5360.00</label>
+                    <div class="explanation" id="exp-arithmetic-hard-q7">
+                        <strong>✔ Correct Answer: $5308.39</strong>
+                        <div class="step"><span class="step-num">1</span><span>A = P(1 + r/n)^(nt) = 5000(1 + 0.06/12)^12</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= 5000 × (1.005)^12 ≈ 5000 × 1.06168 ≈ $5308.39</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-hard-q8">
+                    <h3>8. Simplify: &nbsp; (3/4) × (8/9) ÷ (2/3) <span class="status-badge" id="badge-arithmetic-hard-q8"></span></h3>
+                    <label><input type="radio" name="arithmetic-hard-q8" value="a"> 1</label>
+                    <label><input type="radio" name="arithmetic-hard-q8" value="b"> 2/3</label>
+                    <label><input type="radio" name="arithmetic-hard-q8" value="c"> 4/3</label>
+                    <div class="explanation" id="exp-arithmetic-hard-q8">
+                        <strong>✔ Correct Answer: 1</strong>
+                        <div class="step"><span class="step-num">1</span><span>(3/4) × (8/9) = 24/36 = 2/3</span></div>
+                        <div class="step"><span class="step-num">2</span><span>(2/3) ÷ (2/3) = 1</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-hard-q9">
+                    <h3>9. What is 7! (7 factorial)? <span class="status-badge" id="badge-arithmetic-hard-q9"></span></h3>
+                    <label><input type="radio" name="arithmetic-hard-q9" value="a"> 49</label>
+                    <label><input type="radio" name="arithmetic-hard-q9" value="b"> 5040</label>
+                    <label><input type="radio" name="arithmetic-hard-q9" value="c"> 720</label>
+                    <div class="explanation" id="exp-arithmetic-hard-q9">
+                        <strong>✔ Correct Answer: 5040</strong>
+                        <div class="step"><span class="step-num">1</span><span>7! = 7 × 6 × 5 × 4 × 3 × 2 × 1</span></div>
+                        <div class="step"><span class="step-num">2</span><span>= 5040</span></div>
+                    </div>
+                </div>
+
+                <div class="question-card" id="arithmetic-hard-q10">
+                    <h3>10. Which is larger: 2⁸ or 3⁵? <span class="status-badge" id="badge-arithmetic-hard-q10"></span></h3>
+                    <label><input type="radio" name="arithmetic-hard-q10" value="a"> 3⁵</label>
+                    <label><input type="radio" name="arithmetic-hard-q10" value="b"> They are equal</label>
+                    <label><input type="radio" name="arithmetic-hard-q10" value="c"> 2⁸</label>
+                    <div class="explanation" id="exp-arithmetic-hard-q10">
+                        <strong>✔ Correct Answer: 2⁸</strong>
+                        <div class="step"><span class="step-num">1</span><span>2⁸ = 256</span></div>
+                        <div class="step"><span class="step-num">2</span><span>3⁵ = 243 → 256 &gt; 243, so 2⁸ is larger.</span></div>
+                    </div>
+                </div>
+
+                <button class="btn-submit" onclick="submitQuiz('arithmetic','hard')">Submit Answers</button>
+                <div class="score-box" id="score-arithmetic-hard"></div>
+            </div>
         </div>
+
     </section>
 
     <footer>
         <p>&copy; 2026 All Rights Reserved | MathSphere</p>
     </footer>
 
-    <script> 
-        /* ── Correct answers per topic ── */
+    <script>
+        /* ════════════════════════════════════════
+           ANSWER KEY  — format: topic-level: { q1: 'a'|'b'|'c', ... }
+        ════════════════════════════════════════ */
         const ANSWERS = {
-            algebra: { q1: 'a', q2: 'b', q3: 'c', q4: 'a', q5: 'c' },
-            geometry: { q1: 'b', q2: 'c', q3: 'a', q4: 'c', q5: 'b' },
-            calculus: { q1: 'b', q2: 'b', q3: 'c', q4: 'b', q5: 'b' },
-            statistics: { q1: 'b', q2: 'b', q3: 'c', q4: 'b', q5: 'c' },
-            arithmetic: { q1: 'b', q2: 'b', q3: 'a', q4: 'c', q5: 'c' }
+            'algebra-easy':       { q1:'b', q2:'b', q3:'c', q4:'b', q5:'b', q6:'b', q7:'c', q8:'b', q9:'c', q10:'a' },
+            'algebra-medium':     { q1:'c', q2:'b', q3:'a', q4:'c', q5:'b', q6:'b', q7:'b', q8:'c', q9:'a', q10:'c' },
+            'algebra-hard':       { q1:'b', q2:'b', q3:'a', q4:'a', q5:'b', q6:'b', q7:'b', q8:'c', q9:'a', q10:'b' },
+            'geometry-easy':      { q1:'c', q2:'b', q3:'c', q4:'b', q5:'c', q6:'b', q7:'c', q8:'b', q9:'c', q10:'c' },
+            'geometry-medium':    { q1:'b', q2:'a', q3:'c', q4:'b', q5:'c', q6:'b', q7:'b', q8:'b', q9:'c', q10:'b' },
+            'geometry-hard':      { q1:'b', q2:'b', q3:'a', q4:'b', q5:'b', q6:'b', q7:'b', q8:'c', q9:'b', q10:'a' },
+            'calculus-easy':      { q1:'b', q2:'b', q3:'c', q4:'b', q5:'c', q6:'b', q7:'b', q8:'b', q9:'c', q10:'b' },
+            'calculus-medium':    { q1:'b', q2:'a', q3:'b', q4:'c', q5:'b', q6:'b', q7:'b', q8:'a', q9:'c', q10:'b' },
+            'calculus-hard':      { q1:'b', q2:'c', q3:'c', q4:'b', q5:'a', q6:'b', q7:'b', q8:'c', q9:'b', q10:'b' },
+            'statistics-easy':    { q1:'b', q2:'b', q3:'c', q4:'c', q5:'a', q6:'b', q7:'c', q8:'c', q9:'c', q10:'b' },
+            'statistics-medium':  { q1:'b', q2:'c', q3:'b', q4:'b', q5:'b', q6:'a', q7:'b', q8:'c', q9:'b', q10:'c' },
+            'statistics-hard':    { q1:'b', q2:'a', q3:'b', q4:'b', q5:'b', q6:'c', q7:'b', q8:'b', q9:'b', q10:'c' },
+            'arithmetic-easy':    { q1:'b', q2:'c', q3:'b', q4:'a', q5:'c', q6:'c', q7:'b', q8:'b', q9:'c', q10:'c' },
+            'arithmetic-medium':  { q1:'b', q2:'b', q3:'b', q4:'c', q5:'b', q6:'b', q7:'b', q8:'b', q9:'a', q10:'a' },
+            'arithmetic-hard':    { q1:'b', q2:'b', q3:'b', q4:'a', q5:'b', q6:'c', q7:'b', q8:'a', q9:'b', q10:'c' }
         };
-        const TOTAL = 5;
-        /* ── Tab switching ── */
-        function switchTopic(topic) {
+        const TOTAL = 10;
+
+        /* ── Topic switching ── */
+        function switchTopic(topic, e) {
             document.querySelectorAll('.quiz-panel').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('panel-' + topic).classList.add('active');
-            event.currentTarget.classList.add('active');
+            e.currentTarget.classList.add('active');
         }
-        /* ── Track answered count for progress bar ── */
+
+        /* ── Level switching ── */
+        function switchLevel(topic, level, e) {
+            const panel = document.getElementById('panel-' + topic);
+            panel.querySelectorAll('.level-panel').forEach(p => p.classList.remove('active'));
+            panel.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`level-${topic}-${level}`).classList.add('active');
+            e.currentTarget.classList.add('active');
+        }
+
+        /* ── Progress bar updates ── */
         document.querySelectorAll('input[type="radio"]').forEach(radio => {
             radio.addEventListener('change', () => {
-                const nameParts = radio.name.split('-');   // e.g. ["algebra","q1"]
-                const topic = nameParts[0];
+                const parts = radio.name.split('-');   // e.g. algebra-easy-q1 → ['algebra','easy','q1']
+                const qNum  = parts[parts.length - 1];
+                const key   = parts.slice(0, -1).join('-'); // 'algebra-easy'
                 const answered = new Set();
                 for (let i = 1; i <= TOTAL; i++) {
-                    const sel = document.querySelector(`input[name="${topic}-q${i}"]:checked`);
-                    if (sel) answered.add(i);
+                    if (document.querySelector(`input[name="${key}-q${i}"]:checked`)) answered.add(i);
                 }
                 const pct = (answered.size / TOTAL) * 100;
-                document.getElementById('prog-' + topic).style.width = pct + '%';
-                document.getElementById('plabel-' + topic).textContent = `${answered.size} / ${TOTAL} answered`;
+                document.getElementById('prog-' + key).style.width = pct + '%';
+                document.getElementById('plabel-' + key).textContent = `${answered.size} / ${TOTAL} answered`;
             });
         });
 
         /* ── Submit quiz ── */
-        function submitQuiz(topic) {
-            const correct = ANSWERS[topic];
+        function submitQuiz(topic, level) {
+            const key = `${topic}-${level}`;
+            const correct = ANSWERS[key];
             let score = 0;
+
             for (let i = 1; i <= TOTAL; i++) {
-                const qKey = `q${i}`;
-                const card = document.getElementById(`${topic}-${qKey}`);
-                const badge = document.getElementById(`badge-${topic}-${qKey}`);
-                const exp = document.getElementById(`exp-${topic}-${qKey}`);
-                const selected = document.querySelector(`input[name="${topic}-${qKey}"]:checked`);
-                const userAns = selected ? selected.value : null;
+                const qKey    = `q${i}`;
+                const cardId  = `${topic}-${level}-${qKey}`;
+                const card    = document.getElementById(cardId);
+                const badge   = document.getElementById(`badge-${cardId}`);
+                const exp     = document.getElementById(`exp-${cardId}`);
+                const selected = document.querySelector(`input[name="${key}-${qKey}"]:checked`);
+                const userAns  = selected ? selected.value : null;
                 const rightAns = correct[qKey];
-                // Style labels
+
                 card.querySelectorAll('label').forEach(label => {
-                    const radio = label.querySelector('input');
-                    if (radio.value === rightAns) label.classList.add('correct-label');
-                    else if (radio.value === userAns) label.classList.add('wrong-label');
-                    radio.disabled = true;
+                    const r = label.querySelector('input');
+                    if (r.value === rightAns) label.classList.add('correct-label');
+                    else if (r.value === userAns) label.classList.add('wrong-label');
+                    r.disabled = true;
                 });
-                // Card border
+
                 if (userAns === rightAns) {
                     card.classList.add('correct');
                     badge.textContent = '✔ Correct';
@@ -551,66 +2181,58 @@
                     badge.className = 'status-badge badge-wrong';
                     badge.style.display = 'inline-block';
                 }
-                // Show explanation
                 exp.classList.add('visible');
             }
-            // Disable button
-            const btn = document.querySelector(`#panel-${topic} .btn-submit`);
-            btn.disabled = true;
-            // Show score box
-            const box = document.getElementById('score-' + topic);
+
+            document.querySelector(`#level-${key} .btn-submit`).disabled = true;
+
+            const box = document.getElementById(`score-${key}`);
             box.style.display = 'block';
-            let cls, msg, emoji;
+
+            const levelLabel = level.charAt(0).toUpperCase() + level.slice(1);
+            let cls, msg;
             if (score === TOTAL) {
-                cls = 'score-perfect'; msg = 'Perfect score! Outstanding work! 🎉'; emoji = score;
-            } else if (score >= 3) {
-                cls = 'score-good'; msg = 'Good job! Review the explanations above to master the rest.'; emoji = score;
+                cls = 'score-perfect'; msg = `Perfect! You mastered ${levelLabel} level! 🎉`;
+            } else if (score >= 6) {
+                cls = 'score-good';    msg = 'Good effort! Review the explanations to lock it in.';
             } else {
-                cls = 'score-retry'; msg = "Keep practicing! Read the step-by-step solutions above."; emoji = score;
+                cls = 'score-retry';   msg = 'Keep going! Read each step-by-step solution carefully.';
             }
+
             box.innerHTML = `
-            <div class="score-label">Your Score</div>
-            <div class="score-num ${cls}">${score} / ${TOTAL}</div>
-            <div class="score-msg">${msg}</div>
-            <button class="btn-retry" onclick="retryQuiz('${topic}')">🔄 Try Again</button>
-        `;
+                <div class="score-label">Your Score — ${levelLabel} Level</div>
+                <div class="score-num ${cls}">${score} / ${TOTAL}</div>
+                <div class="score-msg">${msg}</div>
+                <button class="btn-retry" onclick="retryQuiz('${topic}','${level}')">🔄 Try Again</button>
+            `;
             box.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
+
         /* ── Retry ── */
-        function retryQuiz(topic) {
-            // Re-enable all radios and reset styling
-            document.querySelectorAll(`#panel-${topic} input[type="radio"]`).forEach(r => {
-                r.disabled = false;
-                r.checked = false;
-            });
-            document.querySelectorAll(`#panel-${topic} label`).forEach(l => {
-                l.classList.remove('correct-label', 'wrong-label');
-            });
-            document.querySelectorAll(`#panel-${topic} .question-card`).forEach(c => {
-                c.classList.remove('correct', 'wrong');
-            });
-            document.querySelectorAll(`#panel-${topic} .status-badge`).forEach(b => {
-                b.style.display = 'none';
-            });
-            document.querySelectorAll(`#panel-${topic} .explanation`).forEach(e => {
-                e.classList.remove('visible');
-            });
-            document.getElementById('prog-' + topic).style.width = '0%';
-            document.getElementById('plabel-' + topic).textContent = `0 / ${TOTAL} answered`;
-            // Re-enable submit button
-            document.querySelector(`#panel-${topic} .btn-submit`).disabled = false;
-            // Hide score box
-            document.getElementById('score-' + topic).style.display = 'none';
+        function retryQuiz(topic, level) {
+            const key = `${topic}-${level}`;
+            const container = document.getElementById(`level-${key}`);
+            container.querySelectorAll('input[type="radio"]').forEach(r => { r.disabled = false; r.checked = false; });
+            container.querySelectorAll('label').forEach(l => l.classList.remove('correct-label', 'wrong-label'));
+            container.querySelectorAll('.question-card').forEach(c => c.classList.remove('correct', 'wrong'));
+            container.querySelectorAll('.status-badge').forEach(b => b.style.display = 'none');
+            container.querySelectorAll('.explanation').forEach(e => e.classList.remove('visible'));
+            document.getElementById('prog-'   + key).style.width = '0%';
+            document.getElementById('plabel-' + key).textContent = `0 / ${TOTAL} answered`;
+            container.querySelector('.btn-submit').disabled = false;
+            document.getElementById('score-' + key).style.display = 'none';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+
         /* ── Hamburger ── */
         function toggleMenu() {
             document.querySelector('.nav-anim').classList.toggle('active');
         }
 
+        /* ── Auth nav ── */
         function updateAuthNav() {
             const loggedIn = localStorage.getItem('ms_logged_in') === 'true';
-            document.getElementById('nav-login').style.display = loggedIn ? 'none' : 'inline-block';
+            document.getElementById('nav-login').style.display  = loggedIn ? 'none'         : 'inline-block';
             document.getElementById('nav-logout').style.display = loggedIn ? 'inline-block' : 'none';
         }
         function handleLogout() {
@@ -630,8 +2252,5 @@
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-
 </body>
-
 </html>
