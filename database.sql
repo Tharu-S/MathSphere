@@ -26,7 +26,7 @@ SET time_zone = "+00:00";
 --
 -- Table structure for table `messages`
 --
-CREATE TABLE mathsphere;
+CREATE DATABASE mathsphere;
 USE mathsphere;
 
 
