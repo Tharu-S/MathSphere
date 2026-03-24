@@ -26,6 +26,9 @@ SET time_zone = "+00:00";
 --
 -- Table structure for table `messages`
 --
+CREATE TABLE mathsphere;
+USE mathsphere;
+
 
 CREATE TABLE `messages` (
   `id` int(11) NOT NULL,
