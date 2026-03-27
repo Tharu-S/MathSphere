@@ -94,9 +94,8 @@ MathSphere/
    - Mac: `/Applications/XAMPP/htdocs/MathSphere/`
 3. **Start XAMPP** — click Start on both Apache and MySQL
 4. **Open phpMyAdmin** at `http://localhost/phpmyadmin`
-5. **Create a new database** named exactly: `mathsphere`
-6. **Import the database** — click Import → select `database.sql` → click Go
-7. **Open the website** at `http://localhost/MathSphere/`
+5. **Import the database** — click Import → select `database.sql` → click Go
+6. **Open the website** at `http://localhost/MathSphere/`
 
 ---
 
